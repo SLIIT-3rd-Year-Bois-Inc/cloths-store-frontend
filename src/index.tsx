@@ -2,14 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import Home from './pages/home';
+import { BrowserRouter } from 'react-router-dom';
+import CustomerRouter from './routes/customer';
+import StockRouter from './routes/stock';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Home />
+    <BrowserRouter>
+      <CustomerRouter />
+      <StockRouter />
+    </BrowserRouter>
   </React.StrictMode>
 );
 
