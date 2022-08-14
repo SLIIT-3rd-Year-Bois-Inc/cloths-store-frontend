@@ -2,22 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('http://fonts.cdnfonts.com/css/open-sans');
-@import url('http://fonts.cdnfonts.com/css/galada');
-@import url('http://fonts.cdnfonts.com/css/mako');
+@import url("http://fonts.cdnfonts.com/css/open-sans");
+@import url("http://fonts.cdnfonts.com/css/galada");
+@import url("http://fonts.cdnfonts.com/css/mako");
 
 .galada-font {
-    font-family: 'Galada', sans-serif;
+  font-family: "Galada", sans-serif;
 }
 
 .mako-font {
-    font-family: 'Mako', sans-serif;
+  font-family: "Mako", sans-serif;
 }
 
 .open-sans-font {
-    font-family: 'Open Sans';
+  font-family: "Open Sans";
 }
 
 .line-spacing-main {
-    letter-spacing: 0.255em;
+  letter-spacing: 0.255em;
 }

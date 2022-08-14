@@ -4,11 +4,11 @@ import HomePopular from "../../components/home-popular";
 import TopSection from "../../components/top-section";
 
 export default function Home() {
-    return (
-        <div>
-            <Header />
-            <TopSection />
-            <HomePopular />
-        </div>
-    )
+  return (
+    <div>
+      <Header />
+      <TopSection />
+      <HomePopular />
+    </div>
+  );
 }
