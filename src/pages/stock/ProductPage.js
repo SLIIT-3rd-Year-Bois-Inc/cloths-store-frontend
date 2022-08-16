@@ -10,13 +10,8 @@ import {
 
 function ProductPage() {
   const [filter, setFilter] = useState(false);
-  const filterClicked = () => {
-    if (filter) {
-      setFilter(false);
-    } else {
-      setFilter(true);
-    }
-  };
+  const filterClicked = () => setFilter(!filter);
+
   return (
     // full screen div
     <div className="w-screen">
