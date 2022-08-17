@@ -5,7 +5,7 @@ import ProductPage from "../pages/stock/ProductPage";
 export default function ReviewsRouter() {
   return (
     <Routes>
-      <Route path="/stock" element={<ProductPage />} />
+      <Route path="/reviews" element={<ProductPage />} />
     </Routes>
   );
 }
