@@ -5,7 +5,7 @@ import ProductPage from "../pages/stock/ProductPage";
 export default function OrderRouter() {
   return (
     <Routes>
-      <Route path="/stock" element={<ProductPage />} />
+      <Route path="/order" element={<ProductPage />} />
     </Routes>
   );
 }
