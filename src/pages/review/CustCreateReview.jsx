@@ -61,8 +61,8 @@ function cusCreateReview() {
 
           <div class="grid lg:grid-flow-col gap-4 2xl:grid-flex-row md:grid-flow-col">
             <div class="grid lg:grid-flow-col gap-4 2xl:grid-flex-row md:grid-flow-col">
-              <div class="bg-orange-700">
-                <h1>r</h1>
+              <div class="bg-orange-100">
+                <h1>hh</h1>
                 {/* <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-red-900 border-dashed rounded-md">
                   <div class="space-y-1 text-center">
                     <svg
@@ -89,11 +89,13 @@ function cusCreateReview() {
                     </div>
                     <p class="text-xs text-gray-500">PNG, JPG, GIF up to 5MB</p>
                   </div>
-                 */}
+                 </div> */}
               </div>
 
-              <div class="bg-orange-400">
-                {/* <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-red-900 border-dashed rounded-md">
+              <div class="bg-orange-300">
+                <h1>sdfv</h1>
+
+                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-red-900 border-dashed rounded-md">
                   <div class="space-y-1 text-center">
                     <svg
                       class="mx-auto h-12 w-12 text-gray-400"
@@ -119,9 +121,11 @@ function cusCreateReview() {
                     </div>
                     <p class="text-xs text-gray-500">PNG, JPG, GIF up to 5MB</p>
                   </div>
-                </div> */}
+                </div>
 
-                <h1>r</h1>
+                <div class="bg-orange-100">
+                  <h1>sdfs</h1>
+                </div>
               </div>
             </div>
             <div class="bg-blue-300">
