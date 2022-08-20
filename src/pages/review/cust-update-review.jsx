@@ -1,11 +1,19 @@
 import React from "react";
 import image from "../../../src/image/ti.jpg";
+import Modal from "../../components/review-modals/delete-conf-modal";
+import { useState } from "react";
 
-function cusCreateReview() {
+function CusUpdateReview() {
+  const [modalOn, setModalOn] = useState(false);
+  const [choice, setChoice] = useState(false);
+
+  const clicked = () => {
+    setModalOn(true);
+  };
   return (
     <div className="m-24 ml-40 mr-40">
       <h1 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-3xl sm:tracking-tight">
-        Write Your Review
+        Update Your Review
       </h1>
       <div className="grid lg:grid-flow-col gap-10 2xl:grid-flex-row md:grid-flex-col pb-10">
         <div className="bg-gray-00">
@@ -38,12 +46,6 @@ function cusCreateReview() {
         </div>
       </div>
 
-      {/* <div class="grid lg:grid-flow-col gap-4 2xl:grid-flex-row md:grid-flow-col">
-            <div class="bg-red-200">01
-            </div> 
-            <div class="bg-red-300">02</div>
-        </div> */}
-
       <div>
         <form action="">
           <div className="grid lg:grid-flow-col gap-12 2xl:grid-flex-row md:grid-flow-col pb-5">
@@ -60,6 +62,7 @@ function cusCreateReview() {
                   id="about"
                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full mt-1 block sm:text-sm border border-gray-300 rounded-md h-64"
                   placeholder="Type your review here"
+                  value="Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3from SLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3 fromSLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3 from sdvcsdcv dsvcsdc  SLIIT-3rd-Year-Merge pull request #3 from SLIfxv dfv IT-3rd-Yea r-Me rges dcMerges dcMer ges dv cMergesdc"
                 ></textarea>
               </div>
             </div>
@@ -240,6 +243,25 @@ function cusCreateReview() {
                       </button>
                     </div>
                     <div className="ml-3 inline-flex rounded-md shadow">
+                      <button
+                        type="button"
+                        onClick={clicked}
+                        className="inline-flex w-40 h-12 items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-sm text-white bg-stone-900 hover:bg-stone-700"
+                      >
+                        {" "}
+                        Delete Review{" "}
+                      </button>
+                      {choice && (
+                        <div className="flex  justify-center w-1/3 bg-red-400 m-4 p-6 text-lg text-white ">
+                          {" "}
+                          DELETED !!!
+                        </div>
+                      )}
+                      {modalOn && (
+                        <Modal setModalOn={setModalOn} setChoice={setChoice} />
+                      )}
+                    </div>
+                    <div className="ml-3 inline-flex rounded-md shadow">
                       <button className="inline-flex w-40 h-12 items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-sm text-white bg-red-600 hover:bg-red-800">
                         {" "}
                         Submit Review{" "}
@@ -256,4 +278,4 @@ function cusCreateReview() {
   );
 }
 
-export default cusCreateReview;
+export default CusUpdateReview;
