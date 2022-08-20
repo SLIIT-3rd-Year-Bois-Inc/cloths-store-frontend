@@ -22,6 +22,7 @@ const MenuItem = ({
 export default function Header() {
   const [bg, setBg] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const icon_size = 37;
 
   useEffect(() => {
     window.addEventListener("scroll", (e) => {
@@ -34,43 +35,43 @@ export default function Header() {
   return (
     <div
       ref={ref}
-      className={`h-[9em] w-full ${
+      className={`w-full ${
         bg ? "bg-[#ffffffb7] backdrop-blur-sm shadow-md" : ""
       } fixed top-0 z-50 transition-all`}
     >
-      <div className="h-[100px] flex flex-row w-full justify-center items-center px-4">
-        <div className="p-4">
+      <div className="h-[85px] flex flex-row w-full justify-center items-center px-4">
+        <div className="p-4 cursor-pointer">
           <FiMenu
-            size={40}
+            size={icon_size}
             className="stroke-1"
             color={`${bg ? "" : "white"}`}
           />
         </div>
         <div
-          className={`galada-font flex-grow font-bold text-[48px] text-center ${
+          className={`galada-font flex-grow font-bold text-[42px] text-center ${
             bg ? "" : "text-white"
           }`}
         >
           Cloths
         </div>
         <div className="flex flex-row">
-          <div className="p-4">
+          <div className="p-4 cursor-pointer">
             <FiUser
-              size={40}
+              size={icon_size}
               className="stroke-1"
               color={`${bg ? "" : "white"}`}
             />
           </div>
-          <div className="p-4">
+          <div className="p-4 cursor-pointer">
             <FiShoppingBag
-              size={40}
+              size={icon_size}
               className="stroke-1"
               color={`${bg ? "" : "white"}`}
             />
           </div>
         </div>
       </div>
-      <div className="flex w-full justify-center items-center">
+      <div className="flex w-full justify-center items-center pb-2">
         <MenuItem light={!bg}>Women</MenuItem>
         <MenuItem light={!bg}>Men</MenuItem>
         <MenuItem light={!bg}>Kids</MenuItem>
