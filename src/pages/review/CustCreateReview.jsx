@@ -4,9 +4,9 @@ import image from "../../../src/image/ti.jpg";
 function cusCreateReview() {
   // copy paste code
   return (
-    <div>
+    <div className="m-10">
       <div className=""></div>
-      <div class="grid lg:grid-flow-col gap-4 2xl:grid-flex-row md:grid-flow-col">
+      <div class="grid lg:grid-flow-col gap-10 2xl:grid-flex-row md:grid-flow-col pb-5">
         <div class="bg-red-200">
           <img src={image} className="object-cover h-48 w-96 " />
         </div>
@@ -43,12 +43,12 @@ function cusCreateReview() {
 
       <div>
         <form action="">
-          <div class="grid lg:grid-flow-col gap-4 2xl:grid-flex-row md:grid-flow-col">
-            <div class="bg-red-200">
+          <div class="grid lg:grid-flow-col gap-4 2xl:grid-flex-row md:grid-flow-col pb-5">
+            <div class="bg-green-200">
               <h1>Weite a review</h1>
               <textarea name="review" id="" cols="30" rows="10"></textarea>
             </div>
-            <div class="bg-red-300">
+            <div class="bg-teal-300">
               <div>
                 <h1>Rate your review</h1>
                 {/* put star picker */}
@@ -60,15 +60,41 @@ function cusCreateReview() {
           </div>
 
           <div class="grid lg:grid-flow-col gap-4 2xl:grid-flex-row md:grid-flow-col">
-            <div class="bg-red-200">
-              <p>image 1</p>
-              <p>image 1</p>
-              <p>image 1</p>
+            <div class="bg-orange-200">
+              <div>
+                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-red-900 border-dashed rounded-md">
+                  <div class="space-y-1 text-center">
+                    <svg
+                      class="mx-auto h-12 w-12 text-gray-400"
+                      stroke="currentColor"
+                      fill="none"
+                      viewBox="0 0 48 48"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <div class="flex text-sm text-gray-600">
+                      <input
+                        id="file-upload"
+                        name="file-upload"
+                        type="file"
+                        class="sr-only"
+                      />
+                    </div>
+                    <p class="text-xs text-gray-500">PNG, JPG, GIF up to 5MB</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="bg-red-300">
+            <div class="bg-blue-300">
               <div>
                 <div>
-                  <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
+                  <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0 justify-end ">
                     <div class="inline-flex rounded-md shadow">
                       <button className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium text-white bg-stone-900 hover:bg-stone-700 rounded-sm">
                         {" "}
