@@ -21,3 +21,7 @@
 .line-spacing-main {
   letter-spacing: 0.255em;
 }
+
+.text-border-1 {
+  text-shadow: 0 0 3px black;
+}
