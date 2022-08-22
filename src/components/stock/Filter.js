@@ -80,7 +80,7 @@ const initialColorsArray = [
   },
 ];
 
-function Filter({ filter }) {
+function Filter({ filter, from }) {
   const [tagsArray, setTagsArray] = useState(initialArray);
   const [colorArray, setColorArray] = useState(initialColorsArray);
 
@@ -110,7 +110,7 @@ function Filter({ filter }) {
   return (
     <div
       className={
-        " 2xl:w-[300px] 2xl:mr-10" +
+        " 2xl:w-[300px]  2xl:mr-10" +
         (filter
           ? " transition-h flex flex-row justify-around flex-wrap 2xl:flex-col "
           : " hidden 2xl:flex 2xl:flex-col transition-h 2xl:min-h-[400px]")
@@ -139,6 +139,7 @@ function Filter({ filter }) {
         >
           <div class="flex items-center py-1">
             <input
+              checked={from === "Men" ? true : false}
               id="default-radio-1"
               type="radio"
               value=""
@@ -154,7 +155,6 @@ function Filter({ filter }) {
           </div>
           <div class="flex items-center py-1">
             <input
-              checked
               id="default-radio-2"
               type="radio"
               value=""
@@ -170,7 +170,6 @@ function Filter({ filter }) {
           </div>
           <div class="flex items-center py-1">
             <input
-              checked
               id="default-radio-2"
               type="radio"
               value=""
@@ -186,7 +185,6 @@ function Filter({ filter }) {
           </div>
           <div class="flex items-center py-1">
             <input
-              checked
               id="default-radio-2"
               type="radio"
               value=""

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FiUser, FiShoppingBag, FiMenu } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const MenuItem = ({
   children,
@@ -71,9 +72,15 @@ export default function Header() {
         </div>
       </div>
       <div className="flex w-full justify-center items-center">
-        <MenuItem light={!bg}>Women</MenuItem>
-        <MenuItem light={!bg}>Men</MenuItem>
-        <MenuItem light={!bg}>Kids</MenuItem>
+        <Link to="/stock" state={{ from: "Women" }}>
+          <MenuItem light={!bg}>Women</MenuItem>
+        </Link>
+        <Link to="/stock" state={{ from: "Men" }}>
+          <MenuItem light={!bg}>Men</MenuItem>
+        </Link>
+        <Link to="/stock" state={{ from: "kids" }}>
+          <MenuItem light={!bg}>Kids</MenuItem>
+        </Link>
         <MenuItem light={!bg}>New</MenuItem>
         <MenuItem light={!bg}>Sale</MenuItem>
         <MenuItem light={!bg}>Browse</MenuItem>
