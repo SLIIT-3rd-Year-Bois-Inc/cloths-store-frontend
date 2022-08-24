@@ -6,7 +6,7 @@ export default function CustomerDashBoard() {
   return (
     <div className="w-screen h-screen bg-black flex flex-row">
       <SideBar />
-      <div className="flex-grow bg-gray-200">
+      <div className="flex-grow bg-gray-200 pt-[5em] px-[4em]">
         <Outlet />
       </div>
     </div>
