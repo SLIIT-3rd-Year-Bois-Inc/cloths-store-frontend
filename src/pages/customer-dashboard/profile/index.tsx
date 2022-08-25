@@ -4,8 +4,8 @@ import { FiEdit2 } from "react-icons/fi";
 export function Profile() {
   return (
     <>
-      <h1 className="font-bold text-2xl mb-4">Profile</h1>
-      <div className="w-100 flex-grow">
+      <h1 className="font-bold text-2xl mb-6">Profile</h1>
+      <div className="w-100 flex-grow max-w-[60em] bg-white px-12">
         <form className="mb-4">
           <div className="flex flex-row justify-center items-center w-full pb-8">
             <ImagePicker />
@@ -30,7 +30,7 @@ export function Profile() {
           </div>
         </form>
         <div className="w-full flex justify-center items-center">
-          <button className="rounded bg-black text-white hover:bg-white hover:text-black px-10 py-2">
+          <button className="rounded bg-black text-white hover:bg-white hover:text-black px-10 py-3 text-sm">
             Update
           </button>
         </div>
