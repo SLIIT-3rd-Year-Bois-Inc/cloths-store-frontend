@@ -94,7 +94,7 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="flex w-full justify-center items-center">
+      <div className="flex w-full mb-2 justify-center items-center">
         <MenuItem light={!bg} to="/stock" state={{ from: "Women" }}>
           Women
         </MenuItem>
