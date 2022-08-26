@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FiUser, FiShoppingBag, FiMenu } from "react-icons/fi";
+import { Portal } from "react-portal";
+import UserModal from "../home-user-modal";
 
-const MenuItem = ({
-  children,
-  light,
-}: {
+interface MenuItemProps {
   children: string;
   light?: boolean;
-}) => {
+}
+
+const MenuItem = ({ children, light }: MenuItemProps) => {
   return (
     <div
       className={`px-4 mx-1 py-1 mako-font rounded-2xl cursor-pointer drop-shadow-sm ${
@@ -19,10 +20,22 @@ const MenuItem = ({
   );
 };
 
+export interface UserModalState {
+  show: boolean;
+}
+
 export default function Header() {
   const [bg, setBg] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const icon_size = 37;
+
+  const [userModal, setUserModal] = useState<UserModalState>({ show: false });
+
+  const close_user_modal = () => {
+    setUserModal((prev) => {
+      return { ...prev, show: !prev.show };
+    });
+  };
 
   useEffect(() => {
     window.addEventListener("scroll", (e) => {
@@ -55,7 +68,14 @@ export default function Header() {
           Cloths
         </div>
         <div className="flex flex-row">
-          <div className="p-4 cursor-pointer">
+          <div
+            className="p-4 cursor-pointer"
+            onClick={() =>
+              setUserModal((prev) => {
+                return { ...prev, show: true };
+              })
+            }
+          >
             <FiUser
               size={icon_size}
               className="stroke-1"
@@ -79,6 +99,11 @@ export default function Header() {
         <MenuItem light={!bg}>Sale</MenuItem>
         <MenuItem light={!bg}>Browse</MenuItem>
       </div>
+      {userModal.show && (
+        <Portal>
+          <UserModal onClose={close_user_modal} />
+        </Portal>
+      )}
     </div>
   );
 }
