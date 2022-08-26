@@ -1,23 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FiUser, FiShoppingBag, FiMenu } from "react-icons/fi";
 import { Portal } from "react-portal";
-import { Link } from "react-router-dom";
+import { Link, LinkProps } from "react-router-dom";
 import UserModal from "../home-user-modal";
 
-interface MenuItemProps {
+interface MenuItemProps extends LinkProps {
   children: string;
   light?: boolean;
 }
 
-const MenuItem = ({ children, light }: MenuItemProps) => {
+const MenuItem = ({ children, light, ...rest }: MenuItemProps) => {
   return (
-    <div
+    <Link
+      {...rest}
       className={`px-4 mx-1 py-1 mako-font rounded-2xl cursor-pointer drop-shadow-sm ${
         light ? "text-white" : ""
       }`}
     >
       {children}
-    </div>
+    </Link>
   );
 };
 
@@ -94,18 +95,24 @@ export default function Header() {
       </div>
 
       <div className="flex w-full justify-center items-center">
-        <Link to="/stock" state={{ from: "Women" }}>
-          <MenuItem light={!bg}>Women</MenuItem>
-        </Link>
-        <Link to="/stock" state={{ from: "Men" }}>
-          <MenuItem light={!bg}>Men</MenuItem>
-        </Link>
-        <Link to="/stock" state={{ from: "kids" }}>
-          <MenuItem light={!bg}>Kids</MenuItem>
-        </Link>
-        <MenuItem light={!bg}>New</MenuItem>
-        <MenuItem light={!bg}>Sale</MenuItem>
-        <MenuItem light={!bg}>Browse</MenuItem>
+        <MenuItem light={!bg} to="/stock" state={{ from: "Women" }}>
+          Women
+        </MenuItem>
+        <MenuItem light={!bg} to="/stock" state={{ from: "Men" }}>
+          Men
+        </MenuItem>
+        <MenuItem light={!bg} to="/stock" state={{ from: "kids" }}>
+          Kids
+        </MenuItem>
+        <MenuItem light={!bg} to="">
+          New
+        </MenuItem>
+        <MenuItem light={!bg} to="">
+          Sale
+        </MenuItem>
+        <MenuItem light={!bg} to="">
+          Browse
+        </MenuItem>
       </div>
       {userModal.show && (
         <Portal>
