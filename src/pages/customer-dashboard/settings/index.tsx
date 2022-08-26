@@ -11,7 +11,8 @@ export default function Settings() {
         <h1 className="pb-2 font-semibold">Delete Your Account</h1>
         <br></br>
         <p className="mb-4">
-          Warning This will remove all the order history and user data.<br></br>
+          Warning, This will remove all the order history and user data.
+          <br></br>
           All the orders that ongoing will get delivered regardless.
         </p>
         <button
@@ -54,7 +55,7 @@ function ConfirmDelete({ onClose, ...rest }: ConfirmDeleteProps) {
             Please confirm your password to proceed.
           </div>
           <div className="text-center px-4 mb-4 text-red-600">
-            Warning. This will remove all the order history, and user data. All
+            Warning, This will remove all the order history, and user data. All
             the orders that are ongoing will get delivered regardless.
           </div>
           <div className="flex flex-col">
