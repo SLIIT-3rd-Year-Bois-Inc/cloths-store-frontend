@@ -7,7 +7,7 @@ import Stars from "../../components/review-components/stars";
 function CusViewReview() {
   return (
     <div>
-      <div className="m-24 p-16 bg-gray-100 ">
+      <div className="ml-24 mr-24 mb-24 p-16 bg-gray-000 ">
         <div className="">
           <div>
             <div className="input-group relative flex flex-wrap items-stretch w-full mb-4">
@@ -118,7 +118,7 @@ function CusViewReview() {
             <div className="bg-red-200"> <h1>hello</h1></div>
         </div> */}
 
-        <div className=" divide-y divide-stone-300">
+        <div className="">
           {users.map((user, index) => {
             return (
               <div key={index}>

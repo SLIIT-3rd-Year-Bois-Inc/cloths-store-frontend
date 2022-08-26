@@ -13,11 +13,14 @@ function ReviewCard({ users }) {
   };
 
   return (
-    <div className="mt-12 mb-12 pt-0">
+    <div
+      className="p-8 mb-10 rounded-2xl  shadow-md"
+      style={{ backgroundColor: "#f7f7f7" }}
+    >
       <article>
         <div classNameName="flex items-center mb-4 space-x-4 ">
           <div className="space-y-1 font-medium dark:text-white ">
-            <p>{users.name} </p>
+            <p> Review by : {users.name} </p>
           </div>
         </div>
 
@@ -60,10 +63,10 @@ function ReviewCard({ users }) {
           </div>
         </div>
         <aside>
-          <div className="flex items-center mt-3 space-x-3 divide-x divide-gray-200 dark:divide-gray-600">
+          <div className="flex items-center mt-3 space-x-3 justify-end">
             <a
               href="#"
-              className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-2 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+              className="text-white bg-stone-700 border  hover:bg-red-500 focus:ring-4 font-medium rounded text-xs pl-5 pr-5 pt-2 pb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
             >
               update
             </a>
@@ -71,7 +74,7 @@ function ReviewCard({ users }) {
         </aside>
 
         <div
-          class="fixed hidden inset-0 bg-green-600 bg-opacity-50 overflow-y-auto h-full w-full"
+          class="fixed hidden inset-0bg-opacity-50 overflow-y-auto h-full w-full"
           id="my-modal"
         ></div>
       </article>

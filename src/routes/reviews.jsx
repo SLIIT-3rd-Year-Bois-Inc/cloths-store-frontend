@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import CusCreateReview from "../pages/review/cust-create-review";
 import CusUpdateReview from "../pages/review/cust-update-review";
 import CusViewReview from "../pages/review/cust-view-review";
+import Tabs from "../pages/review/cust-two-tab";
 
 import Template from "../pages/review/template";
 
@@ -12,6 +13,7 @@ export default function ReviewsRouter() {
       <Route path="/createReview" element={<CusCreateReview />} />
       <Route path="/updateReview" element={<CusUpdateReview />} />
       <Route path="/viewReview" element={<CusViewReview />} />
+      <Route path="/tabs" element={<Tabs />} />
 
       <Route path="/template" element={<Template />} />
     </Routes>
