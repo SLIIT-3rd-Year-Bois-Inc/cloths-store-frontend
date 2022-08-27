@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+
 import { RiImageAddLine } from "react-icons/ri";
 import { IoCloseSharp } from "react-icons/io5";
 import "./../../components/stock/css/newProduct.css";
@@ -41,7 +42,7 @@ const initialArray = [
   },
 ];
 
-function AddNewProduct() {
+function EditProduct() {
   const [selectedfile, setSelectedfile] = useState(null);
   const [selectedfileIndex, setSelectedfileIndex] = useState(-1);
   const [imagesList, setimagesList] = useState([]);
@@ -121,7 +122,7 @@ function AddNewProduct() {
 
   return (
     <div className="w-screen">
-      <span>Add New Item</span>
+      <span>Edit Item</span>
 
       {/* image upload and inputs set */}
       <div className="w-screen flex flex-wrap 2xl:flex-row  justify-center  ">
@@ -411,4 +412,4 @@ function AddNewProduct() {
   );
 }
 
-export default AddNewProduct;
+export default EditProduct;
