@@ -11,7 +11,7 @@ function ProductViewHeader({ filterClicked }) {
   const [sortby, setSortBy] = useState(false);
   const sortbyClicked = () => setSortBy(!sortby);
   return (
-    <div className=" h-24 px-10 flex flex-row justify-between ml-[350px]">
+    <div className=" h-24 px-10 flex flex-row justify-between 2xl:ml-[350px]">
       <div className="flex flex-row items-center ">
         {/*sort by */}
         <div
@@ -91,7 +91,7 @@ function ProductViewHeader({ filterClicked }) {
           <FiFilter size={20} className="stroke-2" />
         </div>
       </div>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center mr-10">
         <span className="px-1">View:</span>
         <CgViewSplit size={40} className="px-1" />
         <CgViewGrid size={40} className="px-1" />
