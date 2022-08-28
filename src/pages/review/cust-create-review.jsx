@@ -58,7 +58,7 @@ function CusCreateReview() {
               <div className="mt-1">
                 <textarea
                   id="about"
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full mt-1 block sm:text-sm border border-gray-300 rounded-md h-64"
+                  className="shadow-sm focus:ring-red-600 focus:border-red-600 w-full mt-1 block sm:text-sm border border-gray-300 rounded-md h-64"
                   placeholder="Type your review here"
                 ></textarea>
               </div>

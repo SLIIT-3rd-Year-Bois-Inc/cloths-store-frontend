@@ -1,7 +1,11 @@
 import QuestionCard from "../../components/review-components/cust-questions";
 import dataOne from "./dataOne";
+import { useState } from "react";
 
 function Question() {
+  const [popOn, setPopOn] = useState(false);
+  const handleOnClose = () => setPopOn(false);
+
   return (
     <div>
       <div className="ml-40 mr-40 mt-12 ">
@@ -29,11 +33,16 @@ function Question() {
             </form>
           </div>
           <div className="">
-            <button className="btn px-8 py-2 w-36 border-2 ml-3 h-12 border-red-600 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded hover:bg-red-600 hover:border-red-600  focus:outline-none focus:ring-0  transition duration-150 ease-in-out">
+            <button
+              onClick={() => setPopOn(true)}
+              className="btn px-8 py-2 w-36 border-2 ml-3 h-12 border-red-600 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded hover:bg-red-600 hover:border-red-600  focus:outline-none focus:ring-0  transition duration-150 ease-in-out"
+            >
               Ask
             </button>
           </div>
         </div>
+
+        <NotifyMe visible={popOn} onClose={handleOnClose} />
 
         <div>
           {dataOne.map((user, index) => {
@@ -50,3 +59,57 @@ function Question() {
 }
 
 export default Question;
+
+function NotifyMe({ visible, onClose }) {
+  if (!visible) return null;
+
+  return (
+    // <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center backdrop-blur-sm">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-900/60 to-red-900/50  flex justify-center items-center backdrop-blur-sm">
+      <div className="bg-red-000 bg-opacity-40 pt-16 pb-20 p-14  rounded-3xl bg-white">
+        <button
+          onClick={onClose}
+          className="bg-gray-200 text-black p-2 pl-8 pr-8 active:bg-gray-300"
+        >
+          {" "}
+          Go back
+        </button>
+        <div className="flex grid-flow-row">
+          <div className="bg-white p-10">
+            <form action="">
+              <div className="mb-6">
+                <label
+                  for="email"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  We'll notify you when your question is answered
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:red-blue-500 dark:focus:border-red-500"
+                  placeholder="Enter email"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="bg-black text-white p-3 pl-12 pr-12 bg-fixed rounded-3xl hover:bg-red-600 active:bg-red-800"
+              >
+                Ask and Notify
+              </button>
+            </form>
+          </div>
+
+          <div className="bg-red-300 p-16">
+            <p className="pb-3">Dont Notify</p>
+            <button className="bg-black text-white p-3 pl-16 pr-16 bg-fixed rounded-3xl hover:bg-red-600 active:bg-red-800">
+              Just Ask
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
