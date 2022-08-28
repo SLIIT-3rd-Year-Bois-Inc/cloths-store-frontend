@@ -111,13 +111,6 @@ function CusViewReview() {
           </div>
         </div>
 
-        {/* <div className="grid lg:grid-flow-col gap-1 2xl:grid-flex-row md:grid-flex-col">
-            <div className="bg-teal-200 col-span-3"></div>
-            <div className="bg-yellow-100"> <h1>hello</h1></div>
-            <div className="bg-blue-200"> <h1>hello</h1></div>
-            <div className="bg-red-200"> <h1>hello</h1></div>
-        </div> */}
-
         <div className="">
           {users.map((user, index) => {
             return (
@@ -128,7 +121,6 @@ function CusViewReview() {
           })}
 
           <button className="bg-red-400"></button>
-          {/* <ImageView /> */}
         </div>
       </div>
     </div>
