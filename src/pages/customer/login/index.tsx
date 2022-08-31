@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import CustomerFormError from "../../../components/customer-form-error";
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -13,18 +14,6 @@ const loginSchema = yup.object().shape({
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
 });
-
-function FormError({
-  children,
-  className,
-  ...rest
-}: React.HTMLProps<HTMLDivElement>) {
-  return (
-    <div className={`${className} text-red-600 text-sm mt-1`} {...rest}>
-      {children}
-    </div>
-  );
-}
 
 export default function Login() {
   const {
@@ -68,7 +57,9 @@ export default function Login() {
               placeholder="Email"
               {...register("email")}
             ></input>
-            <FormError>{errors.email?.message as string}</FormError>
+            <CustomerFormError>
+              {errors.email?.message as string}
+            </CustomerFormError>
           </div>
           <div className="flex flex-col justify-center items-center mb-6">
             <label className="text-sm">Password</label>
@@ -77,7 +68,9 @@ export default function Login() {
               placeholder="Password"
               {...register("password")}
             ></input>
-            <FormError>{errors.password?.message as string}</FormError>
+            <CustomerFormError>
+              {errors.password?.message as string}
+            </CustomerFormError>
           </div>
           <button
             type="submit"
