@@ -29,3 +29,10 @@
 .line-spacing-small {
   letter-spacing: 0.1em;
 }
+
+.flowbite-dropdown {
+  position: absolute;
+  inset: 0px auto auto 0px;
+  margin: 0px;
+  transform: translate(282px, 70px);
+}
