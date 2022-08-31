@@ -48,10 +48,12 @@ function Order() {
         </div>
       </div>
       <div className="flex flex-row">
-        <img
-          src="https://ae01.alicdn.com/kf/Hb048b9e7d1fb4fafb26619b84c2ad217V.jpg_220x220.jpg"
-          className="w-[9em] mr-2"
-        ></img>
+        <div className="h-[9em] w-[9em] mr-2 flex-shrink-0">
+          <img
+            src="https://ae01.alicdn.com/kf/Hb048b9e7d1fb4fafb26619b84c2ad217V.jpg_220x220.jpg"
+            className="w-full h-full object-contain"
+          ></img>
+        </div>
         <div className="flex flex-col">
           <div className="w-full mb-1 cursor-pointer hover:text-red-500">
             KZ ZSN Pro In Ear Earphones 1BA+1DD Hybrid Technology Hifi Bass
