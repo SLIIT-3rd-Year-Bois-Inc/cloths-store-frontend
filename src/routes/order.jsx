@@ -1,11 +1,11 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import ProductPage from "../pages/stock/ProductPage";
+import Test from "../components/product-details/product-details";
 
 export default function OrderRouter() {
   return (
     <Routes>
-      <Route path="/order" element={<ProductPage />} />
+      <Route path="/product" element={<Test />} />
     </Routes>
   );
 }
