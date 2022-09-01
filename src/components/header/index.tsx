@@ -1,36 +1,60 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FiUser, FiShoppingBag, FiMenu } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Portal } from "react-portal";
+import { Link, LinkProps } from "react-router-dom";
+import UserModal from "../home-user-modal";
 
-const MenuItem = ({
-  children,
-  light,
-}: {
+interface MenuItemProps extends LinkProps {
   children: string;
   light?: boolean;
-}) => {
+}
+
+const MenuItem = ({ children, light, ...rest }: MenuItemProps) => {
   return (
-    <div
+    <Link
+      {...rest}
       className={`px-4 mx-1 py-1 mako-font rounded-2xl cursor-pointer drop-shadow-sm ${
         light ? "text-white" : ""
       }`}
     >
       {children}
-    </div>
+    </Link>
   );
 };
+
+export interface UserModalState {
+  show: boolean;
+  mouse_over_modal: boolean;
+}
 
 export default function Header() {
   const [bg, setBg] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const icon_size = 37;
 
+  const [userModal, setUserModal] = useState<UserModalState>({
+    show: false,
+    mouse_over_modal: false,
+  });
+
+  const close_user_modal = () => {
+    setUserModal((prev) => {
+      return { ...prev, show: !prev.show };
+    });
+  };
+
   useEffect(() => {
-    window.addEventListener("scroll", (e) => {
+    const on_scroll = () => {
       let elem = ref.current;
       let b = elem && window.scrollY > elem.getBoundingClientRect().height;
       setBg(b ? true : false);
-    });
+    };
+
+    window.addEventListener("scroll", on_scroll);
+
+    return () => {
+      window.removeEventListener("scroll", on_scroll);
+    };
   }, []);
 
   return (
@@ -56,13 +80,20 @@ export default function Header() {
           Cloths
         </div>
         <div className="flex flex-row">
-          <div className="p-4 cursor-pointer">
+          <button
+            className="p-4 cursor-pointer"
+            onClick={() =>
+              setUserModal((prev) => {
+                return { ...prev, show: true };
+              })
+            }
+          >
             <FiUser
               size={icon_size}
               className="stroke-1"
               color={`${bg ? "" : "white"}`}
             />
-          </div>
+          </button>
           <div className="p-4 cursor-pointer">
             <FiShoppingBag
               size={icon_size}
@@ -73,20 +104,31 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="flex w-full justify-center items-center">
-        <Link to="/stock" state={{ from: "Women" }}>
-          <MenuItem light={!bg}>Women</MenuItem>
-        </Link>
-        <Link to="/stock" state={{ from: "Men" }}>
-          <MenuItem light={!bg}>Men</MenuItem>
-        </Link>
-        <Link to="/stock" state={{ from: "kids" }}>
-          <MenuItem light={!bg}>Kids</MenuItem>
-        </Link>
-        <MenuItem light={!bg}>New</MenuItem>
-        <MenuItem light={!bg}>Sale</MenuItem>
-        <MenuItem light={!bg}>Browse</MenuItem>
+      <div className="flex w-full mb-2 justify-center items-center">
+        <MenuItem light={!bg} to="/stock" state={{ from: "Women" }}>
+          Women
+        </MenuItem>
+        <MenuItem light={!bg} to="/stock" state={{ from: "Men" }}>
+          Men
+        </MenuItem>
+        <MenuItem light={!bg} to="/stock" state={{ from: "kids" }}>
+          Kids
+        </MenuItem>
+        <MenuItem light={!bg} to="">
+          New
+        </MenuItem>
+        <MenuItem light={!bg} to="">
+          Sale
+        </MenuItem>
+        <MenuItem light={!bg} to="">
+          Browse
+        </MenuItem>
       </div>
+      {userModal.show && (
+        <Portal>
+          <UserModal onClose={close_user_modal} />
+        </Portal>
+      )}
     </div>
   );
 }

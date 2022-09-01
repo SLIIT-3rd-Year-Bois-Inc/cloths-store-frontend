@@ -110,10 +110,10 @@ function Filter({ filter, from }) {
   return (
     <div
       className={
-        " 2xl:w-[300px]  2xl:mr-10" +
+        "absolute top-0 left-0 right-0  overflow-y-auto bg-white 2xl:static 2xl:w-[300px]  2xl:mr-10" +
         (filter
-          ? " transition-h flex flex-row justify-around flex-wrap 2xl:flex-col "
-          : " hidden 2xl:flex 2xl:flex-col transition-h 2xl:min-h-[400px]")
+          ? " transition-h flex justify-around flex-wrap 2xl:flex-col "
+          : " hidden 2xl:flex 2xl:flex-col transition-h xl:min-h-[400px]")
       }
     >
       {/*Gender filter */}
