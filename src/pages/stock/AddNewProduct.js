@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { RiImageAddLine } from "react-icons/ri";
 import { IoCloseSharp } from "react-icons/io5";
 import "./../../components/stock/css/newProduct.css";
+import axios from "axios";
 
 import { IoMdAddCircleOutline } from "react-icons/io";
 
@@ -42,6 +43,34 @@ const initialArray = [
 ];
 
 function AddNewProduct() {
+  //form usestates-----------------------------------------------------------------------------------------------------------------
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [gender, setGender] = useState("Men");
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  function sendData(e) {
+    e.preventDefault();
+
+    const newItem = {
+      name,
+      price,
+      gender,
+    };
+    axios
+      .post("http://localhost:4200/user", {
+        firstName: "Fred",
+        lastName: "Flintstone",
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  // functional use states and functions-------------------------------------------------------------------------------------------
   const [selectedfile, setSelectedfile] = useState(null);
   const [selectedfileIndex, setSelectedfileIndex] = useState(-1);
   const [imagesList, setimagesList] = useState([]);
@@ -194,6 +223,7 @@ function AddNewProduct() {
         <form>
           <div className="w-[600px] m-8">
             <div className="grid">
+              {/*product name input */}
               <div className="mb-6">
                 <label
                   for="first_name"
@@ -202,6 +232,8 @@ function AddNewProduct() {
                   Product Name
                 </label>
                 <input
+                  onChange={(e) => setName(e.target.value)}
+                  value={name}
                   type="text"
                   id="first_name"
                   class=" border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
@@ -209,6 +241,7 @@ function AddNewProduct() {
                   required
                 />
               </div>
+              {/*product price input */}
               <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
                   <label
@@ -218,13 +251,16 @@ function AddNewProduct() {
                     Product Price
                   </label>
                   <input
+                    onChange={(e) => setPrice(e.target.value)}
+                    value={price}
                     type="text"
                     id="first_name"
                     class=" border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
-                    placeholder="John"
+                    placeholder="price"
                     required
                   />
                 </div>
+                {/*gender input */}
                 <div>
                   <label
                     for="countries"
@@ -235,12 +271,15 @@ function AddNewProduct() {
                   <select
                     id="countries"
                     class=" border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
                   >
-                    <option selected>Choose a country</option>
-                    <option value="US">Men</option>
-                    <option value="CA">Women</option>
-                    <option value="FR">Kids</option>
-                    <option value="DE">Unisex</option>
+                    <option value="Men" selected>
+                      Men
+                    </option>
+                    <option value="Women">Women</option>
+                    <option value="Kids">Kids</option>
+                    <option value="Unisex">Unisex</option>
                   </select>
                 </div>
               </div>
@@ -403,6 +442,17 @@ function AddNewProduct() {
                   </span>
                 </div>
               </div>
+            </div>
+            <div>
+              <input
+                onClick={(e) => sendData(e)}
+                type="submit"
+                value={"ADD"}
+                className="bg-red-600 text-white h-10 w-[200px] cursor-pointer hover:bg-red-700 mr-10 mt-20"
+              />
+              <button className="bg-black text-white h-10 w-[200px]">
+                CANCLE
+              </button>
             </div>
           </div>
         </form>
