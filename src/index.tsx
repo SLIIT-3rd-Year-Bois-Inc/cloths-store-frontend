@@ -8,18 +8,24 @@ import CustomerRouter from "./routes/customer";
 import StockRouter from "./routes/stock";
 import ReviewsRouter from "./routes/reviews";
 import OrderRouter from "./routes/order";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+const queryClient = new QueryClient();
+
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <CustomerRouter />
-      <StockRouter />
-      <ReviewsRouter />
-      <OrderRouter />
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <CustomerRouter />
+        <StockRouter />
+        <ReviewsRouter />
+        <OrderRouter />
+      </BrowserRouter>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 

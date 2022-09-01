@@ -6,6 +6,8 @@ import Orders from "../pages/customer-dashboard/orders";
 import { Profile } from "../pages/customer-dashboard/profile";
 import Settings from "../pages/customer-dashboard/settings";
 import WishList from "../pages/customer-dashboard/wishlist";
+import Login from "../pages/customer/login";
+import SignUp from "../pages/customer/sign-up";
 import Home from "../pages/home";
 
 export default function CustomerRouter() {
@@ -19,6 +21,8 @@ export default function CustomerRouter() {
         <Route path="settings" element={<Settings />}></Route>
         <Route path="wishlist" element={<WishList />}></Route>
       </Route>
+      <Route path="/customer/login" element={<Login />} />
+      <Route path="/customer/sign-up" element={<SignUp />} />
     </Routes>
   );
 }

@@ -44,11 +44,17 @@ export default function Header() {
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", (e) => {
+    const on_scroll = () => {
       let elem = ref.current;
       let b = elem && window.scrollY > elem.getBoundingClientRect().height;
       setBg(b ? true : false);
-    });
+    };
+
+    window.addEventListener("scroll", on_scroll);
+
+    return () => {
+      window.removeEventListener("scroll", on_scroll);
+    };
   }, []);
 
   return (
