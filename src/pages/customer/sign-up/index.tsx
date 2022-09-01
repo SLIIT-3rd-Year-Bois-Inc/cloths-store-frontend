@@ -1,8 +1,13 @@
-import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import CustomerFormError from "../../../components/customer-form-error";
+import { CustomerAPI } from "../api";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { sign } from "crypto";
+import { CustomerLoadingOverlay } from "../../../components/customer-loading-overlay";
+import { useEffect } from "react";
 
 const signUpSchema = yup.object().shape({
   password: yup
@@ -28,18 +33,32 @@ export default function SignUp() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(signUpSchema),
   });
 
+  const navigate = useNavigate();
+
+  const sign_up = useMutation(CustomerAPI.sign_up);
+
   const onSubmit = (data: any) => {
-    console.log(data);
+    sign_up.mutate(data);
   };
 
+  useEffect(() => {
+    if (sign_up.isSuccess) {
+      setTimeout(() => {
+        navigate("/");
+        sign_up.reset();
+      }, 1000);
+    } else {
+      setTimeout(() => sign_up.reset(), 1000);
+    }
+  }, [sign_up.status]);
+
   return (
-    <div className="w-screen h-screen bg-black flex justify-center items-center">
+    <div className="w-screen h-screen bg-black flex justify-center items-center relative">
       <div className="py-6 px-10 bg-white w-[30em]">
         <form onSubmit={handleSubmit(onSubmit)} className="w-full">
           <div className="w-full flex flex-row justify-center items-center">
@@ -80,6 +99,7 @@ export default function SignUp() {
           <div className="flex flex-col justify-center items-center w-full">
             <label className="text-sm">Password</label>
             <input
+              type="password"
               className="rounded border-black border mx-2 p-3 w-full"
               placeholder="Password"
               {...register("password")}
@@ -91,6 +111,7 @@ export default function SignUp() {
           <div className="flex flex-col justify-center items-center w-full">
             <label className="text-sm">Confirm Password</label>
             <input
+              type="password"
               className="rounded border-black border mx-2 p-3 w-full"
               placeholder="Confirm Password"
               {...register("confirm_password")}
@@ -142,6 +163,15 @@ export default function SignUp() {
           </div>
         </form>
       </div>
+      {sign_up.isLoading || sign_up.isSuccess || sign_up.isError ? (
+        <CustomerLoadingOverlay>
+          {sign_up.isLoading ? <div>Loading</div> : ""}
+          {sign_up.isError ? <div>Error</div> : ""}
+          {sign_up.isSuccess ? <div>Success</div> : ""}
+        </CustomerLoadingOverlay>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

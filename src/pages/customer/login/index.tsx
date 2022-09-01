@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import CustomerFormError from "../../../components/customer-form-error";
+import { CustomerAPI } from "../api";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { CustomerLoadingOverlay } from "../../../components/customer-loading-overlay";
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -27,12 +31,28 @@ export default function Login() {
 
   const [rememberMe, setRememberMe] = useState(false);
 
-  const onSubmitHandler = (data: any) => {
-    console.log(data);
+  const navigate = useNavigate();
+  const login = useMutation(CustomerAPI.login);
+
+  const onSubmitHandler = async (data: any) => {
+    data.remember_me = rememberMe;
+    login.mutate(data);
   };
 
+  useEffect(() => {
+    if (login.isSuccess) {
+      console.log("success");
+      setTimeout(() => {
+        navigate("/");
+        login.reset();
+      }, 1000);
+    } else {
+      setTimeout(() => login.reset(), 5000);
+    }
+  }, [login.status]);
+
   return (
-    <div className="w-screen h-screen flex flex-row">
+    <div className="w-screen h-screen flex flex-row relative">
       <div className="w-[50%] flex-shrink-0">
         <img
           src="/philipp-arlt-NmH9A0obon8-unsplash.jpg"
@@ -64,6 +84,7 @@ export default function Login() {
           <div className="flex flex-col justify-center items-center mb-6">
             <label className="text-sm">Password</label>
             <input
+              type="password"
               className="rounded border-black border mx-2 p-3 min-w-[22em]"
               placeholder="Password"
               {...register("password")}
@@ -105,6 +126,15 @@ export default function Login() {
           <div>Back to home</div>
         </div>
       </div>
+      {login.isLoading || login.isSuccess || login.isError ? (
+        <CustomerLoadingOverlay>
+          {login.isLoading ? <div>Loading</div> : ""}
+          {login.isError ? <div>Error</div> : ""}
+          {login.isSuccess ? <div>Success</div> : ""}
+        </CustomerLoadingOverlay>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
