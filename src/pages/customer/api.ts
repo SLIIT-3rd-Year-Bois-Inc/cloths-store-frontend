@@ -1,4 +1,3 @@
-import { API_ENDPOINT } from "../../config";
 import { postJson } from "../../utils/fetch";
 
 export const CustomerAPI = {

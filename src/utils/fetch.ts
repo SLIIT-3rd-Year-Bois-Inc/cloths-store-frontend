@@ -15,8 +15,8 @@ export async function postJson(
   });
 
   if (res.status >= 300) {
-    throw new Error(`Received json ${res.status}`);
+    throw new Error(`Received status ${res.status}`);
   }
 
-  if (json_response) return res.json();
+  if (json_response) return await res.json();
 }
