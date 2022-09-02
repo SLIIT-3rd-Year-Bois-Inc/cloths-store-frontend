@@ -10,7 +10,9 @@ export default function StockRouter() {
     <Routes>
       <Route path="/stock" element={<ProductPage />} />
       <Route path="/stock/admin/newProduct" element={<AddNewProduct />} />
-      <Route path="/stock/admin/editProduct" element={<EditProduct />} />
+      <Route path="/stock/admin/editProduct" element={<EditProduct />}>
+        <Route path=":productID" element={<EditProduct />} />
+      </Route>
       <Route path="/stock/admin/ProductPage" element={<AdminProductPage />} />
     </Routes>
   );
