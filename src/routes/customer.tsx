@@ -8,6 +8,7 @@ import Settings from "../pages/customer-dashboard/settings";
 import WishList from "../pages/customer-dashboard/wishlist";
 import Login from "../pages/customer/login";
 import SignUp from "../pages/customer/sign-up";
+import { FileUpload } from "../pages/examples/file-upload";
 import Home from "../pages/home";
 
 export default function CustomerRouter() {
@@ -23,6 +24,7 @@ export default function CustomerRouter() {
       </Route>
       <Route path="/customer/login" element={<Login />} />
       <Route path="/customer/sign-up" element={<SignUp />} />
+      <Route path="/example/file-upload" element={<FileUpload />} />
     </Routes>
   );
 }
