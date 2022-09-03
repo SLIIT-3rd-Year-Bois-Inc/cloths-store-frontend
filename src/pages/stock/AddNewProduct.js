@@ -1,93 +1,39 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { RiImageAddLine } from "react-icons/ri";
 import { IoCloseSharp } from "react-icons/io5";
 import "./../../components/stock/css/newProduct.css";
 import axios from "axios";
 
 import { IoMdAddCircleOutline } from "react-icons/io";
-
-const initialArray = [
-  {
-    tagName: "T-shirt",
-    selected: false,
-  },
-  {
-    tagName: "Shirt",
-    selected: false,
-  },
-  {
-    tagName: "Office Ware",
-    selected: true,
-  },
-  {
-    tagName: "skirts",
-    selected: false,
-  },
-  {
-    tagName: "Frocks",
-    selected: false,
-  },
-
-  {
-    tagName: "Trousers",
-    selected: false,
-  },
-  {
-    tagName: "Blouse",
-    selected: true,
-  },
-  {
-    tagName: "Long Sleeve",
-    selected: false,
-  },
-];
+import Loader from "../../components/stock/Loader";
 
 function AddNewProduct() {
   //form usestates-----------------------------------------------------------------------------------------------------------------
+  const [clothneeds, setClothneeds] = useState(null);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [gender, setGender] = useState("Men");
-  const [selectedTags, setSelectedTags] = useState([]);
-
-  function sendData(e) {
-    e.preventDefault();
-
-    const newItem = {
-      name,
-      price,
-      gender,
-    };
-    axios
-      .post("http://localhost:4200/user", {
-        firstName: "Fred",
-        lastName: "Flintstone",
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
+  const [gender, setGender] = useState("M");
+  const [tagsArray, setTagsArray] = useState([]);
+  const [imagesUrls, setImagesUrls] = useState([]);
+  const [description, setDescription] = useState("");
+  const [color, setColor] = useState("");
+  const [sizeList, setSizeList] = useState([]);
 
   // functional use states and functions-------------------------------------------------------------------------------------------
+  const [colorSelector, setColorSelector] = useState(false);
+  const [colorArray, setColorArray] = useState([]);
   const [selectedfile, setSelectedfile] = useState(null);
   const [selectedfileIndex, setSelectedfileIndex] = useState(-1);
   const [imagesList, setimagesList] = useState([]);
-  const [sizeList, setSizeList] = useState([
-    {
-      size: "s",
-      quantity: 14,
-    },
-    {
-      size: "",
-      quantity: 0,
-    },
-  ]);
+  const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState(false);
-  const [tagsArray, setTagsArray] = useState(initialArray);
+
   const tagsClicked = () => {
     setTags(!tags);
+  };
+  const colorSelectorClicked = () => setColorSelector(!colorSelector);
+  const colorClicked = (color) => {
+    setColor(color);
   };
 
   const handleSizeChange = (index, event) => {
@@ -147,11 +93,123 @@ function AddNewProduct() {
     temparr[index].selected = !temparr[index].selected;
     setTagsArray(temparr);
   }
+  //validations----------------------------------
+  function validations() {
+    if (name === "") {
+      alert("name cannot be null!");
+      return false;
+    }
+    if (price === "") {
+      alert("price cannot be null!");
+      return false;
+    }
+    if (color === "") {
+      alert("please select a color!");
+      return false;
+    }
+    if (sizeList === []) {
+      alert("please select a size!");
+      return false;
+    }
+    if (gender === "choose a gender") {
+      alert("please choose a gender!");
+    }
+    if (description === "") {
+      alert("description cannot be null!");
+      return false;
+    }
+
+    return true;
+  }
+  //useEffect for get tags in gender change------------------------------------------------------------------
+  function sendData(e) {
+    e.preventDefault();
+    if (!validations()) return 0;
+    let tags = [];
+    tagsArray.forEach((tag) => {
+      if (tag.selected) {
+        tags.push(tag.tagName);
+      }
+    });
+
+    let quantity = {};
+    sizeList.forEach((size) => {
+      quantity[String(size.size)] = size.quantity;
+    });
+    const newItem = {
+      name,
+      price,
+      gender,
+      tags,
+      imagesUrls,
+      description,
+      color,
+      quantity,
+    };
+    console.log(newItem);
+    setLoading(true);
+    axios
+      .post("http://localhost:4200/api/stock/newProduct", newItem)
+      .then(function (response) {
+        console.log(response);
+        alert("product added");
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert("product not added");
+      })
+      .then(() => {
+        setLoading(false);
+      });
+  }
+  useEffect(() => {
+    axios
+      .get("http://localhost:4200/api/clothNeeds/getTags")
+      .then(function (response) {
+        // handle success
+        let data = response.data[0].mensTags.map((tag) => ({
+          tagName: tag,
+          selected: false,
+        }));
+
+        setTagsArray(data);
+        setColorArray(response.data[0].colors);
+        setClothneeds(response.data[0]);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+        console.log(colorArray);
+      });
+  }, []);
+  useEffect(() => {
+    if (clothneeds) {
+      if (gender === "Men") {
+        let data = clothneeds.mensTags.map((tag) => ({
+          tagName: tag,
+          selected: false,
+        }));
+
+        setTagsArray(data);
+      } else if (gender === "Women") {
+        let data = [];
+        data = clothneeds.womenTags.map((tag) => ({
+          tagName: tag,
+          selected: false,
+        }));
+
+        setTagsArray(data);
+      }
+    }
+  }, [gender, clothneeds]);
 
   return (
     <div className="w-screen">
       <span>Add New Item</span>
-
+      {loading && <Loader />}
       {/* image upload and inputs set */}
       <div className="w-screen flex flex-wrap 2xl:flex-row  justify-center  ">
         {/* image upload */}
@@ -253,7 +311,7 @@ function AddNewProduct() {
                   <input
                     onChange={(e) => setPrice(e.target.value)}
                     value={price}
-                    type="text"
+                    type="number"
                     id="first_name"
                     class=" border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
                     placeholder="price"
@@ -274,12 +332,15 @@ function AddNewProduct() {
                     value={gender}
                     onChange={(e) => setGender(e.target.value)}
                   >
-                    <option value="Men" selected>
+                    <option value="choose a gender" selected>
+                      choose a gender
+                    </option>
+                    <option value="M" selected>
                       Men
                     </option>
-                    <option value="Women">Women</option>
-                    <option value="Kids">Kids</option>
-                    <option value="Unisex">Unisex</option>
+                    <option value="W">Women</option>
+                    <option value="K">Kids</option>
+                    <option value="U">Unisex</option>
                   </select>
                 </div>
               </div>
@@ -350,6 +411,7 @@ function AddNewProduct() {
                   id="first_name"
                   class=" border align-middle border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
                   placeholder="description"
+                  onChange={(e) => setDescription(e.target.value)}
                   required
                 />
               </div>
@@ -360,24 +422,38 @@ function AddNewProduct() {
       <div className="w-full flex flex-row justify-center">
         <form>
           <div class="flex flex-col items-center gap-6 mb-6">
-            <div className="mb-2">
+            {/* color--------------------------------------------------------------------------------------------------- */}
+            <div className="relative mb-6">
               <label
                 for="first_name"
                 class="block ml-2 mb-2   text-gray-900 dark:text-gray-300 font-bold text-md"
               >
-                Color
+                color
               </label>
-
-              <select
-                id="countries"
-                class="w-[250px] border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
+              <div className="border w-[300px] items-center flex flex-row justify-between min-h-[30px] align-middle border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md">
+                <div className={color + " mr-3 w-full h-10 "}></div>
+                <span onClick={colorSelectorClicked} className="">
+                  <IoMdAddCircleOutline className="w-6 h-6" />
+                </span>
+              </div>
+              <div
+                class={
+                  colorSelector
+                    ? "absolute -bottom-[100px] h-[100px] overflow-y-auto w-full p-5 flex flex-wrap origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+                    : "hidden"
+                }
               >
-                <option selected>Choose a color</option>
-                <option value="US">white</option>
-                <option value="CA">blue</option>
-                <option value="FR">black</option>
-                <option value="DE">red</option>
-              </select>
+                {colorArray.map((color, index) => (
+                  <span
+                    className={
+                      color +
+                      "    border-2 h-8 w-8 m-1 text-base rounded-full px-4 py-1  hover:cursor-pointer"
+                    }
+                    onClick={() => colorClicked(color)}
+                    // bg-slate-500 bg-red-500 bg-orange-500 bg-yellow-500 bg-green-500 bg-emerald-500 bg-teal-500 bg-cyan-500 bg-violet-500
+                  ></span>
+                ))}
+              </div>
             </div>
             <div class="flex flex-wrap justify-around">
               {sizeList.map((sizeqty, index) => (
