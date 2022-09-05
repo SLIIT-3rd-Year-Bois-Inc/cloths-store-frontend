@@ -34,25 +34,22 @@ function CustTwoTab() {
           <div
             className="w-full text-3xl font-semibold border-solid border-b-4"
             style={{ color: revButtonColor, borderColor: rc }}
-            onClick={() => {
-              revButton();
-            }}
+            onClick={revButton}
           >
             Reviews
           </div>
           <div
             className="w-full text-3xl font-semibold border-solid border-b-4"
             style={{ color: quesButtonColor, borderColor: qc }}
-            onClick={() => {
-              quesButton();
-            }}
+            onClick={quesButton}
           >
             Questions
           </div>
         </div>
       </div>
       <div className=" p-0 w-full bg-orange-00">
-        <Tabs TabSelect={ShowTab} />
+        {/* <Tabs TabSelect={ShowTab} /> */}
+        {ShowTab == "rev" ? <CusViewReview /> : <Question />}
       </div>
     </div>
   );
