@@ -1,3 +1,4 @@
+import { string } from "yup";
 import { API_ENDPOINT } from "../config";
 
 export async function postJson(
@@ -19,4 +20,17 @@ export async function postJson(
   }
 
   if (json_response) return await res.json();
+}
+
+export async function deleteRequest(endpoint: string) {
+  let res = await fetch(`${API_ENDPOINT}${endpoint}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (res.status >= 300) {
+    throw new Error(`Received status ${res.status}`);
+  }
+
+  return true;
 }

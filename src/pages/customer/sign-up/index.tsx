@@ -39,27 +39,25 @@ export default function SignUp() {
 
   const navigate = useNavigate();
 
-  const sign_up = useMutation(CustomerAPI.sign_up);
-
-  const onSubmit = (data: any) => {
-    sign_up.mutate(data);
-  };
-
-  useEffect(() => {
-    if (sign_up.isSuccess) {
+  const sign_up = useMutation(CustomerAPI.signUp, {
+    onSuccess: () => {
       setTimeout(() => {
         navigate("/");
         sign_up.reset();
       }, 1000);
-    } else {
+    },
+    onError: () => {
       setTimeout(() => sign_up.reset(), 1000);
-    }
-  }, [sign_up.status]);
+    },
+  });
 
   return (
     <div className="w-screen h-screen bg-black flex justify-center items-center relative">
       <div className="py-6 px-10 bg-white w-[30em]">
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+        <form
+          onSubmit={handleSubmit((data) => sign_up.mutate(data))}
+          className="w-full"
+        >
           <div className="w-full flex flex-row justify-center items-center">
             <div className="flex flex-col justify-center items-center flex-grow mr-3">
               <label className="text-sm">First Name</label>
