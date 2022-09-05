@@ -1,7 +1,54 @@
 import React from "react";
 import image from "../../../src/image/ti.jpg";
+import { useState } from "react";
+import { API_ENDPOINT } from "../../config";
+import Success from "../../components/review-modals/success";
+import Failed from "../../components/review-modals/failed";
 
 function CusCreateReview() {
+  // put const for ishans stuff
+
+  const [review, setReview] = useState("");
+  const [rating, setRating] = useState("");
+  const [image1, setImage1] = useState("");
+  const [image2, setImage2] = useState("");
+  const [image3, setImage3] = useState("");
+
+  const [modalOn, setModalOn] = useState(false);
+  const [choice, setChoice] = useState(false);
+  const [modalOn2, setModalOn2] = useState(false);
+  const [choice2, setChoice2] = useState(false);
+  // const clicked = () => {
+  //   setModalOn(true);
+  // };
+
+  const formSubmit = (e) => {
+    e.preventDefault();
+    // const data = { revive , stars, image1 etc}
+
+    const data = { review, rating };
+    fetch(`${API_ENDPOINT}/api/review/addReview`, {
+      method: "post",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("success");
+          setModalOn(true);
+        } else {
+          console.log("Failed");
+          setModalOn2(true);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
   return (
     <div className="m-24 ml-40 mr-40">
       <h1 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-3xl sm:tracking-tight">
@@ -38,14 +85,8 @@ function CusCreateReview() {
         </div>
       </div>
 
-      {/* <div class="grid lg:grid-flow-col gap-4 2xl:grid-flex-row md:grid-flow-col">
-            <div class="bg-red-200">01
-            </div> 
-            <div class="bg-red-300">02</div>
-        </div> */}
-
       <div>
-        <form action="">
+        <form action="" onSubmit={formSubmit}>
           <div className="grid lg:grid-flow-col gap-12 2xl:grid-flex-row md:grid-flow-col pb-5">
             <div className="col-span-6 ">
               <label
@@ -60,6 +101,11 @@ function CusCreateReview() {
                   id="about"
                   className="shadow-sm focus:ring-red-600 focus:border-red-600 w-full mt-1 block sm:text-sm border border-gray-300 rounded-md h-64"
                   placeholder="Type your review here"
+                  value={review}
+                  onChange={(e) => {
+                    setReview(e.target.value);
+                  }}
+                  required
                 ></textarea>
               </div>
             </div>
@@ -244,6 +290,18 @@ function CusCreateReview() {
                         {" "}
                         Submit Review{" "}
                       </button>
+                      {modalOn && (
+                        <Success
+                          setModalOn={setModalOn}
+                          setChoice={setChoice}
+                        />
+                      )}
+                      {modalOn2 && (
+                        <Failed
+                          setModalOn2={setModalOn2}
+                          setChoice2={setChoice2}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

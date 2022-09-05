@@ -2,14 +2,53 @@ import React from "react";
 import image from "../../../src/image/ti.jpg";
 import Modal from "../../components/review-modals/delete-conf-modal";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { API_ENDPOINT } from "../../config";
 
 function CusUpdateReview() {
   const [modalOn, setModalOn] = useState(false);
   const [choice, setChoice] = useState(false);
 
+  const location = useLocation();
+
+  const [review, setReview] = useState(location.state.review);
+  const [rating, setRating] = useState(8);
+  const [image1, setImage1] = useState("");
+  const [image2, setImage2] = useState("");
+  const [image3, setImage3] = useState("");
+
   const clicked = () => {
     setModalOn(true);
   };
+
+  const formSubmit = (e) => {
+    e.preventDefault();
+    // const data = { revive , stars, image1 etc}
+
+    const data = { review, rating };
+
+    fetch(`${API_ENDPOINT}/api/review/updateReview/` + location.state._id, {
+      method: "put",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("success");
+          // setModalOn(true);
+        } else {
+          console.log("Failed");
+          // setModalOn2(true);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
   return (
     <div className="m-24 ml-40 mr-40">
       <h1 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-3xl sm:tracking-tight">
@@ -47,7 +86,7 @@ function CusUpdateReview() {
       </div>
 
       <div>
-        <form action="">
+        <form action="" onSubmit={formSubmit}>
           <div className="grid lg:grid-flow-col gap-12 2xl:grid-flex-row md:grid-flow-col pb-5">
             <div className="col-span-6 ">
               <label
@@ -60,9 +99,12 @@ function CusUpdateReview() {
               <div className="mt-1">
                 <textarea
                   id="about"
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full mt-1 block sm:text-sm border border-gray-300 rounded-md h-64"
+                  className="shadow-sm focus:ring-red-600 focus:border-red-600 w-full mt-1 block sm:text-sm border border-gray-300 rounded-md h-64"
                   placeholder="Type your review here"
-                  value="Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3from SLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3 fromSLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3 from sdvcsdcv dsvcsdc  SLIIT-3rd-Year-Merge pull request #3 from SLIfxv dfv IT-3rd-Yea r-Me rges dcMerges dcMer ges dv cMergesdc"
+                  value={review}
+                  onChange={(e) => {
+                    setReview(e.target.value);
+                  }}
                 ></textarea>
               </div>
             </div>

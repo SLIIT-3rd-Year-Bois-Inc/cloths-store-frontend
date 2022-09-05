@@ -3,8 +3,23 @@ import ReviewCard from "../../components/review-components/user-review";
 import ImageView from "../../components/review-components/image-view";
 import users from "./data";
 import Stars from "../../components/review-components/stars";
+import { API_ENDPOINT } from "../../config";
+// change later with quarry
+import { useEffect, useState } from "react";
 
 function CusViewReview() {
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API_ENDPOINT}/api/review/getReviews`).then(async (response) => {
+      let data = await response.json();
+      setReviews(data);
+      console.log(data);
+    });
+  }, []);
+
+  console.log("test");
+
   return (
     <div>
       <div className="ml-24 mr-24 mb-24 p-16 bg-gray-000 ">
@@ -27,77 +42,77 @@ function CusViewReview() {
 
         <div className="grid  lg:grid-flow-col gap-1 2xl:grid-flex-row md:grid-cols-none sm:grid-cols-none md:grid-flex-col divide-x divide-stone-900">
           <div className="col-span-3 mt-10 mb-10">
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
               1,745 Total
             </p>
-            <div class="flex items-center mt-4">
-              <span class="text-sm font-medium  dark:text-blue-500">
+            <div className="flex items-center mt-4">
+              <span className="text-sm font-medium  dark:text-blue-500">
                 5 star
               </span>
-              <div class="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
+              <div className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
                 <div
                   className="h-5 bg-red-600 rounded"
                   style={{ width: "70%" }}
                 ></div>
               </div>
-              <span class="text-sm font-medium text-red-600 dark:text-blue-500">
+              <span className="text-sm font-medium text-red-600 dark:text-blue-500">
                 70%
               </span>
             </div>
-            <div class="flex items-center mt-4">
-              <span class="text-sm font-medium  dark:text-blue-500">
+            <div className="flex items-center mt-4">
+              <span className="text-sm font-medium  dark:text-blue-500">
                 4 star
               </span>
-              <div class="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
+              <div className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
                 <div
-                  class="h-5 bg-red-600 rounded"
+                  className="h-5 bg-red-600 rounded"
                   style={{ width: "17%" }}
                 ></div>
               </div>
-              <span class="text-sm font-medium text-red-600 dark:text-blue-500">
+              <span className="text-sm font-medium text-red-600 dark:text-blue-500">
                 17%
               </span>
             </div>
-            <div class="flex items-center mt-4">
-              <span class="text-sm font-medium  dark:text-blue-500">
+            <div className="flex items-center mt-4">
+              <span className="text-sm font-medium  dark:text-blue-500">
                 3 star
               </span>
-              <div class="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
+              <div className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
                 <div
-                  class="h-5 bg-red-600 rounded"
+                  className="h-5 bg-red-600 rounded"
                   style={{ width: "8%" }}
                 ></div>
               </div>
-              <span class="text-sm font-medium text-red-600 dark:text-blue-500">
+              <span className="text-sm font-medium text-red-600 dark:text-blue-500">
                 8%
               </span>
             </div>
-            <div class="flex items-center mt-4">
-              <span class="text-sm font-medium  dark:text-blue-500">
+            <div className="flex items-center mt-4">
+              <span className="text-sm font-medium  dark:text-blue-500">
                 2 star
               </span>
-              <div class="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
+              <div className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
                 <div
-                  class="h-5 bg-red-600 rounded"
+                  className="h-5 bg-red-600 rounded"
                   style={{ width: "4%" }}
                 ></div>
               </div>
-              <span class="text-sm font-medium text-red-600 dark:text-blue-500">
+              <span className="text-sm font-medium text-red-600 dark:text-blue-500">
                 4%
               </span>
             </div>
 
-            <div class="flex items-center mt-4">
-              <span class="text-sm font-medium  dark:text-blue-500">
+            <div className="flex items-center mt-4">
+              <span className="text-sm font-medium  dark:text-blue-500">
                 1 star
               </span>
-              <div class="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
+              <div className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
                 <div
-                  class="h-5 bg-red-600 rounded"
+                  className="h-5 bg-red-600 rounded"
                   style={{ width: "89%" }}
                 ></div>
               </div>
-              <span class="text-sm font-medium text-red-600 dark:text-blue-500">
+              <span className="text-sm font-medium text-red-600 dark:text-blue-500">
                 89%
               </span>
             </div>
@@ -105,14 +120,16 @@ function CusViewReview() {
 
           <div className="bg-teal-00 m-auto ">
             <Stars count="4" size="60" />
-            <p class="ml-2 text-lg font-medium text-gray-900 dark:text-white">
+            <p className="ml-2 text-lg font-medium text-gray-900 dark:text-white">
               4.95 out of 5
             </p>
           </div>
         </div>
 
         <div className="">
-          {users.map((user, index) => {
+          {/* {users.map((user, index) => { */}
+
+          {reviews.map((user, index) => {
             return (
               <div key={index}>
                 <ReviewCard users={user} />
