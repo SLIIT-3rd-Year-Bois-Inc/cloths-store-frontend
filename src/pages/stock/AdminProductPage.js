@@ -10,7 +10,7 @@ function AdminProductPage() {
   const [products, setProducts] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:4200/api/stock/getCusProducts", {
+      .get("http://localhost:4200/api/stock/getAdminProducts", {
         params: { archived: false },
       })
       .then(function (response) {
