@@ -19,7 +19,7 @@ export function FileUpload() {
       }
       // Get file object
       let file = file_input.files[0];
-
+      console.log(file);
       // Check the image size - 2MB for example
       if (file.size > 2 * 1024 * 1024) {
         setState(

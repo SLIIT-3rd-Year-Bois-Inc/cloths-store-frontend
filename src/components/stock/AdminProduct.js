@@ -10,6 +10,7 @@ function AdminProduct({ viewtype, docID }) {
   const [product, setProduct] = useState({});
   const [archiveConfirmModel, setArchiveConfirmModel] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState("");
 
   function showArchiveConfirmModel() {
     setArchiveConfirmModel(true);
@@ -49,6 +50,7 @@ function AdminProduct({ viewtype, docID }) {
       .then(function (response) {
         setProduct(response.data);
         console.log(response.data);
+        setImage(response.data.imagesUrls[0][1]);
       })
       .catch(function (error) {
         console.log(error);
@@ -58,7 +60,6 @@ function AdminProduct({ viewtype, docID }) {
       });
   }
   useEffect(() => {
-    console.log(docID);
     getProduct();
   }, []);
   return (
@@ -89,19 +90,14 @@ function AdminProduct({ viewtype, docID }) {
         </div>
       )}
 
-      <div className="relative">
-        <img
-          height="100%"
-          width="100%"
-          src={require("./tempAssests/productImg1.png")}
-          alt="car"
-        />
+      <div className="relative ">
+        <img className="w-[330px] h-[400px]" src={image} alt="car" />
         <div className="absolute w-full bottom-16 flex flex-row justify-evenly">
           <Link
             to={`/stock/admin/editProduct/${docID}`}
             className="p-3 hover:cursor-pointer hover:bg-white/60 bg-white/50"
           >
-            <FaRegEdit color="white" className="w-5 h-5" />
+            <FaRegEdit color="black" className="w-5 h-5" />
           </Link>
           <span
             onClick={showArchiveConfirmModel}
@@ -112,17 +108,19 @@ function AdminProduct({ viewtype, docID }) {
                 : "hover:bg-white/60 bg-white/50")
             }
           >
-            <BsArchive color="white" className="w-5 h-5" />
+            <BsArchive color="black" className="w-5 h-5" />
           </span>
           <span className="p-3 hover:cursor-pointer hover:bg-white/60 bg-white/50">
-            <RiDeleteBin6Line color="white" className="w-5 h-5" />
+            <RiDeleteBin6Line color="black" className="w-5 h-5" />
           </span>
         </div>
         {loading && <ItemLoader />}
       </div>
 
       <div className="flex flex-col items-center p-2">
-        <span className="text-xl">{product.name}</span>
+        <span className="text-xl w-full text-center  truncate max-h-[40px]">
+          {product.name}
+        </span>
         <span className="text-xl font-bold">Rs.{product.price}</span>
       </div>
     </div>

@@ -7,7 +7,9 @@ import axios from "axios";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import Loader from "../../components/stock/Loader";
 import { useParams } from "react-router-dom";
-
+import { getStorage, ref, deleteObject } from "firebase/storage";
+import { uploadFile } from "../../firebase";
+import { genRandFileName } from "./../../utils/random";
 let prevArray = [];
 function EditProduct() {
   //form usestates-----------------------------------------------------------------------------------------------------------------
@@ -21,6 +23,7 @@ function EditProduct() {
   const [description, setDescription] = useState("");
   const [color, setColor] = useState("");
   const [sizeList, setSizeList] = useState([]);
+  const [imagesChanged, setImagesChanged] = useState(false);
 
   // functional use states and functions-------------------------------------------------------------------------------------------
   const [colorSelector, setColorSelector] = useState(false);
@@ -28,9 +31,11 @@ function EditProduct() {
   const [selectedfile, setSelectedfile] = useState(null);
   const [selectedfileIndex, setSelectedfileIndex] = useState(-1);
   const [imagesList, setimagesList] = useState([]);
+  const [imagesUrlList, setImagesUrlList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState(false);
 
+  //color change handling----------------------------------------------------------------------------------------------------
   const tagsClicked = () => {
     setTags(!tags);
   };
@@ -38,18 +43,25 @@ function EditProduct() {
   const colorClicked = (color) => {
     setColor(color);
   };
-
+  //size change handling--------------------------------------------------------------------------------------------------------
   const handleSizeChange = (index, event) => {
     let data = [...sizeList];
     data[index][event.target.name] = event.target.value;
     setSizeList(data);
   };
+
+  //images change handling-----------------------------------------------------------------------------------------------------
   function handleChange(e) {
     console.log(e.target.files);
 
+    let temUrlparr = [...imagesUrlList];
+    temUrlparr.unshift(URL.createObjectURL(e.target.files[0]));
+    setImagesUrlList(temUrlparr);
+
     let temparr = [...imagesList];
-    temparr.unshift(URL.createObjectURL(e.target.files[0]));
+    temparr.unshift(e.target.files[0]);
     setimagesList(temparr);
+
     setSelectedfile(URL.createObjectURL(e.target.files[0]));
     setSelectedfileIndex(0);
   }
@@ -60,12 +72,14 @@ function EditProduct() {
   };
 
   function imgClicked(index) {
-    setSelectedfile(imagesList[index]);
+    setSelectedfile(imagesUrlList[index]);
     setSelectedfileIndex(index);
   }
   function imgRemoveClicked() {
-    let temparr = [...imagesList];
+    let temparr = [...imagesUrlList];
+    let tempar2 = [...imagesList];
     temparr.splice(selectedfileIndex, 1);
+    tempar2.splice(selectedfileIndex, 1);
     if (temparr.length === 0) {
       setSelectedfile(null);
       setSelectedfileIndex(-1);
@@ -74,7 +88,8 @@ function EditProduct() {
       setSelectedfileIndex(0);
     }
 
-    setimagesList(temparr);
+    setImagesUrlList(temparr);
+    setimagesList(tempar2);
   }
 
   function addSize() {
@@ -96,7 +111,7 @@ function EditProduct() {
     temparr[index].selected = !temparr[index].selected;
     setTagsArray(temparr);
   }
-  //validations----------------------------------
+  //validations------------------------------------------------------------------------------------------------------------
   function validations() {
     if (name === "") {
       alert("name cannot be null!");
@@ -124,8 +139,27 @@ function EditProduct() {
 
     return true;
   }
-  //useEffect for get tags in gender change------------------------------------------------------------------
-  function sendData(e) {
+  //delete old photos -------------------------------------------------------------------------------------
+  async function deleteOldPhotos(name) {
+    const storage = getStorage();
+
+    // Create a reference to the file to delete
+    const desertRef = ref(storage, `test/${name}`);
+
+    // Delete the file
+    deleteObject(desertRef)
+      .then(() => {
+        console.log(name + " deleted");
+      })
+      .catch((error) => {
+        console.log(name + " not deleted");
+      });
+  }
+  //reset form after it updated-------------------------------------------------------------------------------
+  function reset() {}
+
+  //sending data---------------------------------------------------------------------------------------------
+  async function sendData(e) {
     e.preventDefault();
     if (!validations()) return 0;
     let tags = [];
@@ -134,24 +168,62 @@ function EditProduct() {
         tags.push(tag.tagName);
       }
     });
-
+    console.log(imagesList);
     let quantity = {};
     sizeList.forEach((size) => {
       quantity[String(size.size)] = size.quantity;
     });
+    let newImagesUrls = [];
+    let newImageList = imagesList;
+    let count = 0;
+
+    imagesUrls.forEach((image) => {
+      let val = newImageList.indexOf(image[0]);
+      if (val === -1) {
+        console.log(
+          image[0] + " !!!!!!!!!" + imagesList[0] + " not found! gonna delete!"
+        );
+        deleteOldPhotos(image[0]);
+      } else {
+        console.log(image + " found! gonna add");
+        newImagesUrls.push(imagesUrls[count]);
+        newImageList.splice(val, 1);
+      }
+      count = count + 1;
+    });
+
+    console.log("done!");
+    console.log(newImagesUrls);
+    console.log(newImageList);
+
+    setLoading(true);
+    let newArray = newImageList.map((image) =>
+      uploadFile(image, genRandFileName(), "test")
+    );
+
+    let fileDetails = await Promise.all(newArray);
+    console.log("fileDetails");
+    console.log(fileDetails);
+    console.log("hehe");
+    fileDetails.forEach((item) => {
+      newImagesUrls.push(item);
+    });
+    console.log("newImagesUrls");
+    console.log(newImagesUrls);
+
     const newItem = {
       _id: params.productID,
       name,
       price,
       gender,
       tags,
-      imagesUrls,
+      imagesUrls: newImagesUrls,
       description,
       color,
       quantity,
     };
     console.log(newItem);
-    setLoading(true);
+
     axios
       .put("http://localhost:4200/api/stock/updateProduct", newItem)
       .then(function (response) {
@@ -166,6 +238,7 @@ function EditProduct() {
         setLoading(false);
       });
   }
+  //initial setup ----------------------------------------------------------------------------------------------
   useEffect(() => {
     //get tags----------------------------------
     axios
@@ -202,6 +275,15 @@ function EditProduct() {
         prevArray = response.data.tags;
         setGender(response.data.gender);
         setImagesUrls(response.data.imagesUrls);
+        let data = [];
+        let dataUrls = [];
+        response.data.imagesUrls.forEach((image) => {
+          data.push(image[0]);
+          dataUrls.push(image[1]);
+        });
+        setimagesList(data);
+        console.log("heres the use effect image name set" + data);
+        setImagesUrlList(dataUrls);
         setColor(response.data.color);
         setDescription(response.data.description);
         let qObj = response.data.quantity;
@@ -222,6 +304,7 @@ function EditProduct() {
         setLoading(false);
       });
   }, []);
+  //useEffect for get tags in gender change------------------------------------------------------------------
   useEffect(() => {
     if (clothneeds) {
       if (gender === "M") {
@@ -334,7 +417,7 @@ function EditProduct() {
                   : "overflow-y-scroll")
               }
             >
-              {imagesList.map((imgItem, index) => (
+              {imagesUrlList.map((imgItem, index) => (
                 <div
                   key={index}
                   onClick={() => imgClicked(index)}
