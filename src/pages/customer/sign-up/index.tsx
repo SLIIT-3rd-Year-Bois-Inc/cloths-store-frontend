@@ -51,8 +51,14 @@ export default function SignUp() {
   });
 
   return (
-    <div className="w-screen h-screen bg-black flex justify-center items-center relative">
-      <div className="py-6 px-10 bg-white w-[30em]">
+    <div
+      className="w-screen h-screen bg-black flex justify-center items-center relative"
+      style={{
+        backgroundImage:
+          "url('/alexandra-dementyeva-OXU7rATxRoE-unsplash 1.png')",
+      }}
+    >
+      <div className="py-6 px-10 bg-white w-[30em] shadow-lg backdrop-blur-sm bg-[#ffffffdc]">
         <form
           onSubmit={handleSubmit((data) => sign_up.mutate(data))}
           className="w-full"
