@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { GrClose } from "react-icons/gr";
+import { AiOutlineUser } from "react-icons/ai";
+import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
+import { CustomerAPI } from "../../pages/customer/api";
 
 interface UserModalProps {
   onClose: () => any;
@@ -7,6 +11,7 @@ interface UserModalProps {
 
 export default function UserModal({ onClose, ...rest }: UserModalProps) {
   const [show, setShow] = useState(false);
+  const query = useQuery(["customer", "session"], CustomerAPI.me);
 
   useEffect(() => {
     setShow(true);
@@ -34,15 +39,40 @@ export default function UserModal({ onClose, ...rest }: UserModalProps) {
           </button>
         </div>
         <div className="w-full flex justify-center items-center">
-          <img className="w-[5em] h-[5em] mb-6"></img>
+          {/* <img className="w-[5em] h-[5em] mb-6"></img> */}
+          <div className="p-4 rounded-full bg-red-600 mb-6 shadow-lg">
+            <AiOutlineUser size={72} color="white" />
+          </div>
         </div>
         <div className="flex flex-col">
-          <button className="bg-white text-black px-1 py-2 line-spacing-main open-sans-font text-sm">
-            Login
-          </button>
-          <button className="bg-black text-white px-1 py-2 line-spacing-main open-sans-font text-sm">
-            Sign Up
-          </button>
+          {query.error || !query.isSuccess ? (
+            <>
+              <Link
+                to="/customer/login"
+                className="bg-white text-center text-black px-1 py-2 line-spacing-main open-sans-font text-sm"
+              >
+                Login
+              </Link>
+              <Link
+                to="/customer/sign-up"
+                className="bg-black text-white text-center px-1 py-2 line-spacing-main open-sans-font text-sm"
+              >
+                Sign Up
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/customer/dashboard/me"
+                className="bg-black text-center text-white px-1 py-2 line-spacing-main open-sans-font text-sm"
+              >
+                Dashboard
+              </Link>
+              <button className="bg-white text-center text-black px-1 py-2 line-spacing-main open-sans-font text-sm">
+                Logout
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
