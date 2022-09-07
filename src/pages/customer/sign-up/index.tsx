@@ -6,7 +6,6 @@ import { CustomerAPI } from "../api";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { CustomerLoadingOverlay } from "../../../components/customer-loading-overlay";
-import { useEffect } from "react";
 
 const signUpSchema = yup.object().shape({
   password: yup

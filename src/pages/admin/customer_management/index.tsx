@@ -2,7 +2,7 @@ import React from "react";
 import { Customer } from "../../../types";
 import { FiEdit2 } from "react-icons/fi";
 import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { AdminAPI } from "../api";
 import { CustomerLoadingOverlay } from "../../../components/customer-loading-overlay";
 

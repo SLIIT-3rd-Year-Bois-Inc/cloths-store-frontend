@@ -1,5 +1,4 @@
 import React from "react";
-import { AiFillFacebook, AiFillTwitterSquare } from "react-icons/ai";
 import { FiFacebook, FiInstagram, FiTwitter } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import { Link } from "react-router-dom";
