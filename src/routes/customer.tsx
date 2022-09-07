@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import { CustomerManagement } from "../pages/admin/customer_management";
 import Billing from "../pages/customer-dashboard/billing";
 import CustomerDashBoard from "../pages/customer-dashboard/dashboard";
 import Orders from "../pages/customer-dashboard/orders";
@@ -24,6 +25,7 @@ export default function CustomerRouter() {
       </Route>
       <Route path="/customer/login" element={<Login />} />
       <Route path="/customer/sign-up" element={<SignUp />} />
+      <Route path="/admin/customers" element={<CustomerManagement />} />
       <Route path="/example/file-upload" element={<FileUpload />} />
     </Routes>
   );
