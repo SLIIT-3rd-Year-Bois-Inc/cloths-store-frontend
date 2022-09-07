@@ -1,22 +1,26 @@
-const Failed = ({ setModalOn2, setChoice2 }) => {
+const Updated = ({ setShowUpdate }) => {
   const handleOKClick = () => {
-    setChoice2(true);
-    setModalOn2(false);
+    setShowUpdate(false);
   };
   const handleCancelClick = () => {
-    setChoice2(false);
-    setModalOn2(false);
+    setShowUpdate(false);
   };
 
   return (
     <div className=" fixed inset-0 bg-gradient-to-br from-gray-900/60 to-red-900/50  flex justify-center items-center backdrop-blur-sm ">
       <div className="flex h-screen justify-center items-center ">
-        <div className="bg-gradient-to-br from-red-600/70 to-rose-800/70 p-10 rounded-xl">
+        <div className="bg-gradient-to-br from-green-600/70 to-lime-400/70 p-10 rounded-xl">
           <div className="flex-col justify-center opacity-100 bg-white py-12 px-24 rounded-xl ">
             <div className="flex  text-lg  text-stone-900  font-bold mb-10">
-              Operation Failed. Try again later
+              Review Updated Successfully.
             </div>
             <div className="flex ">
+              <button
+                onClick={handleOKClick}
+                className=" rounded px-4 py-2 text-white  bg-stone-600 h-12 w-32"
+              >
+                Under Construction
+              </button>
               <button
                 onClick={handleCancelClick}
                 className="rounded px-4 py-2 ml-4 text-white bg-stone-900 h-12 w-32"
@@ -31,4 +35,4 @@ const Failed = ({ setModalOn2, setChoice2 }) => {
   );
 };
 
-export default Failed;
+export default Updated;

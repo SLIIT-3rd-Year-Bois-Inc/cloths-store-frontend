@@ -1,10 +1,9 @@
-const Modal = ({ setModalOn, setChoice }) => {
+const Modal = ({ setModalOn, setDeleting }) => {
   const handleOKClick = () => {
-    setChoice(true);
     setModalOn(false);
+    setDeleting(true);
   };
   const handleCancelClick = () => {
-    setChoice(false);
     setModalOn(false);
   };
 
