@@ -36,7 +36,7 @@ function ReviewCard({ users }) {
             dateTime="2014-08-16 19:00"
             className="block text-sm text-gray-500 dark:text-gray-400"
           >
-            Date : {users.Date}
+            Date : {users.date}
           </time>
         </footer>
         <p className="mb-2 font-light text-gray-500 dark:text-gray-400">
