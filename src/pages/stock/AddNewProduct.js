@@ -6,6 +6,8 @@ import axios from "axios";
 
 import { IoMdAddCircleOutline } from "react-icons/io";
 import Loader from "../../components/stock/Loader";
+import { genRandFileName } from "./../../utils/random";
+import { uploadFile } from "../../firebase";
 
 function AddNewProduct() {
   //form usestates-----------------------------------------------------------------------------------------------------------------
@@ -25,6 +27,7 @@ function AddNewProduct() {
   const [selectedfile, setSelectedfile] = useState(null);
   const [selectedfileIndex, setSelectedfileIndex] = useState(-1);
   const [imagesList, setimagesList] = useState([]);
+  const [imagesUrlList, setImagesUrlList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState(false);
 
@@ -44,9 +47,14 @@ function AddNewProduct() {
   function handleChange(e) {
     console.log(e.target.files);
 
+    let temUrlparr = [...imagesUrlList];
+    temUrlparr.unshift(URL.createObjectURL(e.target.files[0]));
+    setImagesUrlList(temUrlparr);
+
     let temparr = [...imagesList];
-    temparr.unshift(URL.createObjectURL(e.target.files[0]));
+    temparr.unshift(e.target.files[0]);
     setimagesList(temparr);
+
     setSelectedfile(URL.createObjectURL(e.target.files[0]));
     setSelectedfileIndex(0);
   }
@@ -61,7 +69,7 @@ function AddNewProduct() {
     setSelectedfileIndex(index);
   }
   function imgRemoveClicked() {
-    let temparr = [...imagesList];
+    let temparr = [...imagesUrlList];
     temparr.splice(selectedfileIndex, 1);
     if (temparr.length === 0) {
       setSelectedfile(null);
@@ -71,7 +79,12 @@ function AddNewProduct() {
       setSelectedfileIndex(0);
     }
 
-    setimagesList(temparr);
+    setImagesUrlList(temparr);
+
+    let tempUrlarr = [...imagesUrlList];
+    tempUrlarr.splice(selectedfileIndex, 1);
+
+    setimagesList(tempUrlarr);
   }
 
   function addSize() {
@@ -122,7 +135,8 @@ function AddNewProduct() {
     return true;
   }
   //useEffect for get tags in gender change------------------------------------------------------------------
-  function sendData(e) {
+
+  async function sendData(e) {
     e.preventDefault();
     if (!validations()) return 0;
     let tags = [];
@@ -136,18 +150,27 @@ function AddNewProduct() {
     sizeList.forEach((size) => {
       quantity[String(size.size)] = size.quantity;
     });
+
+    setLoading(true);
+    let newArray = imagesList.map((image) =>
+      uploadFile(image, genRandFileName(), "test")
+    );
+
+    let fileDetails = await Promise.all(newArray);
+    console.log("hehe");
+
     const newItem = {
       name,
       price,
       gender,
       tags,
-      imagesUrls,
+      imagesUrls: fileDetails,
       description,
       color,
       quantity,
     };
     console.log(newItem);
-    setLoading(true);
+
     axios
       .post("http://localhost:4200/api/stock/newProduct", newItem)
       .then(function (response) {
@@ -173,6 +196,7 @@ function AddNewProduct() {
         }));
 
         setTagsArray(data);
+
         setColorArray(response.data[0].colors);
         setClothneeds(response.data[0]);
       })
@@ -182,29 +206,66 @@ function AddNewProduct() {
       })
       .then(function () {
         // always executed
-        console.log(colorArray);
+        console.log(clothneeds);
       });
   }, []);
   useEffect(() => {
     if (clothneeds) {
-      if (gender === "Men") {
-        let data = clothneeds.mensTags.map((tag) => ({
-          tagName: tag,
-          selected: false,
-        }));
+      if (gender === "M") {
+        let data = clothneeds.mensTags.map((tag) => {
+          {
+            let selectedBool = false;
+
+            return {
+              tagName: tag,
+              selected: selectedBool,
+            };
+          }
+        });
 
         setTagsArray(data);
-      } else if (gender === "Women") {
-        let data = [];
-        data = clothneeds.womenTags.map((tag) => ({
-          tagName: tag,
-          selected: false,
-        }));
+      } else if (gender === "W") {
+        let data = clothneeds.womenTags.map((tag) => {
+          {
+            let selectedBool = false;
+
+            return {
+              tagName: tag,
+              selected: selectedBool,
+            };
+          }
+        });
+
+        setTagsArray(data);
+      } else if (gender === "K") {
+        let data = clothneeds.childTags.map((tag) => {
+          {
+            let selectedBool = false;
+
+            return {
+              tagName: tag,
+              selected: selectedBool,
+            };
+          }
+        });
+
+        setTagsArray(data);
+      } else if (gender === "U") {
+        let data = clothneeds.unisexTags.map((tag) => {
+          {
+            let selectedBool = false;
+
+            return {
+              tagName: tag,
+              selected: selectedBool,
+            };
+          }
+        });
 
         setTagsArray(data);
       }
     }
-  }, [gender, clothneeds]);
+  }, [gender, clothneeds, loading]);
 
   return (
     <div className="w-screen">
@@ -250,7 +311,7 @@ function AddNewProduct() {
                   : "overflow-y-scroll")
               }
             >
-              {imagesList.map((imgItem, index) => (
+              {imagesUrlList.map((imgItem, index) => (
                 <div
                   key={index}
                   onClick={() => imgClicked(index)}
