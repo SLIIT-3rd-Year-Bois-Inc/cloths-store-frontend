@@ -2,7 +2,18 @@ import ImageView from "./image-view";
 import { useState } from "react";
 import Stars from "./stars";
 
-function QuestionCard({ user }) {
+function QuestionCard({ user, setCurrentID, deleteQuestion }) {
+  // function run(){
+
+  //   deleteQuestion();
+  // }
+
+  const handleCancelClick = () => {
+    console.log("1");
+    // setCurrentID(user._id);
+    deleteQuestion(user._id);
+  };
+
   return (
     <div
       className=" p-5 mt-8 mb-8 rounded-2xl  border-stone-400  shadow-md"
@@ -23,6 +34,12 @@ function QuestionCard({ user }) {
           A
         </div>
         <div className=" w-full m-4">{user.answer}</div>
+      </div>
+      <div className="flex justify-end">
+        <button className="bg-red-400 p-10" onClick={handleCancelClick}>
+          {" "}
+          test{" "}
+        </button>
       </div>
     </div>
   );

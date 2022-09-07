@@ -1,10 +1,81 @@
 import QuestionCard from "../../components/review-components/cust-questions";
 import dataOne from "./dataOne";
 import { useState } from "react";
+import { API_ENDPOINT } from "../../config";
+import CommonSuccess from "../../components/review-modals/common-success";
+import { useEffect } from "react";
 
 function Question() {
   const [popOn, setPopOn] = useState(false);
   const handleOnClose = () => setPopOn(false);
+
+  const [question, setQuestion] = useState("");
+  const [email, setEmail] = useState("");
+  const current = new Date();
+  const date = `${current.getDate()}/${
+    current.getMonth() + 1
+  }/${current.getFullYear()}`;
+  const [commonPop, setCommonPop] = useState(false);
+
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API_ENDPOINT}/api/question/getQuestion`).then(async (response) => {
+      let data = await response.json();
+      setQuestions(data);
+      console.log(data);
+    });
+  }, []);
+
+  const [currentID, setCurrentID] = useState("96");
+  const deleteQuestion = (currentID) => {
+    console.log("2");
+    console.log(currentID);
+    fetch(`${API_ENDPOINT}/api/question/deleteQuestion/` + currentID, {
+      method: "DELETE",
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("success");
+          // setDeletingM(true)
+        } else {
+          console.log("Failed");
+          // setFailed(true)
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  const formSubmit = (e) => {
+    e.preventDefault();
+    console.log("refresh prevented");
+
+    const data = { question, date, email };
+    fetch(`${API_ENDPOINT}/api/question/addQuestion`, {
+      method: "post",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("success");
+          setPopOn(false);
+          setCommonPop(true);
+          //do something
+        } else {
+          console.log("Failed");
+          //do something
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
 
   return (
     <div>
@@ -26,9 +97,13 @@ function Question() {
           <div className="w-2/5">
             <form action="">
               <textarea
+                value={question}
+                onChange={(e) => {
+                  setQuestion(e.target.value);
+                }}
                 id="about"
                 className="shadow-sm focus:ring-red-500 focus:border-red-500 w-full mt-1 block sm:text-sm border border-gray-300 rounded-md h-40"
-                placeholder="Type your review here"
+                placeholder="Type your question here"
               ></textarea>
             </form>
           </div>
@@ -42,13 +117,33 @@ function Question() {
           </div>
         </div>
 
-        <NotifyMe visible={popOn} onClose={handleOnClose} />
+        <NotifyMe
+          visible={popOn}
+          onClose={handleOnClose}
+          setEmail={setEmail}
+          email={email}
+          formSubmit={formSubmit}
+        />
+
+        {commonPop && (
+          <CommonSuccess
+            setCommonSuccess={setCommonPop}
+            message={"Your question has been added successfully."}
+            topic={"Question Added!"}
+            link1={""}
+            link2={""}
+          />
+        )}
 
         <div>
-          {dataOne.map((user, index) => {
+          {questions.map((user, index) => {
             return (
               <div key={index}>
-                <QuestionCard user={user} />
+                <QuestionCard
+                  user={user}
+                  setCurrentID={setCurrentID}
+                  deleteQuestion={deleteQuestion}
+                />
               </div>
             );
           })}
@@ -60,7 +155,7 @@ function Question() {
 
 export default Question;
 
-function NotifyMe({ visible, onClose }) {
+function NotifyMe({ visible, onClose, setEmail, email, formSubmit }) {
   if (!visible) return null;
 
   return (
@@ -76,18 +171,22 @@ function NotifyMe({ visible, onClose }) {
         </button>
         <div className="flex grid-flow-row">
           <div className="bg-white p-10">
-            <form action="">
+            <form onSubmit={formSubmit}>
               <div className="mb-6">
                 <label
                   for="email"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
                   We'll notify you when your question is answered
                 </label>
                 <input
                   type="email"
                   id="email"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:red-blue-500 dark:focus:border-red-500"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:red-blue-500 dark:focus:border-red-500"
                   placeholder="Enter email"
                   required
                 />
@@ -104,7 +203,11 @@ function NotifyMe({ visible, onClose }) {
 
           <div className="bg-red-300 p-16">
             <p className="pb-3">Dont Notify</p>
-            <button className="bg-black text-white p-3 pl-16 pr-16 bg-fixed rounded-3xl hover:bg-red-600 active:bg-red-800">
+            <button
+              type="submit"
+              onClick={formSubmit}
+              className="bg-black text-white p-3 pl-16 pr-16 bg-fixed rounded-3xl hover:bg-red-600 active:bg-red-800"
+            >
               Just Ask
             </button>
           </div>
