@@ -56,6 +56,9 @@ export default function SignUp() {
       style={{
         backgroundImage:
           "url('/alexandra-dementyeva-OXU7rATxRoE-unsplash 1.png')",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
+        backgroundPosition: "center",
       }}
     >
       <div className="py-6 px-10 bg-white w-[30em] shadow-lg backdrop-blur-sm bg-[#ffffffdc]">
