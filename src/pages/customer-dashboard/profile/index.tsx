@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { CustomerAPI } from "../../customer/api";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -35,7 +35,6 @@ export function Profile() {
     onSuccess: (data) => {
       data.dob = toDateOnly(new Date(data.dob));
       reset(data);
-      console.log(data);
     },
   });
 
@@ -43,11 +42,22 @@ export function Profile() {
 
   useEffect(() => setValue("image", image), [image]);
 
+  const queryClient = useQueryClient();
+
+  const update = useMutation(CustomerAPI.updateMe, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("profile");
+    },
+  });
+
   return (
     <>
       <h1 className="font-bold text-2xl mb-6">Profile</h1>
       <div className="w-100 flex-grow max-w-[60em] bg-white px-12">
-        <form className="mb-4">
+        <form
+          onSubmit={handleSubmit((data) => update.mutate(data))}
+          className="mb-4"
+        >
           <div className="flex flex-row justify-center items-center w-full pb-8">
             <ImagePicker
               currentImage={image}
@@ -92,12 +102,20 @@ export function Profile() {
               {...register("dob")}
             />
           </div>
+          <div className="w-full flex flex-col justify-center items-center">
+            <button
+              type="submit"
+              className="rounded bg-black text-white hover:bg-white hover:text-black px-10 py-3 text-sm shadow-lg"
+            >
+              Update
+            </button>
+            <div className="text-red-400 font-bold mt-2">
+              {update.isLoading && "Please wait."}
+              {update.isSuccess && "Success!"}
+              {update.isError && "Update was not success. Please try again."}
+            </div>
+          </div>
         </form>
-        <div className="w-full flex justify-center items-center">
-          <button className="rounded bg-black text-white hover:bg-white hover:text-black px-10 py-3 text-sm">
-            Update
-          </button>
-        </div>
       </div>
     </>
   );

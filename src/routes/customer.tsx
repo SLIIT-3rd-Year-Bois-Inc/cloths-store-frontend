@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { CustomerManagement } from "../pages/admin/customer_management";
+import { CustomerManagement } from "../pages/admin/customer-management";
 import Billing from "../pages/customer-dashboard/billing";
 import CustomerDashBoard from "../pages/customer-dashboard/dashboard";
 import Orders from "../pages/customer-dashboard/orders";
