@@ -1,0 +1,99 @@
+.cartSideBar {
+  background: #222222;
+  z-index: 1000;
+  width: 350px;
+  top: 0;
+  right: 0;
+  padding: 25px;
+  overflow: auto;
+  position: fixed;
+  height: 100%;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19) 0 6px 6px rgba(0, 0, 0, 0.23);
+  transition: all ease-in-out 0.3s;
+}
+
+.cartSideBarHidden {
+  background: #222222;
+  z-index: 1000;
+  width: 350px;
+  top: 0;
+  right: 0;
+  padding: 25px;
+  overflow: auto;
+  position: fixed;
+  height: 100%;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19) 0 6px 6px rgba(0, 0, 0, 0.23);
+  transition: all ease-in-out 0.3s;
+  right: -400px;
+}
+
+.sideBarHeader {
+  font-weight: 300;
+  font-size: 24px;
+  text-transform: uppercase;
+  position: relative;
+  padding: 15px 0;
+  color: #ffff;
+}
+.sideBarHeader::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  background: #ffff;
+}
+
+.cartEmpty {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+}
+
+.cartItemContainer {
+  display: flex;
+  margin-top: 5%;
+  flex-direction: row;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.cartProductImg {
+  height: 120px;
+  width: 120px;
+  object-fit: contain;
+}
+
+.itemName {
+  margin-top: 5%;
+  font-size: x-small;
+  padding-left: 3%;
+  color: #ffff;
+  padding-right: 3%;
+}
+
+.itemSize {
+  font-size: x-small;
+  padding-left: 3%;
+  color: #ffff;
+  padding-right: 3%;
+  margin-top: 2%;
+}
+
+.itemPrice {
+  font-size: x-small;
+  padding-left: 3%;
+  color: #ffff;
+  padding-right: 3%;
+  margin-top: 2%;
+}
+
+.itemRemove {
+  color: red;
+  margin-top: 1%;
+}

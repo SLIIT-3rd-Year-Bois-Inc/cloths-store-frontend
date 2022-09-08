@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import Filter from "../../components/stock/Filter";
-import Product from "../../components/stock/Product";
 import ProductViewHeader from "../../components/stock/ProductViewHeader";
+import Product from "../../components/stock/Product";
 
-function ProductPage() {
+function AdminProductPage() {
   const [filter, setFilter] = useState(false);
-
   const filterClicked = () => setFilter(!filter);
 
   return (
-    // full screen div
-
     <div className="flex flex-col items-center justify-center w-screen border-2">
       <div className="flex flex-col">
         <ProductViewHeader filterClicked={filterClicked} />
@@ -29,4 +26,4 @@ function ProductPage() {
   );
 }
 
-export default ProductPage;
+export default AdminProductPage;
