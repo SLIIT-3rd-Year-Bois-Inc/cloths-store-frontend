@@ -6,7 +6,6 @@ import { FiX } from "react-icons/fi";
 
 export default function Cart({ isToggle, setToggle, cartData }) {
   const $sideBarRef = useRef();
-  console.log();
   useOnClickOutside($sideBarRef, () => setToggle(false));
 
   return (
@@ -28,14 +27,18 @@ export default function Cart({ isToggle, setToggle, cartData }) {
                 <div className="itemPrice">Rs{cartData.price}.00</div>
               </div>
               <div className="itemRemove cursor-pointer">
-                <FiX size={15} onClick={() => console.log("hi")} />
+                <FiX size={15} />
               </div>
             </div>
           ))
         )}
-        <button className="mt-3 w-28 h-9 md:w-40 md:h-12 bg-red-600	 text-white text-center items-center rounded-sm	 float-right	">
-          CHECKOUT
-        </button>
+        {cartData[0] !== undefined && (
+          <div>
+            <button className="mt-3 w-28 h-9 md:w-40 md:h-12 bg-red-600	 text-white text-center items-center rounded-sm	 float-right	">
+              CHECKOUT
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
