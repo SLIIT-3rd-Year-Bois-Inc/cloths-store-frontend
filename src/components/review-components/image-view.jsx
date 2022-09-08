@@ -18,15 +18,28 @@ function ImageView({ visible, onClose, image }) {
         <div className="h-4/5 w-4/5 bg-stone-700 rounded-3xl bg-bg1 ">
           <img
             src={image}
-            onClick={onClose}
+            onClick={() => window.open(image, "_blank")}
             className="w-[650px] rounded-t-3xl"
           />
-          <button
-            onClick={onClose}
-            className="bg-black text-white p-3 pl-16 pr-16 bg-fixed animate-pulse rounded-bl-3xl"
-          >
-            Go back
-          </button>
+          <div className="flex flex-row ">
+            <div>
+              <button
+                onClick={onClose}
+                className="bg-black text-white p-3 pl-16 pr-16 bg-fixed rounded-bl-3xl"
+              >
+                Go back
+              </button>
+            </div>
+
+            <div>
+              <button
+                onClick={() => window.open(image, "_blank")}
+                className="bg-red-800 text-white p-3 pl-16 pr-16 bg-fixed animate-pulse"
+              >
+                Enlarge Image
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

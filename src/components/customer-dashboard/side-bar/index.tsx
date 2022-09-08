@@ -1,8 +1,25 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useMutation } from "react-query";
+import { Link, useNavigate } from "react-router-dom";
+import { CustomerAPI } from "../../../pages/customer/api";
+import { CustomerLoadingOverlay } from "../../customer-loading-overlay";
 import SideBarItem from "../sidebar-item";
 
 export default function SideBar() {
+  const navigate = useNavigate();
+
+  const sign_out = useMutation(CustomerAPI.signOut, {
+    onSuccess: () => {
+      setTimeout(() => {
+        navigate("/");
+        sign_out.reset();
+      }, 1000);
+    },
+    onError: () => {
+      setTimeout(() => sign_out.reset(), 1000);
+    },
+  });
+
   return (
     <div className="w-[calc(15vw+10em)] max-w-[28em] bg-white flex flex-col items-center flex-shrink-0">
       <h1 className="font-bold pt-[5em] mb-2 text-lg">Hello</h1>
@@ -24,13 +41,19 @@ export default function SideBar() {
         </SideBarItem>
 
         <SideBarItem
-          to="./billing"
+          to={""}
           title="Sign out from your account"
           className="mt-[5em]"
+          onClick={() => sign_out.mutate()}
           red
         >
           Log out
         </SideBarItem>
+        {sign_out.isSuccess ||
+          sign_out.isLoading ||
+          (sign_out.isError && (
+            <CustomerLoadingOverlay>Loading</CustomerLoadingOverlay>
+          ))}
       </div>
     </div>
   );

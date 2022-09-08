@@ -1,15 +1,14 @@
-const Modal = ({ setModalOn, setChoice }) => {
+const Modal = ({ setModalOn, setDeleting }) => {
   const handleOKClick = () => {
-    setChoice(true);
     setModalOn(false);
+    setDeleting(true);
   };
   const handleCancelClick = () => {
-    setChoice(false);
     setModalOn(false);
   };
 
   return (
-    <div className="  bg-stone-900 opacity-90 fixed  inset-0 z-50   ">
+    <div className=" fixed inset-0 bg-gradient-to-br from-gray-900/60 to-red-900/50  flex justify-center items-center backdrop-blur-sm ">
       <div className="flex h-screen justify-center items-center ">
         <div className="flex-col justify-center opacity-100 bg-white py-12 px-24 rounded-xl ">
           <div className="flex  text-lg  text-stone-900  font-bold mb-10">

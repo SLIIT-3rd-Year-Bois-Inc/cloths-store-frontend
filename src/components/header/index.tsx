@@ -24,6 +24,7 @@ const MenuItem = ({ children, light, ...rest }: MenuItemProps) => {
 
 export interface UserModalState {
   show: boolean;
+  mouse_over_modal: boolean;
 }
 
 export default function Header() {
@@ -31,7 +32,10 @@ export default function Header() {
   const ref = useRef<HTMLDivElement>(null);
   const icon_size = 37;
 
-  const [userModal, setUserModal] = useState<UserModalState>({ show: false });
+  const [userModal, setUserModal] = useState<UserModalState>({
+    show: false,
+    mouse_over_modal: false,
+  });
 
   const close_user_modal = () => {
     setUserModal((prev) => {
@@ -40,11 +44,17 @@ export default function Header() {
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", (e) => {
+    const on_scroll = () => {
       let elem = ref.current;
       let b = elem && window.scrollY > elem.getBoundingClientRect().height;
       setBg(b ? true : false);
-    });
+    };
+
+    window.addEventListener("scroll", on_scroll);
+
+    return () => {
+      window.removeEventListener("scroll", on_scroll);
+    };
   }, []);
 
   return (
@@ -70,7 +80,7 @@ export default function Header() {
           Cloths
         </div>
         <div className="flex flex-row">
-          <div
+          <button
             className="p-4 cursor-pointer"
             onClick={() =>
               setUserModal((prev) => {
@@ -83,7 +93,7 @@ export default function Header() {
               className="stroke-1"
               color={`${bg ? "" : "white"}`}
             />
-          </div>
+          </button>
           <div className="p-4 cursor-pointer">
             <FiShoppingBag
               size={icon_size}
@@ -94,7 +104,7 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="flex w-full justify-center items-center">
+      <div className="flex w-full mb-2 justify-center items-center">
         <MenuItem light={!bg} to="/stock" state={{ from: "Women" }}>
           Women
         </MenuItem>

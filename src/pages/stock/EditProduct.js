@@ -1,78 +1,67 @@
-import React, { useState, useRef } from "react";
-
+import React, { useState, useRef, useEffect } from "react";
 import { RiImageAddLine } from "react-icons/ri";
 import { IoCloseSharp } from "react-icons/io5";
 import "./../../components/stock/css/newProduct.css";
+import axios from "axios";
 
 import { IoMdAddCircleOutline } from "react-icons/io";
-
-const initialArray = [
-  {
-    tagName: "T-shirt",
-    selected: false,
-  },
-  {
-    tagName: "Shirt",
-    selected: false,
-  },
-  {
-    tagName: "Office Ware",
-    selected: true,
-  },
-  {
-    tagName: "skirts",
-    selected: false,
-  },
-  {
-    tagName: "Frocks",
-    selected: false,
-  },
-
-  {
-    tagName: "Trousers",
-    selected: false,
-  },
-  {
-    tagName: "Blouse",
-    selected: true,
-  },
-  {
-    tagName: "Long Sleeve",
-    selected: false,
-  },
-];
-
+import Loader from "../../components/stock/Loader";
+import { useParams } from "react-router-dom";
+import { getStorage, ref, deleteObject } from "firebase/storage";
+import { uploadFile } from "../../firebase";
+import { genRandFileName } from "./../../utils/random";
+let prevArray = [];
 function EditProduct() {
+  //form usestates-----------------------------------------------------------------------------------------------------------------
+  let params = useParams();
+  const [clothneeds, setClothneeds] = useState(null);
+  const [name, setName] = useState(params.productID);
+  const [price, setPrice] = useState("");
+  const [gender, setGender] = useState("X");
+  const [tagsArray, setTagsArray] = useState([]);
+  const [imagesUrls, setImagesUrls] = useState([]);
+  const [description, setDescription] = useState("");
+  const [color, setColor] = useState("");
+  const [sizeList, setSizeList] = useState([]);
+  const [imagesChanged, setImagesChanged] = useState(false);
+
+  // functional use states and functions-------------------------------------------------------------------------------------------
+  const [colorSelector, setColorSelector] = useState(false);
+  const [colorArray, setColorArray] = useState([]);
   const [selectedfile, setSelectedfile] = useState(null);
   const [selectedfileIndex, setSelectedfileIndex] = useState(-1);
   const [imagesList, setimagesList] = useState([]);
-  const [sizeList, setSizeList] = useState([
-    {
-      size: "s",
-      quantity: 14,
-    },
-    {
-      size: "",
-      quantity: 0,
-    },
-  ]);
+  const [imagesUrlList, setImagesUrlList] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState(false);
-  const [tagsArray, setTagsArray] = useState(initialArray);
+
+  //color change handling----------------------------------------------------------------------------------------------------
   const tagsClicked = () => {
     setTags(!tags);
   };
-
+  const colorSelectorClicked = () => setColorSelector(!colorSelector);
+  const colorClicked = (color) => {
+    setColor(color);
+  };
+  //size change handling--------------------------------------------------------------------------------------------------------
   const handleSizeChange = (index, event) => {
     let data = [...sizeList];
     data[index][event.target.name] = event.target.value;
     setSizeList(data);
   };
+
+  //images change handling-----------------------------------------------------------------------------------------------------
   function handleChange(e) {
     console.log(e.target.files);
 
+    let temUrlparr = [...imagesUrlList];
+    temUrlparr.unshift(URL.createObjectURL(e.target.files[0]));
+    setImagesUrlList(temUrlparr);
+
     let temparr = [...imagesList];
-    temparr.unshift(URL.createObjectURL(e.target.files[0]));
+    temparr.unshift(e.target.files[0]);
     setimagesList(temparr);
+
     setSelectedfile(URL.createObjectURL(e.target.files[0]));
     setSelectedfileIndex(0);
   }
@@ -83,12 +72,14 @@ function EditProduct() {
   };
 
   function imgClicked(index) {
-    setSelectedfile(imagesList[index]);
+    setSelectedfile(imagesUrlList[index]);
     setSelectedfileIndex(index);
   }
   function imgRemoveClicked() {
-    let temparr = [...imagesList];
+    let temparr = [...imagesUrlList];
+    let tempar2 = [...imagesList];
     temparr.splice(selectedfileIndex, 1);
+    tempar2.splice(selectedfileIndex, 1);
     if (temparr.length === 0) {
       setSelectedfile(null);
       setSelectedfileIndex(-1);
@@ -97,7 +88,8 @@ function EditProduct() {
       setSelectedfileIndex(0);
     }
 
-    setimagesList(temparr);
+    setImagesUrlList(temparr);
+    setimagesList(tempar2);
   }
 
   function addSize() {
@@ -119,11 +111,272 @@ function EditProduct() {
     temparr[index].selected = !temparr[index].selected;
     setTagsArray(temparr);
   }
+  //validations------------------------------------------------------------------------------------------------------------
+  function validations() {
+    if (name === "") {
+      alert("name cannot be null!");
+      return false;
+    }
+    if (price === "") {
+      alert("price cannot be null!");
+      return false;
+    }
+    if (color === "") {
+      alert("please select a color!");
+      return false;
+    }
+    if (sizeList === []) {
+      alert("please select a size!");
+      return false;
+    }
+    if (gender === "choose a gender") {
+      alert("please choose a gender!");
+    }
+    if (description === "") {
+      alert("description cannot be null!");
+      return false;
+    }
+
+    return true;
+  }
+  //delete old photos -------------------------------------------------------------------------------------
+  async function deleteOldPhotos(name) {
+    const storage = getStorage();
+
+    // Create a reference to the file to delete
+    const desertRef = ref(storage, `test/${name}`);
+
+    // Delete the file
+    deleteObject(desertRef)
+      .then(() => {
+        console.log(name + " deleted");
+      })
+      .catch((error) => {
+        console.log(name + " not deleted");
+      });
+  }
+  //reset form after it updated-------------------------------------------------------------------------------
+  function reset() {}
+
+  //sending data---------------------------------------------------------------------------------------------
+  async function sendData(e) {
+    e.preventDefault();
+    if (!validations()) return 0;
+    let tags = [];
+    tagsArray.forEach((tag) => {
+      if (tag.selected) {
+        tags.push(tag.tagName);
+      }
+    });
+    console.log(imagesList);
+    let quantity = {};
+    sizeList.forEach((size) => {
+      quantity[String(size.size)] = size.quantity;
+    });
+    let newImagesUrls = [];
+    let newImageList = imagesList;
+    let count = 0;
+
+    imagesUrls.forEach((image) => {
+      let val = newImageList.indexOf(image[0]);
+      if (val === -1) {
+        console.log(
+          image[0] + " !!!!!!!!!" + imagesList[0] + " not found! gonna delete!"
+        );
+        deleteOldPhotos(image[0]);
+      } else {
+        console.log(image + " found! gonna add");
+        newImagesUrls.push(imagesUrls[count]);
+        newImageList.splice(val, 1);
+      }
+      count = count + 1;
+    });
+
+    console.log("done!");
+    console.log(newImagesUrls);
+    console.log(newImageList);
+
+    setLoading(true);
+    let newArray = newImageList.map((image) =>
+      uploadFile(image, genRandFileName(), "test")
+    );
+
+    let fileDetails = await Promise.all(newArray);
+    console.log("fileDetails");
+    console.log(fileDetails);
+    console.log("hehe");
+    fileDetails.forEach((item) => {
+      newImagesUrls.push(item);
+    });
+    console.log("newImagesUrls");
+    console.log(newImagesUrls);
+
+    const newItem = {
+      _id: params.productID,
+      name,
+      price,
+      gender,
+      tags,
+      imagesUrls: newImagesUrls,
+      description,
+      color,
+      quantity,
+    };
+    console.log(newItem);
+
+    axios
+      .put("http://localhost:4200/api/stock/updateProduct", newItem)
+      .then(function (response) {
+        console.log(response);
+        alert("product was updated");
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert("product was not Updated");
+      })
+      .then(() => {
+        setLoading(false);
+      });
+  }
+  //initial setup ----------------------------------------------------------------------------------------------
+  useEffect(() => {
+    //get tags----------------------------------
+    axios
+      .get("http://localhost:4200/api/clothNeeds/getTags")
+      .then(function (response) {
+        // handle success
+        let data = response.data[0].mensTags.map((tag) => ({
+          tagName: tag,
+          selected: false,
+        }));
+
+        setTagsArray(data);
+        setColorArray(response.data[0].colors);
+        setClothneeds(response.data[0]);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+        console.log(colorArray);
+      });
+
+    //get product details----------------------------------------------------
+    setLoading(true);
+    axios
+      .get("http://localhost:4200/api/stock/getProduct", {
+        params: { id: params.productID },
+      })
+      .then(function (response) {
+        setName(response.data.name);
+        setPrice(response.data.price);
+        prevArray = response.data.tags;
+        setGender(response.data.gender);
+        setImagesUrls(response.data.imagesUrls);
+        let data = [];
+        let dataUrls = [];
+        response.data.imagesUrls.forEach((image) => {
+          data.push(image[0]);
+          dataUrls.push(image[1]);
+        });
+        setimagesList(data);
+        console.log("heres the use effect image name set" + data);
+        setImagesUrlList(dataUrls);
+        setColor(response.data.color);
+        setDescription(response.data.description);
+        let qObj = response.data.quantity;
+        let qArray = [];
+        for (const key in qObj) {
+          qArray.push({
+            size: key,
+            quantity: qObj[key],
+          });
+        }
+        setSizeList(qArray);
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        setLoading(false);
+      });
+  }, []);
+  //useEffect for get tags in gender change------------------------------------------------------------------
+  useEffect(() => {
+    if (clothneeds) {
+      if (gender === "M") {
+        let data = clothneeds.mensTags.map((tag) => {
+          {
+            let selectedBool = false;
+            if (prevArray.indexOf(tag) !== -1) {
+              selectedBool = true;
+            }
+            return {
+              tagName: tag,
+              selected: selectedBool,
+            };
+          }
+        });
+
+        setTagsArray(data);
+      } else if (gender === "W") {
+        let data = clothneeds.womenTags.map((tag) => {
+          {
+            let selectedBool = false;
+            if (prevArray.indexOf(tag) !== -1) {
+              selectedBool = true;
+            }
+            return {
+              tagName: tag,
+              selected: selectedBool,
+            };
+          }
+        });
+
+        setTagsArray(data);
+      } else if (gender === "K") {
+        let data = clothneeds.childTags.map((tag) => {
+          {
+            let selectedBool = false;
+            if (prevArray.indexOf(tag) !== -1) {
+              selectedBool = true;
+            }
+            return {
+              tagName: tag,
+              selected: selectedBool,
+            };
+          }
+        });
+
+        setTagsArray(data);
+      } else if (gender === "U") {
+        let data = clothneeds.unisexTags.map((tag) => {
+          {
+            let selectedBool = false;
+            if (prevArray.indexOf(tag) !== -1) {
+              selectedBool = true;
+            }
+            return {
+              tagName: tag,
+              selected: selectedBool,
+            };
+          }
+        });
+
+        setTagsArray(data);
+      }
+    }
+  }, [gender, clothneeds, loading]);
 
   return (
     <div className="w-screen">
-      <span>Edit Item</span>
-
+      {loading && <Loader />}
+      <span className="ml-80 mt-20 mb-10 text-3xl font-bold">
+        Edit New Item
+      </span>
       {/* image upload and inputs set */}
       <div className="w-screen flex flex-wrap 2xl:flex-row  justify-center  ">
         {/* image upload */}
@@ -164,7 +417,7 @@ function EditProduct() {
                   : "overflow-y-scroll")
               }
             >
-              {imagesList.map((imgItem, index) => (
+              {imagesUrlList.map((imgItem, index) => (
                 <div
                   key={index}
                   onClick={() => imgClicked(index)}
@@ -195,6 +448,7 @@ function EditProduct() {
         <form>
           <div className="w-[600px] m-8">
             <div className="grid">
+              {/*product name input */}
               <div className="mb-6">
                 <label
                   for="first_name"
@@ -203,6 +457,8 @@ function EditProduct() {
                   Product Name
                 </label>
                 <input
+                  onChange={(e) => setName(e.target.value)}
+                  value={name}
                   type="text"
                   id="first_name"
                   class=" border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
@@ -210,6 +466,7 @@ function EditProduct() {
                   required
                 />
               </div>
+              {/*product price input */}
               <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
                   <label
@@ -219,13 +476,16 @@ function EditProduct() {
                     Product Price
                   </label>
                   <input
-                    type="text"
+                    onChange={(e) => setPrice(e.target.value)}
+                    value={price}
+                    type="number"
                     id="first_name"
                     class=" border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
-                    placeholder="John"
+                    placeholder="price"
                     required
                   />
                 </div>
+                {/*gender input */}
                 <div>
                   <label
                     for="countries"
@@ -236,12 +496,18 @@ function EditProduct() {
                   <select
                     id="countries"
                     class=" border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
                   >
-                    <option selected>Choose a country</option>
-                    <option value="US">Men</option>
-                    <option value="CA">Women</option>
-                    <option value="FR">Kids</option>
-                    <option value="DE">Unisex</option>
+                    <option value="choose a gender" selected>
+                      choose a gender
+                    </option>
+                    <option value="M" selected>
+                      Men
+                    </option>
+                    <option value="W">Women</option>
+                    <option value="K">Kids</option>
+                    <option value="U">Unisex</option>
                   </select>
                 </div>
               </div>
@@ -312,6 +578,8 @@ function EditProduct() {
                   id="first_name"
                   class=" border align-middle border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
                   placeholder="description"
+                  onChange={(e) => setDescription(e.target.value)}
+                  value={description}
                   required
                 />
               </div>
@@ -322,24 +590,38 @@ function EditProduct() {
       <div className="w-full flex flex-row justify-center">
         <form>
           <div class="flex flex-col items-center gap-6 mb-6">
-            <div className="mb-2">
+            {/* color--------------------------------------------------------------------------------------------------- */}
+            <div className="relative mb-6">
               <label
                 for="first_name"
                 class="block ml-2 mb-2   text-gray-900 dark:text-gray-300 font-bold text-md"
               >
-                Color
+                color
               </label>
-
-              <select
-                id="countries"
-                class="w-[250px] border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
+              <div className="border w-[300px] items-center flex flex-row justify-between min-h-[30px] align-middle border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md">
+                <div className={color + " mr-3 w-full h-10 "}></div>
+                <span onClick={colorSelectorClicked} className="">
+                  <IoMdAddCircleOutline className="w-6 h-6" />
+                </span>
+              </div>
+              <div
+                class={
+                  colorSelector
+                    ? "absolute -bottom-[100px] h-[100px] overflow-y-auto w-full p-5 flex flex-wrap origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+                    : "hidden"
+                }
               >
-                <option selected>Choose a color</option>
-                <option value="US">white</option>
-                <option value="CA">blue</option>
-                <option value="FR">black</option>
-                <option value="DE">red</option>
-              </select>
+                {colorArray.map((color, index) => (
+                  <span
+                    className={
+                      color +
+                      "    border-2 h-8 w-8 m-1 text-base rounded-full px-4 py-1  hover:cursor-pointer"
+                    }
+                    onClick={() => colorClicked(color)}
+                    // bg-slate-500 bg-red-500 bg-orange-500 bg-yellow-500 bg-green-500 bg-emerald-500 bg-teal-500 bg-cyan-500 bg-violet-500
+                  ></span>
+                ))}
+              </div>
             </div>
             <div class="flex flex-wrap justify-around">
               {sizeList.map((sizeqty, index) => (
@@ -404,6 +686,17 @@ function EditProduct() {
                   </span>
                 </div>
               </div>
+            </div>
+            <div>
+              <input
+                onClick={(e) => sendData(e)}
+                type="submit"
+                value={"UPDATE"}
+                className="bg-red-600 text-white h-10 w-[200px] cursor-pointer hover:bg-red-700 mr-10 mt-20"
+              />
+              <button className="bg-black text-white h-10 w-[200px]">
+                CANCLE
+              </button>
             </div>
           </div>
         </form>
