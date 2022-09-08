@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import Cart from "../cart/cart";
+import { FiHeart } from "react-icons/fi";
 const ProductDetails = () => {
   const data = [
     {
@@ -24,13 +25,32 @@ const ProductDetails = () => {
   const [availableAmount, setAvailableAmount] = useState("2");
   const [product, setProduct] = useState(data);
   const [mainImage, setMainImage] = useState(data.map((obj) => obj.img[0]));
+  const [isToggle, setToggle] = useState(false);
+  const [size, setSize] = useState(null);
+  const [cartData, setCartData] = useState([]);
 
   const changeImage = (event) => {
     document.querySelector(".main-img").src = event.target.src;
   };
-  const changeSize = (event, key) => {
-    document.getElementById(key).style.backgroundColor = "black";
-    document.getElementById(key).style.color = "white";
+  const changeSize = (e, key) => {
+    setSize(data[0].size[key]);
+  };
+
+  const addToCart = () => {
+    if (size !== null) {
+      setCartData([
+        {
+          name: data[0].name,
+          img: data[0].img[0],
+          price: data[0].price,
+          size: size,
+        },
+        ...cartData,
+      ]);
+      console.log(cartData);
+    } else {
+      console.log("select color");
+    }
   };
 
   return (
@@ -107,13 +127,26 @@ const ProductDetails = () => {
                 </div>
               </div>
             ))}
-            <div>
-              <button className="mt-9 w-28 h-9 md:w-40 md:h-12 bg-black text-white text-center items-center rounded">
-                ADD TO BAG{" "}
+            <div className="flex flex-row">
+              <button
+                className="mt-9 w-28 h-9 md:w-40 md:h-12 bg-black text-white text-center items-center rounded"
+                onClick={addToCart}
+              >
+                ADD TO BAG
               </button>
-              <button className="border border-red-600 h-9 w-12 ml-1 md:ml-3 md:w-16 md:h-12 rounded ">
-                hi
-              </button>
+              <div
+                className="mt-9 cursor-pointer"
+                onClick={() => {
+                  setToggle(!isToggle);
+                  console.log(cartData);
+                }}
+              >
+                <FiHeart
+                  size={16}
+                  color="red"
+                  className="items-center border border-red-600 h-9 w-12 ml-1 md:ml-3 md:w-16 md:h-12 rounded "
+                />
+              </div>
             </div>
             <div className=" pt-4 text-xs md:text-base ">
               <div>Only {availableAmount} Available</div>
@@ -138,6 +171,9 @@ const ProductDetails = () => {
             </div>
           ))}
         </div>
+      </div>
+      <div>
+        <Cart isToggle={isToggle} setToggle={setToggle} cartData={cartData} />
       </div>
     </>
   );
