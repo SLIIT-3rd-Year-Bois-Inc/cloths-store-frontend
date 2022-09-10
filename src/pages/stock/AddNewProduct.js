@@ -3,7 +3,7 @@ import { RiImageAddLine } from "react-icons/ri";
 import { IoCloseSharp } from "react-icons/io5";
 import "./../../components/stock/css/newProduct.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
 import { IoMdAddCircleOutline } from "react-icons/io";
 import Loader from "../../components/stock/Loader";
 import { genRandFileName } from "./../../utils/random";
@@ -11,7 +11,6 @@ import { uploadFile } from "../../firebase";
 import FullScreenModelAddNewItem from "../../components/stock/FullScreenModelAddNewItem";
 
 function AddNewProduct() {
-  const navigate = useNavigate();
   //form usestates-----------------------------------------------------------------------------------------------------------------
   const [errorMessage, setErrorMessage] = useState("");
   const [clothneeds, setClothneeds] = useState(null);
@@ -19,7 +18,6 @@ function AddNewProduct() {
   const [price, setPrice] = useState("");
   const [gender, setGender] = useState("M");
   const [tagsArray, setTagsArray] = useState([]);
-  const [imagesUrls, setImagesUrls] = useState([]);
   const [description, setDescription] = useState("");
   const [color, setColor] = useState("");
   const [sizeList, setSizeList] = useState([]);
