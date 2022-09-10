@@ -28,7 +28,7 @@ function Product({ viewtype, docID }) {
   }
   useEffect(() => {
     getProduct();
-  }, []);
+  }, [docID]);
 
   return (
     <div className="relative w-[330px] h-[470px]  mr-5 ml-5 mb-14 ">

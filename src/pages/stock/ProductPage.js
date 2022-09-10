@@ -9,13 +9,15 @@ function ProductPage() {
 
   const filterClicked = () => setFilter(!filter);
   const [products, setProducts] = useState([]);
+  const [sortingOption, setSortingOption] = useState();
+
   useEffect(() => {
     axios
       .get("http://localhost:4200/api/stock/getCusProducts", {
-        params: { archived: false },
+        params: { archived: false, sortingOption },
       })
       .then(function (response) {
-        setProducts(response.data);
+        setProducts([...response.data]);
         console.log(response.data);
       })
       .catch(function (error) {
@@ -24,14 +26,17 @@ function ProductPage() {
       .then(function () {
         // always executed
       });
-  }, []);
+  }, [sortingOption]);
 
   return (
     // full screen div
 
     <div className="flex flex-col items-center justify-center w-screen border-2">
       <div className="flex flex-col">
-        <ProductViewHeader filterClicked={filterClicked} />
+        <ProductViewHeader
+          filterClicked={filterClicked}
+          setSortingOption={setSortingOption}
+        />
         <div className="flex flex-row relative">
           <Filter filter={filter} />
           <div className="flex flex-wrap justify-left xl:w-[1150px]">
