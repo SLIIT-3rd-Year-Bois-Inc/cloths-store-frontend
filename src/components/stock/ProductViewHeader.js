@@ -7,7 +7,7 @@ import {
 } from "react-icons/cg";
 import { FiChevronUp, FiChevronDown, FiFilter } from "react-icons/fi";
 
-function ProductViewHeader({ filterClicked }) {
+function ProductViewHeader({ filterClicked, setSortingOption }) {
   const [sortby, setSortBy] = useState(false);
   const sortbyClicked = () => setSortBy(!sortby);
   return (
@@ -52,33 +52,24 @@ function ProductViewHeader({ filterClicked }) {
             tabindex="-1"
           >
             <div class="py-1" role="none">
-              <a
-                href="he"
-                class="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-50"
-                role="menuitem"
-                tabindex="-1"
-                id="menu-item-0"
+              <span
+                onClick={() => setSortingOption(1)}
+                className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-50"
               >
-                Account settings
-              </a>
-              <a
-                href="he"
-                class="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-50"
-                role="menuitem"
-                tabindex="-1"
-                id="menu-item-1"
+                Price: low to high
+              </span>
+              <span
+                onClick={() => setSortingOption(-1)}
+                className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-50"
               >
-                Support
-              </a>
-              <a
-                href="he"
-                class="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-50"
-                role="menuitem"
-                tabindex="-1"
-                id="menu-item-2"
+                Price: high to low
+              </span>
+              <span
+                onClick={() => setSortingOption({})}
+                className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-50"
               >
-                License
-              </a>
+                Price: random
+              </span>
             </div>
           </div>
         </div>

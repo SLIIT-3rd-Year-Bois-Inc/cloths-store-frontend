@@ -3,14 +3,17 @@ import { RiImageAddLine } from "react-icons/ri";
 import { IoCloseSharp } from "react-icons/io5";
 import "./../../components/stock/css/newProduct.css";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import Loader from "../../components/stock/Loader";
 import { genRandFileName } from "./../../utils/random";
 import { uploadFile } from "../../firebase";
+import FullScreenModelAddNewItem from "../../components/stock/FullScreenModelAddNewItem";
 
 function AddNewProduct() {
+  const navigate = useNavigate();
   //form usestates-----------------------------------------------------------------------------------------------------------------
+  const [errorMessage, setErrorMessage] = useState("");
   const [clothneeds, setClothneeds] = useState(null);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -30,9 +33,18 @@ function AddNewProduct() {
   const [imagesUrlList, setImagesUrlList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState(false);
+  const [modelBox, setModelBox] = useState(false);
+  const [errorMessageDiv, setErrorMessageDiv] = useState(false);
 
   const tagsClicked = () => {
-    setTags(!tags);
+    if (gender === "choose a gender") {
+      setErrorMessageDiv(true);
+      setErrorMessage("please choose a gender before select a tag!");
+      return false;
+    } else {
+      setErrorMessageDiv(false);
+      setTags(!tags);
+    }
   };
   const colorSelectorClicked = () => setColorSelector(!colorSelector);
   const colorClicked = (color) => {
@@ -106,32 +118,44 @@ function AddNewProduct() {
     temparr[index].selected = !temparr[index].selected;
     setTagsArray(temparr);
   }
+  //reset form------------------------------------------------------------
+
   //validations----------------------------------
   function validations() {
     if (name === "") {
-      alert("name cannot be null!");
+      setErrorMessageDiv(true);
+      setErrorMessage("please enter a name!");
       return false;
     }
     if (price === "") {
-      alert("price cannot be null!");
-      return false;
-    }
-    if (color === "") {
-      alert("please select a color!");
-      return false;
-    }
-    if (sizeList === []) {
-      alert("please select a size!");
+      setErrorMessageDiv(true);
+      setErrorMessage("please add a price!");
       return false;
     }
     if (gender === "choose a gender") {
-      alert("please choose a gender!");
+      setErrorMessageDiv(true);
+      setErrorMessage("please choose a gender!");
+      return false;
     }
     if (description === "") {
-      alert("description cannot be null!");
+      setErrorMessageDiv(true);
+      setErrorMessage("please add a description");
+
+      return false;
+    }
+    if (color === "") {
+      setErrorMessageDiv(true);
+      setErrorMessage("please select a color!");
       return false;
     }
 
+    if (sizeList.length === 0) {
+      setErrorMessageDiv(true);
+      setErrorMessage("please select a size!");
+      return false;
+    }
+
+    setErrorMessageDiv(false);
     return true;
   }
   //useEffect for get tags in gender change------------------------------------------------------------------
@@ -175,7 +199,6 @@ function AddNewProduct() {
       .post("http://localhost:4200/api/stock/newProduct", newItem)
       .then(function (response) {
         console.log(response);
-        alert("product added");
       })
       .catch(function (error) {
         console.log(error);
@@ -183,6 +206,7 @@ function AddNewProduct() {
       })
       .then(() => {
         setLoading(false);
+        setModelBox(true);
       });
   }
   useEffect(() => {
@@ -268,9 +292,12 @@ function AddNewProduct() {
   }, [gender, clothneeds, loading]);
 
   return (
-    <div className="w-screen">
-      <span>Add New Item</span>
+    <div className="relative w-screen pt-20">
+      <span className="ml-80 pt-20 mb-10 text-3xl font-bold">Add New Item</span>
       {loading && <Loader />}
+      {modelBox && (
+        <FullScreenModelAddNewItem message="ITEM ADDED SUCCESSFULLY!" />
+      )}
       {/* image upload and inputs set */}
       <div className="w-screen flex flex-wrap 2xl:flex-row  justify-center  ">
         {/* image upload */}
@@ -278,26 +305,37 @@ function AddNewProduct() {
           {/* selected image */}
           <div
             className={
-              "relative w-[330px] h-[415px] ml-14 border-2 " +
+              "relative w-[330px] h-[415px] ml-14 border-2 flex flex-row justify-center items-center " +
               (selectedfileIndex === -1 ? "border-dashed" : "border-solid")
             }
           >
             <img
               src={selectedfile}
-              className={selectedfileIndex === -1 ? "opacity-0" : "opacity-100"}
+              className={
+                "w-[330px] h-[415px] " +
+                (selectedfileIndex === -1 ? "hidden" : "inline")
+              }
               alt="selected cloath"
             />
             <span
               onClick={imgRemoveClicked}
               className={
-                "absolute top-2 right-2 bg-gray-50/75 rounded-sm cursor-pointer hover:bg-gray-50" +
-                (selectedfileIndex === -1 ? "opacity-0" : "opacity-100")
+                "absolute top-2 right-2 bg-gray-50/75 rounded-sm cursor-pointer hover:bg-gray-50 " +
+                (selectedfileIndex === -1 ? "hidden" : "block")
               }
             >
               <IoCloseSharp
                 className={selectedfileIndex === -1 ? "hidden" : "block"}
                 color="black"
               />
+            </span>
+            <span
+              className={
+                "text-zinc-500 " +
+                (selectedfileIndex === -1 ? "block" : "hidden")
+              }
+            >
+              Selected image will be displayed here
             </span>
           </div>
 
@@ -356,7 +394,7 @@ function AddNewProduct() {
                   type="text"
                   id="first_name"
                   class=" border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
-                  placeholder="John"
+                  placeholder="Product Name"
                   required
                 />
               </div>
@@ -375,7 +413,7 @@ function AddNewProduct() {
                     type="number"
                     id="first_name"
                     class=" border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
-                    placeholder="price"
+                    placeholder="Price"
                     required
                   />
                 </div>
@@ -471,7 +509,7 @@ function AddNewProduct() {
                   type="text"
                   id="first_name"
                   class=" border align-middle border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
-                  placeholder="description"
+                  placeholder="Description"
                   onChange={(e) => setDescription(e.target.value)}
                   required
                 />
@@ -489,7 +527,7 @@ function AddNewProduct() {
                 for="first_name"
                 class="block ml-2 mb-2   text-gray-900 dark:text-gray-300 font-bold text-md"
               >
-                color
+                Color
               </label>
               <div className="border w-[300px] items-center flex flex-row justify-between min-h-[30px] align-middle border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md">
                 <div className={color + " mr-3 w-full h-10 "}></div>
@@ -548,7 +586,7 @@ function AddNewProduct() {
                       value={sizeqty.quantity}
                       name="quantity"
                       onChange={(event) => handleSizeChange(index, event)}
-                      type="text"
+                      type="number"
                       id="first_name"
                       class="border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[80px] p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md"
                       placeholder="size"
@@ -570,7 +608,7 @@ function AddNewProduct() {
 
               <div className="ml-10 mt-2">
                 <br />
-                <div className="flex flex-row justify-center items-center  border-2 border-dashed w-[190px] h-12">
+                <div className="flex flex-row justify-center items-center  border-2 border-dashed border-zinc-400 w-[190px] h-12">
                   <span
                     onClick={addSize}
                     className="text-zinc-500 hover:cursor-pointer"
@@ -580,12 +618,17 @@ function AddNewProduct() {
                 </div>
               </div>
             </div>
+            {errorMessageDiv && (
+              <span className="w-full text-center bg-red-600/25 p-3 rounded-full text-red-600 text-m font-bold">
+                {errorMessage}
+              </span>
+            )}
             <div>
               <input
                 onClick={(e) => sendData(e)}
                 type="submit"
                 value={"ADD"}
-                className="bg-red-600 text-white h-10 w-[200px] cursor-pointer hover:bg-red-700 mr-10 mt-20"
+                className="bg-red-600 text-white h-10 w-[200px] cursor-pointer hover:bg-red-700 mr-10 mt-10 mb-20"
               />
               <button className="bg-black text-white h-10 w-[200px]">
                 CANCLE
