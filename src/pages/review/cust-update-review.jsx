@@ -11,6 +11,7 @@ import Updated from "../../components/review-modals/updated";
 import Failed from "../../components/review-modals/failed";
 import Deleted from "../../components/review-modals/deleted";
 import ImageBig from "../../components/review-modals/imageBig";
+import CommonSuccess from "../../components/review-modals/common-success";
 
 function CusUpdateReview() {
   const [modalOn, setModalOn] = useState(false);
@@ -21,6 +22,7 @@ function CusUpdateReview() {
   const [deletingM, setDeletingM] = useState(false);
   const [failed, setFailed] = useState(false);
 
+  const [commonPop, setCommonPop] = useState(false);
   const location = useLocation();
 
   const [review, setReview] = useState(location.state.review);
@@ -152,7 +154,8 @@ function CusUpdateReview() {
       .then((res) => {
         if (res.status === 200) {
           console.log("update success");
-          setShowUpdate(true);
+          // setShowUpdate(true);
+          setCommonPop(true);
         } else {
           console.log("Failed");
           // setModalOn2(true);
@@ -203,14 +206,11 @@ function CusUpdateReview() {
             </h1>
 
             <p className="text-justify">
-              Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3
-              from SLIIT-3rd-Year-Merge pull request #3 from
-              SLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge
-              pull request #3 from SLIIT-3rd-Year-Merge pull request #3 from
-              SLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge
-              pull request #3 from SLIIT-3rd-Year-Merge pull request #3 from
-              SLIIT-3rd-Year-Merge pull request #3 from SLIfxv dfv IT-3rd-Yea
-              r-Me rges dcMerges dcMer ges dv cMergesdc
+              This section is still under construction. This section will work
+              when we integrate with my team member's part. Data from their side
+              will be shown here. This will be a read another additional read
+              CRUD operation as well. This section as well as additional
+              Sections will be implemented in sprint 2
             </p>
             <br />
             <div className="grid lg:grid-flow-col gap-10 2xl:grid-flex-row md:grid-flex-col">
@@ -388,6 +388,16 @@ function CusUpdateReview() {
                         />
                       )}
 
+                      {commonPop && (
+                        <CommonSuccess
+                          setCommonSuccess={setCommonPop}
+                          message={"Your Review has been updated."}
+                          topic={"Review Updated!"}
+                          link1={"deletedQ"}
+                          link2={""}
+                        />
+                      )}
+
                       {deletingM && <Deleted />}
                       {failed && <Failed />}
 
@@ -401,7 +411,7 @@ function CusUpdateReview() {
                         className="inline-flex w-40 h-12 items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-sm text-white bg-red-600 hover:bg-red-800"
                       >
                         {" "}
-                        Submit Review{" "}
+                        Update Review{" "}
                       </button>
                     </div>
                   </div>

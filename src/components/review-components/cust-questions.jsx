@@ -3,11 +3,6 @@ import { useState } from "react";
 import Stars from "./stars";
 
 function QuestionCard({ user, setCurrentID, deleteQuestion }) {
-  // function run(){
-
-  //   deleteQuestion();
-  // }
-
   const handleCancelClick = () => {
     console.log("1");
     // setCurrentID(user._id);
@@ -36,9 +31,12 @@ function QuestionCard({ user, setCurrentID, deleteQuestion }) {
         <div className=" w-full m-4">{user.answer}</div>
       </div>
       <div className="flex justify-end">
-        <button className="bg-red-400 p-10" onClick={handleCancelClick}>
+        <button
+          className="bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 px-4 rounded"
+          onClick={handleCancelClick}
+        >
           {" "}
-          test{" "}
+          Delete Question{" "}
         </button>
       </div>
     </div>
