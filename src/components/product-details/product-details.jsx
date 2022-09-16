@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import Cart from "../cart/cart";
+import { FiHeart } from "react-icons/fi";
 const ProductDetails = () => {
   const data = [
     {
@@ -24,14 +25,117 @@ const ProductDetails = () => {
   const [availableAmount, setAvailableAmount] = useState("2");
   const [product, setProduct] = useState(data);
   const [mainImage, setMainImage] = useState(data.map((obj) => obj.img[0]));
+  const [isToggle, setToggle] = useState(false);
+  const [size, setSize] = useState(null);
+  const [cartData, setCartData] = useState([]);
+  const [sizeID, setSizeId] = useState();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const changeImage = (event) => {
     document.querySelector(".main-img").src = event.target.src;
   };
-  const changeSize = (event, key) => {
-    document.getElementById(key).style.backgroundColor = "black";
-    document.getElementById(key).style.color = "white";
+  const changeSize = (e, key) => {
+    setSize(data[0].size[key]);
+    setSizeId(key);
   };
+
+  const chooseSizeError = () => (
+    <div
+      id="alert-border-3"
+      className="flex p-4 mb-4  bg-red-100 border-t-4 border-red-500 dark:bg-red-200 mt-4 w-2/4 "
+      role="alert"
+    >
+      <div class="ml-3 text-sm font-medium text-red-700">
+        Select a size to add.
+      </div>
+      <button
+        type="button"
+        className="ml-auto -mx-1.5 -my-1.5  bg-red-100 dark:bg-red-200 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 dark:hover:bg-red-300 inline-flex h-8 w-8"
+        data-dismiss-target="#alert-border-3"
+        aria-label="Close"
+        onClick={() => setShowError(false)}
+      >
+        <span class="sr-only">Dismiss</span>
+        <svg
+          aria-hidden="true"
+          className="w-5 h-5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </button>
+    </div>
+  );
+
+  const addToCart = () => {
+    if (size !== null) {
+      setCartData([
+        {
+          name: data[0].name,
+          img: data[0].img[0],
+          price: data[0].price,
+          size: size,
+        },
+        ...cartData,
+      ]);
+      setShowSuccess(true);
+    } else {
+      setShowError(true);
+    }
+  };
+
+  const addedToCartSuccess = () => (
+    <div
+      id="alert-border-3"
+      className="flex p-4 mb-4 bg-green-100 border-t-4 border-green-500 dark:bg-green-200 mt-4  w-3/4"
+      role="alert"
+    >
+      <svg
+        class="flex-shrink-0 w-5 h-5 text-green-700"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+          clip-rule="evenodd"
+        ></path>
+      </svg>
+      <div class="ml-3 text-sm font-medium text-green-700">
+        Item added!. Check your cart for added item
+      </div>
+      <button
+        type="button"
+        className="ml-auto -mx-1.5 -my-1.5 bg-green-100 dark:bg-green-200 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 dark:hover:bg-green-300 inline-flex h-8 w-8"
+        data-dismiss-target="#alert-border-3"
+        aria-label="Close"
+        onClick={() => setShowSuccess(false)}
+      >
+        <span class="sr-only">Dismiss</span>
+        <svg
+          aria-hidden="true"
+          className="w-5 h-5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </button>
+    </div>
+  );
 
   return (
     <>
@@ -62,7 +166,7 @@ const ProductDetails = () => {
         <div className=" md:w-2/4  md: -ml-40">
           <div className="ml-44 md:ml-0 text-xs md:text-base">
             {product.map((obj, index) => (
-              <div>
+              <div key={index}>
                 <div className=" font-extrabold italic">
                   <label htmlFor="name" className=" text-xs pb-0">
                     {obj.gender === "m" ? "Men's" : "Women's"}
@@ -96,7 +200,11 @@ const ProductDetails = () => {
                     {obj.size.map((value, index) => (
                       <button
                         key={index}
-                        className="sizeSelect inline-block  mr-3 bg-white-50 shadow-lg border w-16 h-7 md:w-24 md:h-9 bg-  text-center items-center"
+                        className={
+                          sizeID === index
+                            ? "sizeSelect inline-block  mr-3 bg-zinc-900 shadow-lg border w-16 h-7 md:w-24 md:h-9 bg-  text-white	 text-center items-center"
+                            : "sizeSelect inline-block  mr-3 bg-white-50 shadow-lg border w-16 h-7 md:w-24 md:h-9 bg-  text-center items-center"
+                        }
                         id={index}
                         onClick={(e) => changeSize(e, index)}
                       >
@@ -107,13 +215,30 @@ const ProductDetails = () => {
                 </div>
               </div>
             ))}
+            <div className="flex flex-row">
+              <button
+                className="mt-9 w-28 h-9 md:w-40 md:h-12 bg-black text-white text-center items-center rounded"
+                onClick={addToCart}
+              >
+                ADD TO BAG
+              </button>
+              <div
+                className="mt-9 cursor-pointer"
+                onClick={() => {
+                  setToggle(!isToggle);
+                  console.log(cartData);
+                }}
+              >
+                <FiHeart
+                  size={16}
+                  color="red"
+                  className="items-center border border-red-600 h-9 w-12 ml-1 md:ml-3 md:w-16 md:h-12 rounded "
+                />
+              </div>
+            </div>
             <div>
-              <button className="mt-9 w-28 h-9 md:w-40 md:h-12 bg-black text-white text-center items-center rounded">
-                ADD TO BAG{" "}
-              </button>
-              <button className="border border-red-600 h-9 w-12 ml-1 md:ml-3 md:w-16 md:h-12 rounded ">
-                hi
-              </button>
+              <div>{showSuccess ? addedToCartSuccess() : <></>}</div>
+              <div>{showError ? chooseSizeError() : <></>}</div>
             </div>
             <div className=" pt-4 text-xs md:text-base ">
               <div>Only {availableAmount} Available</div>
@@ -129,8 +254,8 @@ const ProductDetails = () => {
       </div>
       <div>
         <div className="pt-6 text-xs md:text-base shadow-md  ml-2 mr-2 pt-4 pr-4 pl-4	 pb-4">
-          {data.map((obj) => (
-            <div>
+          {data.map((obj, index) => (
+            <div key={index}>
               <label htmlFor="description" className="font-bold md:text-lg">
                 Description:
               </label>
@@ -138,6 +263,14 @@ const ProductDetails = () => {
             </div>
           ))}
         </div>
+      </div>
+      <div>
+        <Cart
+          isToggle={isToggle}
+          setToggle={setToggle}
+          cartData={cartData}
+          setCartData={setCartData}
+        />
       </div>
     </>
   );

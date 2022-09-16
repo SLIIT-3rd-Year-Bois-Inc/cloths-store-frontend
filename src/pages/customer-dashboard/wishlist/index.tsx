@@ -23,6 +23,7 @@ function WishProduct() {
           <img
             src="https://ae01.alicdn.com/kf/Hb048b9e7d1fb4fafb26619b84c2ad217V.jpg_220x220.jpg"
             className="w-full h-full object-contain"
+            alt="Product"
           ></img>
         </div>
         <div className="flex flex-col">
