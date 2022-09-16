@@ -8,14 +8,16 @@ import { useEffect } from "react";
 function Question() {
   const [popOn, setPopOn] = useState(false);
   const handleOnClose = () => setPopOn(false);
-
   const [question, setQuestion] = useState("");
   const [email, setEmail] = useState("");
+
   const current = new Date();
   const date = `${current.getDate()}/${
     current.getMonth() + 1
   }/${current.getFullYear()}`;
+
   const [commonPop, setCommonPop] = useState(false);
+  const [commonPop2, setCommonPop2] = useState(false);
 
   const [questions, setQuestions] = useState([]);
 
@@ -27,7 +29,8 @@ function Question() {
     });
   }, []);
 
-  const [currentID, setCurrentID] = useState("96");
+  const [currentID, setCurrentID] = useState("");
+
   const deleteQuestion = (currentID) => {
     console.log("2");
     console.log(currentID);
@@ -36,7 +39,8 @@ function Question() {
     })
       .then((res) => {
         if (res.status === 200) {
-          console.log("success");
+          console.log("success del");
+          setCommonPop2(true);
           // setDeletingM(true)
         } else {
           console.log("Failed");
@@ -130,7 +134,17 @@ function Question() {
             setCommonSuccess={setCommonPop}
             message={"Your question has been added successfully."}
             topic={"Question Added!"}
-            link1={""}
+            link1={"deletedQ"}
+            link2={""}
+          />
+        )}
+
+        {commonPop2 && (
+          <CommonSuccess
+            setCommonSuccess={setCommonPop2}
+            message={"Your question has been removed successfully."}
+            topic={"Question Removed!"}
+            link1={"deletedQ"}
             link2={""}
           />
         )}

@@ -6,19 +6,25 @@ import Stars from "../../components/review-components/stars";
 import { API_ENDPOINT } from "../../config";
 // change later with quarry
 import { useEffect, useState } from "react";
+import { FiTerminal } from "react-icons/fi";
 
 function CusViewReview() {
   const [reviews, setReviews] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(10);
+  const pagesButton = new Array(totalPage).fill(null).map((v, i) => i);
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/api/review/getReviews`).then(async (response) => {
-      let data = await response.json();
-      setReviews(data);
-      console.log(data);
-    });
-  }, []);
-
-  console.log("test");
+    fetch(`${API_ENDPOINT}/api/review/getReviews?page=` + page).then(
+      async (response) => {
+        await response.json().then(({ review, total }) => {
+          setReviews(review);
+          setTotalPage(total);
+          console.log(review);
+        });
+      }
+    );
+  }, [page]);
 
   return (
     <div>
@@ -137,7 +143,30 @@ function CusViewReview() {
             );
           })}
 
-          <button className="bg-red-400"></button>
+          <h1>Page selected : {page + 1}</h1>
+
+          {pagesButton.map((pageIndex) => {
+            return (
+              <button
+                //  className="
+                // bg-stone-900
+                // text-white
+                //   p-2 pl-4 pr-4 m-2
+                // hover:bg-red-700
+                //   hover:-translate-y-2 transform transition"
+
+                className={
+                  page == pageIndex
+                    ? "bg-red-600 text-white p-2 pl-4 pr-4 m-2 hover:bg-red-700 hover:-translate-y-2 transform transition"
+                    : "bg-stone-900 text-white p-2 pl-4 pr-4 m-2 hover:bg-red-700 hover:-translate-y-2 transform transition"
+                }
+                onClick={() => setPage(pageIndex)}
+              >
+                {" "}
+                {pageIndex + 1}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -145,3 +174,6 @@ function CusViewReview() {
 }
 
 export default CusViewReview;
+// = {(var > k ? "ihbii" : "utfuyb")}
+
+// FiTerminal.js / tags

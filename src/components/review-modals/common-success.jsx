@@ -1,6 +1,13 @@
 import ok from "../../../src/image/ok.gif";
+import { useNavigate } from "react-router-dom";
+
 const CommonSuccess = ({ setCommonSuccess, message, topic, link1, link2 }) => {
+  let navigate = useNavigate();
+
   const handleCancelClick = () => {
+    if (link1 == "deletedQ") {
+      navigate("/");
+    }
     setCommonSuccess(false);
   };
 
