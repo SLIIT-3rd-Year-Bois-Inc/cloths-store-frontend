@@ -13,18 +13,28 @@ function CusViewReview() {
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(10);
   const pagesButton = new Array(totalPage).fill(null).map((v, i) => i);
+  const [totalReviews, setTotalReviews] = useState();
+  const [search, setSearch] = useState("");
+  const [rating, setRating] = useState("");
+  const [tempSearch, setTempSearch] = useState("");
+
+  function searchActivate() {
+    setSearch(tempSearch);
+    console.log(search);
+  }
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/api/review/getReviews?page=` + page).then(
-      async (response) => {
-        await response.json().then(({ review, total }) => {
-          setReviews(review);
-          setTotalPage(total);
-          console.log(review);
-        });
-      }
-    );
-  }, [page]);
+    fetch(
+      `${API_ENDPOINT}/api/review/getReviews?page=${page}&search=${search}&rating=${rating}`
+    ).then(async (response) => {
+      await response.json().then(({ review, total2, total }) => {
+        setReviews(review);
+        setTotalPage(total);
+        setTotalReviews(total2);
+        console.log(review);
+      });
+    });
+  }, [page, search, rating]);
 
   return (
     <div>
@@ -38,8 +48,16 @@ function CusViewReview() {
                 placeholder="Search"
                 aria-label="Search"
                 aria-describedby="button-addon3"
+                onChange={(e) => {
+                  setTempSearch(e.target.value);
+                }}
               />
-              <button className="btn px-8 py-2 w-36 border-2 ml-3 border-black bg-black text-white font-medium text-xs leading-tight uppercase rounded hover:bg-red-600 hover:border-red-600  focus:outline-none focus:ring-0  transition duration-150 ease-in-out">
+              <button
+                className="btn px-8 py-2 w-36 border-2 ml-3 border-black bg-black text-white font-medium text-xs leading-tight uppercase rounded hover:bg-red-600 hover:border-red-600  focus:outline-none focus:ring-0  transition duration-150 ease-in-out"
+                onClick={(e) => {
+                  searchActivate();
+                }}
+              >
                 Search
               </button>
             </div>
@@ -49,15 +67,19 @@ function CusViewReview() {
         <div className="grid  lg:grid-flow-col gap-1 2xl:grid-flex-row md:grid-cols-none sm:grid-cols-none md:grid-flex-col divide-x divide-stone-900">
           <div className="col-span-3 mt-10 mb-10">
             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-              1,745 Total
+              {totalReviews} Total Reviews
             </p>
             <div className="flex items-center mt-4">
               <span className="text-sm font-medium  dark:text-blue-500">
                 5 star
               </span>
-              <div className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
+              <div
+                className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700 hover:scale-x-90 "
+                onClick={() => setRating("5")}
+              >
                 <div
                   className="h-5 bg-red-600 rounded"
+                  onClick={() => setRating("5")}
                   style={{ width: "70%" }}
                 ></div>
               </div>
@@ -69,9 +91,13 @@ function CusViewReview() {
               <span className="text-sm font-medium  dark:text-blue-500">
                 4 star
               </span>
-              <div className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
+              <div
+                className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700 hover:scale-x-90"
+                onClick={() => setRating("4")}
+              >
                 <div
                   className="h-5 bg-red-600 rounded"
+                  onClick={() => setRating("4")}
                   style={{ width: "17%" }}
                 ></div>
               </div>
@@ -83,9 +109,13 @@ function CusViewReview() {
               <span className="text-sm font-medium  dark:text-blue-500">
                 3 star
               </span>
-              <div className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
+              <div
+                className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700 hover:scale-x-90"
+                onClick={() => setRating("3")}
+              >
                 <div
                   className="h-5 bg-red-600 rounded"
+                  onClick={() => setRating("3")}
                   style={{ width: "8%" }}
                 ></div>
               </div>
@@ -97,9 +127,13 @@ function CusViewReview() {
               <span className="text-sm font-medium  dark:text-blue-500">
                 2 star
               </span>
-              <div className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
+              <div
+                className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700 hover:scale-x-90"
+                onClick={() => setRating("2")}
+              >
                 <div
                   className="h-5 bg-red-600 rounded"
+                  onClick={() => setRating("2")}
                   style={{ width: "4%" }}
                 ></div>
               </div>
@@ -112,9 +146,13 @@ function CusViewReview() {
               <span className="text-sm font-medium  dark:text-blue-500">
                 1 star
               </span>
-              <div className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700">
+              <div
+                className="mx-4 w-3/4 h-5 bg-gray-200 rounded dark:bg-gray-700 hover:scale-x-90"
+                onClick={() => setRating("1")}
+              >
                 <div
                   className="h-5 bg-red-600 rounded"
+                  onClick={() => setRating("1")}
                   style={{ width: "89%" }}
                 ></div>
               </div>
@@ -129,7 +167,22 @@ function CusViewReview() {
             <p className="ml-2 text-lg font-medium text-gray-900 dark:text-white">
               4.95 out of 5
             </p>
+            <button
+              className="bg-stone-400 hover:bg-stone-600 hover:text-white active:bg-red-500 ml-2 mt-2  p-2 "
+              onClick={() => setRating("")}
+            >
+              Clear Star Filter
+            </button>
           </div>
+        </div>
+
+        <div className="pb-6 text-lg font-bold">
+          Showing{" "}
+          <div className="text-red-600 font-extrabold inline">
+            {" "}
+            {rating == "" ? "all" : rating}{" "}
+          </div>{" "}
+          star reviews
         </div>
 
         <div className="">
@@ -143,18 +196,11 @@ function CusViewReview() {
             );
           })}
 
-          <h1>Page selected : {page + 1}</h1>
+          <h1 className="ml-2">Page selected : {page + 1}</h1>
 
           {pagesButton.map((pageIndex) => {
             return (
               <button
-                //  className="
-                // bg-stone-900
-                // text-white
-                //   p-2 pl-4 pr-4 m-2
-                // hover:bg-red-700
-                //   hover:-translate-y-2 transform transition"
-
                 className={
                   page == pageIndex
                     ? "bg-red-600 text-white p-2 pl-4 pr-4 m-2 hover:bg-red-700 hover:-translate-y-2 transform transition"
