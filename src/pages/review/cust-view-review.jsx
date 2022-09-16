@@ -11,7 +11,7 @@ import { FiTerminal } from "react-icons/fi";
 function CusViewReview() {
   const [reviews, setReviews] = useState([]);
   const [page, setPage] = useState(0);
-  const [totalPage, setTotalPage] = useState(10);
+  const [totalPage, setTotalPage] = useState();
   const pagesButton = new Array(totalPage).fill(null).map((v, i) => i);
   const [totalReviews, setTotalReviews] = useState();
   const [search, setSearch] = useState("");

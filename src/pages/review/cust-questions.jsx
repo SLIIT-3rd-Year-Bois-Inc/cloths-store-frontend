@@ -1,5 +1,4 @@
 import QuestionCard from "../../components/review-components/cust-questions";
-import dataOne from "./dataOne";
 import { useState } from "react";
 import { API_ENDPOINT } from "../../config";
 import CommonSuccess from "../../components/review-modals/common-success";
@@ -11,6 +10,12 @@ function Question() {
   const [question, setQuestion] = useState("");
   const [email, setEmail] = useState("");
 
+  const [totalPage, setTotalPage] = useState();
+  const pagesButton = new Array(totalPage).fill(null).map((v, i) => i);
+  const [totalQuestion, setTotalQuestions] = useState();
+  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+
   const current = new Date();
   const date = `${current.getDate()}/${
     current.getMonth() + 1
@@ -20,14 +25,23 @@ function Question() {
   const [commonPop2, setCommonPop2] = useState(false);
 
   const [questions, setQuestions] = useState([]);
+  const [tempSearch, setTempSearch] = useState("");
+  function searchActivate() {
+    setSearch(tempSearch);
+    console.log(search);
+  }
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/api/question/getQuestion`).then(async (response) => {
-      let data = await response.json();
-      setQuestions(data);
-      console.log(data);
+    fetch(
+      `${API_ENDPOINT}/api/question/getQuestion?page=${page}&search=${search}`
+    ).then(async (response) => {
+      await response.json().then(({ question, total2, total }) => {
+        setQuestions(question);
+        setTotalPage(total);
+        setTotalQuestions(total2);
+      });
     });
-  }, []);
+  }, [page, search]);
 
   const [currentID, setCurrentID] = useState("");
 
@@ -91,8 +105,16 @@ function Question() {
             placeholder="Search"
             aria-label="Search"
             aria-describedby="button-addon3"
+            onChange={(e) => {
+              setTempSearch(e.target.value);
+            }}
           />
-          <button className="btn px-8 py-2 w-36 border-2 ml-3 border-black bg-black text-white font-medium text-xs leading-tight uppercase rounded hover:bg-red-600 hover:border-red-600  focus:outline-none focus:ring-0  transition duration-150 ease-in-out">
+          <button
+            className="btn px-8 py-2 w-36 border-2 ml-3 border-black bg-black text-white font-medium text-xs leading-tight uppercase rounded hover:bg-red-600 hover:border-red-600  focus:outline-none focus:ring-0  transition duration-150 ease-in-out"
+            onClick={(e) => {
+              searchActivate();
+            }}
+          >
             Search
           </button>
         </div>
@@ -120,6 +142,8 @@ function Question() {
             </button>
           </div>
         </div>
+
+        <div className="mt-6">{totalQuestion} Total Questions</div>
 
         <NotifyMe
           visible={popOn}
@@ -159,6 +183,23 @@ function Question() {
                   deleteQuestion={deleteQuestion}
                 />
               </div>
+            );
+          })}
+
+          <h1 className="ml-2">Page selected : {page + 1}</h1>
+          {pagesButton.map((pageIndex) => {
+            return (
+              <button
+                className={
+                  page == pageIndex
+                    ? "bg-red-600 text-white p-2 pl-4 pr-4 m-2 hover:bg-red-700 hover:-translate-y-2 transform transition"
+                    : "bg-stone-900 text-white p-2 pl-4 pr-4 m-2 hover:bg-red-700 hover:-translate-y-2 transform transition"
+                }
+                onClick={() => setPage(pageIndex)}
+              >
+                {" "}
+                {pageIndex + 1}
+              </button>
             );
           })}
         </div>
