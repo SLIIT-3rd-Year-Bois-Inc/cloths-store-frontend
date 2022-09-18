@@ -10,6 +10,9 @@ function ProductPage() {
   const filterClicked = () => setFilter(!filter);
   const [products, setProducts] = useState([]);
   const [sortingOption, setSortingOption] = useState();
+  const [gender, setGender] = useState();
+  const [maxPrice, getMaxPrice] = useState("");
+  const [minPrice, getminPrice] = useState("");
 
   useEffect(() => {
     axios
@@ -38,10 +41,10 @@ function ProductPage() {
           setSortingOption={setSortingOption}
         />
         <div className="flex flex-row relative">
-          <Filter filter={filter} />
+          <Filter filter={filter} setGender={setGender} gender={gender} />
           <div className="flex flex-wrap justify-left xl:w-[1150px]">
             {products.map((product, index) => (
-              <Product key={index} docID={product._id} />
+              <Product key={index} doc={product} setGender={setGender} />
             ))}
           </div>
         </div>
