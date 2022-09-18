@@ -3,6 +3,7 @@ import Filter from "../../components/stock/Filter";
 import Product from "../../components/stock/Product";
 import ProductViewHeader from "../../components/stock/ProductViewHeader";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function ProductPage() {
   const [filter, setFilter] = useState(false);
@@ -44,7 +45,9 @@ function ProductPage() {
           <Filter filter={filter} setGender={setGender} gender={gender} />
           <div className="flex flex-wrap justify-left xl:w-[1150px]">
             {products.map((product, index) => (
-              <Product key={index} doc={product} setGender={setGender} />
+              <Link to={`/product/${product._id}`}>
+                <Product key={index} doc={product} setGender={setGender} />
+              </Link>
             ))}
           </div>
         </div>
