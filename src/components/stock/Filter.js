@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import MultiRangeSlider from "./multiRangeSlider";
 
@@ -80,7 +80,13 @@ const initialColorsArray = [
   },
 ];
 
-function Filter({ filter, from }) {
+function Filter({ filter, from, setGender, gender }) {
+  //states for data
+
+  const [maxPrice, getMaxPrice] = useState("");
+  const [minPrice, getminPrice] = useState("");
+
+  //states for functioning part
   const [tagsArray, setTagsArray] = useState(initialArray);
   const [colorArray, setColorArray] = useState(initialColorsArray);
 
@@ -139,10 +145,11 @@ function Filter({ filter, from }) {
         >
           <div class="flex items-center py-1">
             <input
-              checked={from === "Men" ? true : false}
               id="default-radio-1"
               type="radio"
-              value=""
+              value="M"
+              checked={gender === "M"}
+              onChange={(e) => setGender(e.target.value)}
               name="default-radio"
               className="w-5 h-5 text-gray-600 bg-gray-100 border-gray-300 focus:ring-gray-500 dark:focus:ring-gray-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             />
@@ -157,7 +164,9 @@ function Filter({ filter, from }) {
             <input
               id="default-radio-2"
               type="radio"
-              value=""
+              value="F"
+              checked={gender === "F"}
+              onChange={(e) => setGender(e.target.value)}
               name="default-radio"
               className="w-5 h-5 text-gray-600 bg-gray-100 border-gray-300 focus:ring-gray-500 dark:focus:ring-gray-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             />
@@ -172,7 +181,9 @@ function Filter({ filter, from }) {
             <input
               id="default-radio-2"
               type="radio"
-              value=""
+              value="K"
+              checked={gender === "K"}
+              onChange={(e) => setGender(e.target.value)}
               name="default-radio"
               className="w-5 h-5 text-gray-600 bg-gray-100 border-gray-300 focus:ring-gray-500 dark:focus:ring-gray-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             />
@@ -187,7 +198,9 @@ function Filter({ filter, from }) {
             <input
               id="default-radio-2"
               type="radio"
-              value=""
+              checked={gender === "U"}
+              onChange={(e) => setGender(e.target.value)}
+              value="U"
               name="default-radio"
               className="w-5 h-5 text-gray-600 bg-gray-100 border-gray-300 focus:ring-gray-500 dark:focus:ring-gray-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             />
