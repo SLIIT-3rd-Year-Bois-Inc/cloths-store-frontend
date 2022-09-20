@@ -9,7 +9,9 @@ import ImageTest from "../pages/stock/ImageTest";
 export default function StockRouter() {
   return (
     <Routes>
-      <Route path="/stock" element={<ProductPage />} />
+      <Route path="/stock" element={<ProductPage />}>
+        <Route path=":gender" element={<ProductPage />} />
+      </Route>
       <Route path="/stock/admin/newProduct" element={<AddNewProduct />} />
       <Route path="/stock/admin/testImage" element={<ImageTest />} />
       <Route path="/stock/admin/editProduct" element={<EditProduct />}>

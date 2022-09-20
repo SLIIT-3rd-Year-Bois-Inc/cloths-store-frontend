@@ -105,13 +105,13 @@ export default function Header() {
       </div>
 
       <div className="flex w-full mb-2 justify-center items-center">
-        <MenuItem light={!bg} to="/stock" state={{ from: "Women" }}>
+        <MenuItem light={!bg} to="/stock/W">
           Women
         </MenuItem>
-        <MenuItem light={!bg} to="/stock" state={{ from: "Men" }}>
+        <MenuItem light={!bg} to="/stock/M">
           Men
         </MenuItem>
-        <MenuItem light={!bg} to="/stock" state={{ from: "kids" }}>
+        <MenuItem light={!bg} to="/stock/K">
           Kids
         </MenuItem>
         <MenuItem light={!bg} to="">

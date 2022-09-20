@@ -112,6 +112,7 @@ function Filter({ filter, from, setGender, gender }) {
     temparr[index].selected = !temparr[index].selected;
     setColorArray(temparr);
   }
+  useEffect(() => {}, []);
 
   return (
     <div
@@ -164,8 +165,8 @@ function Filter({ filter, from, setGender, gender }) {
             <input
               id="default-radio-2"
               type="radio"
-              value="F"
-              checked={gender === "F"}
+              value="W"
+              checked={gender === "W"}
               onChange={(e) => setGender(e.target.value)}
               name="default-radio"
               className="w-5 h-5 text-gray-600 bg-gray-100 border-gray-300 focus:ring-gray-500 dark:focus:ring-gray-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -237,7 +238,7 @@ function Filter({ filter, from, setGender, gender }) {
             <span
               key={index}
               className={
-                "h-8 m-1 bg-black text-base rounded-full px-4 py-1 text-white hover:cursor-pointer " +
+                "h-8 m-1 text-base rounded-full px-4 py-1 text-white hover:cursor-pointer  " +
                 (tag.selected
                   ? "bg-red-600 hover:bg-red-500"
                   : "bg-black hover:bg-gray-900")
