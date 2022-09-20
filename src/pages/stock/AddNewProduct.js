@@ -75,7 +75,7 @@ function AddNewProduct() {
   };
 
   function imgClicked(index) {
-    setSelectedfile(imagesList[index]);
+    setSelectedfile(imagesUrlList[index]);
     setSelectedfileIndex(index);
   }
   function imgRemoveClicked() {
@@ -455,7 +455,7 @@ function AddNewProduct() {
                         return (
                           <span
                             className={
-                              "h-8 m-1 bg-black text-base rounded-full px-4 py-1 text-white hover:cursor-pointer " +
+                              "h-8 m-1 text-base rounded-full px-4 py-1 text-white hover:cursor-pointer " +
                               (tag.selected
                                 ? "bg-red-600 hover:bg-red-500"
                                 : "bg-black hover:bg-gray-900")
@@ -484,7 +484,7 @@ function AddNewProduct() {
                   {tagsArray.map((tag, index) => (
                     <span
                       className={
-                        "h-8 m-1 bg-black text-base rounded-full px-4 py-1 text-white hover:cursor-pointer " +
+                        "h-8 m-1  text-base rounded-full px-4 py-1 text-white hover:cursor-pointer " +
                         (tag.selected
                           ? "bg-red-600 hover:bg-red-500"
                           : "bg-black hover:bg-gray-900")

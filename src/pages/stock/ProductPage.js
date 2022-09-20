@@ -3,22 +3,39 @@ import Filter from "../../components/stock/Filter";
 import Product from "../../components/stock/Product";
 import ProductViewHeader from "../../components/stock/ProductViewHeader";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import Loader from "../../components/stock/Loader";
 
 function ProductPage() {
+  let params = useParams();
   const [filter, setFilter] = useState(false);
 
   const filterClicked = () => setFilter(!filter);
   const [products, setProducts] = useState([]);
   const [sortingOption, setSortingOption] = useState();
   const [gender, setGender] = useState();
+  const [color, setColor] = useState();
+  const [selectedTags, setSelectedTags] = useState();
   const [maxPrice, getMaxPrice] = useState("");
   const [minPrice, getminPrice] = useState("");
+  const [loading, setLoading] = useState(false);
+  function makeObject() {
+    let temSearchObj = { archived: false };
+    if (!gender) {
+      setGender(params.gender);
+      temSearchObj.gender = params.gender;
+    } else {
+      temSearchObj.gender = gender;
+    }
+    return temSearchObj;
+  }
 
   useEffect(() => {
+    setLoading(true);
+    let tempSearchObj = makeObject();
     axios
       .get("http://localhost:4200/api/stock/getCusProducts", {
-        params: { archived: false, sortingOption },
+        params: { tempSearchObj, sortingOption },
       })
       .then(function (response) {
         setProducts([...response.data]);
@@ -28,14 +45,15 @@ function ProductPage() {
         console.log(error);
       })
       .then(function () {
-        // always executed
+        setLoading(false);
       });
-  }, [sortingOption]);
+  }, [sortingOption, gender]);
 
   return (
     // full screen div
 
-    <div className="flex flex-col items-center justify-center w-screen border-2">
+    <div className="relative flex flex-col items-center justify-center w-screen border-2">
+      {loading && <Loader />}
       <div className="flex flex-col">
         <ProductViewHeader
           filterClicked={filterClicked}
