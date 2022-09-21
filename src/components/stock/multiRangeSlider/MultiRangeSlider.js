@@ -3,9 +3,10 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import "./multiRangeSlider.css";
 
-const MultiRangeSlider = ({ min, max, onChange }) => {
+const MultiRangeSlider = ({ min, max, onChange, setMaxPrice, setminPrice }) => {
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
+  const [mouseUp, setMouseUp] = useState(false);
   const minValRef = useRef(null);
   const maxValRef = useRef(null);
   const range = useRef(null);
@@ -42,10 +43,10 @@ const MultiRangeSlider = ({ min, max, onChange }) => {
   }, [maxVal, getPercent]);
 
   // Get min and max values when their state changes
-  useEffect(() => {
-    onChange({ min: minVal, max: maxVal });
-  }, [minVal, maxVal, onChange]);
 
+  useEffect(() => {
+    console.log("min:", minVal, " max:", maxVal);
+  }, [mouseUp]);
   return (
     <div className="container h-[70px]">
       <input
@@ -59,6 +60,8 @@ const MultiRangeSlider = ({ min, max, onChange }) => {
           setMinVal(value);
           event.target.value = value.toString();
         }}
+        onClick={() => setMouseUp(true)}
+        onMouseDown={() => setMouseUp(false)}
         className={
           "thumb thumb--zindex-3" +
           (minVal > max - 100 ? "thumb thumb--zindex-3" : "")
@@ -70,6 +73,7 @@ const MultiRangeSlider = ({ min, max, onChange }) => {
         max={max}
         value={maxVal}
         ref={maxValRef}
+        onMouseUp={(e) => setMaxPrice(maxVal)}
         onChange={(event) => {
           const value = Math.max(+event.target.value, minVal + 1);
           setMaxVal(value);
