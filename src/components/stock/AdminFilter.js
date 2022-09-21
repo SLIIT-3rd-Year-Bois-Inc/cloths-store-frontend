@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import MultiRangeSlider from "./multiRangeSlider";
 
-function Filter({
+function AdminFilter({
   filter,
   from,
   setGender,
@@ -11,11 +11,11 @@ function Filter({
   setTagsArray,
   colorArray,
   setColorArray,
+  archived,
+  setArchived,
 }) {
-  //states for data
-
-  const [maxPrice, setMaxPrice] = useState(0);
-  const [minPrice, setminPrice] = useState(0);
+  const [maxPrice, getMaxPrice] = useState("");
+  const [minPrice, getminPrice] = useState("");
 
   //states for functioning part
 
@@ -41,9 +41,6 @@ function Filter({
     temparr[index].selected = !temparr[index].selected;
     setColorArray(temparr);
   }
-  useEffect(() => {
-    console.log("price range:", minPrice, ":", maxPrice);
-  }, [minPrice, maxPrice]);
 
   return (
     <div
@@ -54,6 +51,59 @@ function Filter({
           : " hidden 2xl:flex 2xl:flex-col transition-h xl:min-h-[400px]")
       }
     >
+      <div className="mb-5 w-[300px] pl-5  mx-2 2xl:mx-0">
+        <div class="flex items-center py-1">
+          <input
+            id="default-radio-1"
+            type="radio"
+            value="archived"
+            checked={archived === "archived"}
+            onChange={(e) => setArchived(e.target.value)}
+            name="archived"
+            className="w-5 h-5 text-gray-600 bg-gray-100 border-gray-300 focus:ring-gray-500 dark:focus:ring-gray-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          />
+          <label
+            for="default-radio-1"
+            className="ml-2 text-lg font-medium text-gray-900 dark:text-gray-300"
+          >
+            Only archived items
+          </label>
+        </div>
+        <div class="flex items-center py-1">
+          <input
+            id="default-radio-2"
+            type="radio"
+            value="not"
+            checked={archived === "not"}
+            onChange={(e) => setArchived(e.target.value)}
+            name="archived"
+            className="w-5 h-5 text-gray-600 bg-gray-100 border-gray-300 focus:ring-gray-500 dark:focus:ring-gray-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          />
+          <label
+            for="default-radio-2"
+            className="ml-2 text-lg font-medium text-gray-900 dark:text-gray-300"
+          >
+            Only not archived items
+          </label>
+        </div>
+        <div class="flex items-center py-1">
+          <input
+            id="default-radio-2"
+            type="radio"
+            value="all"
+            checked={archived === "all"}
+            onChange={(e) => setArchived(e.target.value)}
+            name="archived"
+            className="w-5 h-5 text-gray-600 bg-gray-100 border-gray-300 focus:ring-gray-500 dark:focus:ring-gray-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          />
+          <label
+            for="default-radio-2"
+            className="ml-2 text-lg font-medium text-gray-900 dark:text-gray-300"
+          >
+            All items
+          </label>
+        </div>
+      </div>
       {/*Gender filter */}
       <div className="mb-4 w-[300px] mx-2 2xl:mx-0">
         <h2>
@@ -236,7 +286,6 @@ function Filter({
         <div
           class={priceRangeView ? "pl-4" : "hidden"}
           aria-labelledby="accordion-open-heading-1"
-          onMouseUp={() => alert("Up")}
         >
           <MultiRangeSlider
             min={0}
@@ -244,8 +293,6 @@ function Filter({
             onChange={({ min, max }) =>
               console.log(`min = ${min}, max = ${max}`)
             }
-            setMaxPrice={setMaxPrice}
-            setminPrice={setminPrice}
           />
         </div>
       </div>
@@ -253,4 +300,4 @@ function Filter({
   );
 }
 
-export default Filter;
+export default AdminFilter;

@@ -231,61 +231,36 @@ function AddNewProduct() {
         console.log(clothneeds);
       });
   }, []);
+
+  function tagArrayBuilderForChangeGet(tag) {
+    let selectedBool = false;
+
+    return {
+      tagName: tag,
+      selected: selectedBool,
+    };
+  }
   useEffect(() => {
     if (clothneeds) {
+      let data = [];
       if (gender === "M") {
-        let data = clothneeds.mensTags.map((tag) => {
-          {
-            let selectedBool = false;
-
-            return {
-              tagName: tag,
-              selected: selectedBool,
-            };
-          }
-        });
-
-        setTagsArray(data);
+        data = clothneeds.mensTags.map((tag) =>
+          tagArrayBuilderForChangeGet(tag)
+        );
       } else if (gender === "W") {
-        let data = clothneeds.womenTags.map((tag) => {
-          {
-            let selectedBool = false;
-
-            return {
-              tagName: tag,
-              selected: selectedBool,
-            };
-          }
-        });
-
-        setTagsArray(data);
+        data = clothneeds.womenTags.map((tag) =>
+          tagArrayBuilderForChangeGet(tag)
+        );
       } else if (gender === "K") {
-        let data = clothneeds.childTags.map((tag) => {
-          {
-            let selectedBool = false;
-
-            return {
-              tagName: tag,
-              selected: selectedBool,
-            };
-          }
-        });
-
-        setTagsArray(data);
+        data = clothneeds.childTags.map((tag) =>
+          tagArrayBuilderForChangeGet(tag)
+        );
       } else if (gender === "U") {
-        let data = clothneeds.unisexTags.map((tag) => {
-          {
-            let selectedBool = false;
-
-            return {
-              tagName: tag,
-              selected: selectedBool,
-            };
-          }
-        });
-
-        setTagsArray(data);
+        data = clothneeds.unisexTags.map((tag) =>
+          tagArrayBuilderForChangeGet(tag)
+        );
       }
+      setTagsArray(data);
     }
   }, [gender, clothneeds, loading]);
 
