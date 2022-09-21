@@ -48,14 +48,16 @@ function GenderItemsReport() {
           "#f3ba2f",
           "#2a71d0",
         ],
-        borderWidth: 2,
+        borderWidth: 0,
       },
     ],
   });
   return (
     <div>
       <h1>Gender Item Reports</h1>
-      <Pie className="w-[700px]" data={userData} />;
+      <div className="w-[700px]">
+        <Pie className="w-[700px]" data={userData} />
+      </div>
     </div>
   );
 }
