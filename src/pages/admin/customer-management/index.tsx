@@ -1,6 +1,6 @@
 import React from "react";
 import { Customer } from "../../../types";
-import { FiEdit2 } from "react-icons/fi";
+import { FiEdit2, FiSearch } from "react-icons/fi";
 import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
 import { useQuery } from "react-query";
 import { AdminAPI } from "../api";
@@ -9,14 +9,25 @@ import AdminHeader from "../../../components/admin-header";
 
 export function CustomerManagement() {
   const query = useQuery(["admin/all_customers", 0, 10], AdminAPI.allCustomers);
-  const total = query.data && query.data.total;
-  const data = query.data && query.data.data ? query.data.data : [];
+  const total = query.data?.total ?? "N/A";
+  const data = query.data?.data ?? [];
 
   return (
     <>
-      <AdminHeader />
       <div className="flex justify-center items-center w-full h-full flex-col">
-        <div className="h-[80vh] w-full p-2">
+        <div className="w-full">
+          <form className="flex flex-row justify-center items-center">
+            <input
+              placeholder="Search"
+              type="text"
+              className="mr-4 rounded-md"
+            ></input>
+            <button className="p-2 rounded-full border-1 border">
+              <FiSearch size={20} />
+            </button>
+          </form>
+        </div>
+        <div className="h-[80%] w-full p-2 overflow-y-auto">
           <table className="w-full text-sm text-gray-500 dark:text-gray-400 text-center">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
@@ -45,13 +56,13 @@ export function CustomerManagement() {
         ) : (
           ""
         )}
-        <div className="mt-3">Total Customers - {total || "N/A"}</div>
+        <div className="mt-3">Total Customers - {total}</div>
         <div className="flex justify-center items-center mt-2">
-          <button className="p-4 text-gray-700 border border-gray-700 rounded hover:bg-gray-300">
+          <button className="p-2 text-gray-700 border border-gray-700 rounded hover:bg-gray-300">
             <AiOutlineLeft />
           </button>
-          <input className="h-full mx-2 rounded p-4" type="text" size={5} />
-          <button className="p-4 text-gray-700 border border-gray-700 rounded hover:bg-gray-300">
+          <input className="h-full mx-2 rounded p-2" type="text" size={5} />
+          <button className="p-2 text-gray-700 border border-gray-700 rounded hover:bg-gray-300">
             <AiOutlineRight />
           </button>
         </div>
