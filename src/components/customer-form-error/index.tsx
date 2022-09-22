@@ -1,10 +1,15 @@
 import React from "react";
 
+interface CustomerFormErrorProps extends React.HTMLProps<HTMLDivElement> {
+  hideWhenEmpty?: boolean;
+}
+
 export default function CustomerFormError({
   children,
   className,
+  hideWhenEmpty,
   ...rest
-}: React.HTMLProps<HTMLDivElement>) {
+}: CustomerFormErrorProps) {
   return (
     <div
       className={`${
@@ -12,7 +17,7 @@ export default function CustomerFormError({
       } text-sm mt-1 ${className}`}
       {...rest}
     >
-      {children || "No error"}
+      {children || (hideWhenEmpty ? "" : "No error")}
     </div>
   );
 }

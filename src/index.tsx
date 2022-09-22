@@ -9,6 +9,7 @@ import StockRouter from "./routes/stock";
 import ReviewsRouter from "./routes/reviews";
 import OrderRouter from "./routes/order";
 import { QueryClient, QueryClientProvider } from "react-query";
+import AdminRouter from "./routes/admin";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -24,6 +25,7 @@ root.render(
         <StockRouter />
         <ReviewsRouter />
         <OrderRouter />
+        <AdminRouter />
       </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>

@@ -7,8 +7,8 @@ export function AdminSidebar() {
   return (
     <div className="h-full min-w-[18em] max-w-[50%] pt-2 pl-3">
       <CollapsibleButton title="Customer Management">
-        <CollapsibleSubButton title="Search" to="" />
-        <CollapsibleSubButton title="Add Customer" to="" />
+        <CollapsibleSubButton title="Search" to="customers" />
+        <CollapsibleSubButton title="Add Customer" to="customers/add" />
       </CollapsibleButton>
       <CollapsibleButton title="Product Management">
         <CollapsibleSubButton title="Search" to="" />
