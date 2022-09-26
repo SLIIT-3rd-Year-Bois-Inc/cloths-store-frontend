@@ -14,7 +14,7 @@ function AdminProductViewHeader({ filterClicked, setSortingOption }) {
   return (
     <div className=" h-24 px-10 flex flex-row justify-between ">
       <Link
-        to={"/stock/admin/newProduct"}
+        to={"../../admin/stocks/add"}
         className="bg-black w-[300px] hover:cursor-pointer hover:bg-black/90 flex flex-row justify-center items-center mr-[50px] my-3 text-white font-bold text-center"
       >
         <span>ADD NEW ITEM</span>

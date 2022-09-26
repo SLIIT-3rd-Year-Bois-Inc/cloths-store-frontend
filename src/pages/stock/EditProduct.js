@@ -351,7 +351,7 @@ function EditProduct() {
   }, [gender, clothneeds, loading]);
 
   return (
-    <div className="relative w-screen pt-20">
+    <div className="relative w-full pt-20">
       {loading && <Loader />}
       {modelBox && (
         <FullScreenModelUpdateSuccess message="SUCCESSFULLY UPDATED" />
@@ -360,7 +360,7 @@ function EditProduct() {
         Edit New Item
       </span>
       {/* image upload and inputs set */}
-      <div className="w-screen flex flex-wrap 2xl:flex-row  justify-center  ">
+      <div className="w-full flex flex-wrap 2xl:flex-row  justify-center  ">
         {/* image upload */}
         <div className=" w-[600px] m-8 flex flex-row ">
           {/* selected image */}

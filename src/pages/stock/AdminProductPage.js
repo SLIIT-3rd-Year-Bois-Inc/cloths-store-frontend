@@ -5,6 +5,7 @@ import Filter from "../../components/stock/Filter";
 import AdminProductViewHeader from "../../components/stock/AdminProductViewHeader";
 import AdminFilter from "../../components/stock/AdminFilter";
 import Loader from "../../components/stock/Loader";
+import ProductSearch from "../../components/stock/ProductSearch";
 
 function AdminProductPage() {
   const [filter, setFilter] = useState(false);
@@ -80,6 +81,26 @@ function AdminProductPage() {
       });
   }, [sortingOption, gender, tagsArray, colorArray, archived]);
 
+  function searchProducts(searchValue) {
+    alert(searchValue);
+    setLoading(true);
+    let tempSearchObj = makeObject();
+    axios
+      .get("http://localhost:4200/api/stock/searchProduct", {
+        params: { tempSearchObj, searchValue, sortingOption },
+      })
+      .then(function (response) {
+        console.log(response.data.data.items);
+        setProducts([...response.data.data.items]);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        setLoading(false);
+      });
+  }
+
   function colorArrayBuilderForChangeGet(color) {
     let selectedBool = false;
 
@@ -146,8 +167,9 @@ function AdminProductPage() {
   }, [gender, clothneeds]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center w-screen">
+    <div className="relative flex flex-col items-center justify-center w-full mt-10">
       {loading && <Loader />}
+      <ProductSearch searchProducts={searchProducts} />
       <div className="flex flex-col">
         <AdminProductViewHeader
           filterClicked={filterClicked}
@@ -168,7 +190,7 @@ function AdminProductPage() {
 
           <div className="flex flex-wrap justify-left xl:w-[1150px]">
             {products.map((product, index) => (
-              <AdminProduct key={index} docID={product._id} />
+              <AdminProduct key={index} product={product} />
             ))}
           </div>
         </div>

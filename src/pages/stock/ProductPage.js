@@ -5,6 +5,7 @@ import ProductViewHeader from "../../components/stock/ProductViewHeader";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/stock/Loader";
+import ProductSearch from "../../components/stock/ProductSearch";
 
 function ProductPage() {
   let params = useParams();
@@ -20,6 +21,7 @@ function ProductPage() {
   const [maxPrice, getMaxPrice] = useState("");
   const [minPrice, getminPrice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [postWidth, setPostWidth] = useState(3);
   function makeObject() {
     let temSearchObj = { archived: false };
     if (!gender) {
@@ -72,6 +74,24 @@ function ProductPage() {
         setLoading(false);
       });
   }, [sortingOption, gender, tagsArray, colorArray]);
+  function searchProducts(searchValue) {
+    setLoading(true);
+    let tempSearchObj = makeObject();
+    axios
+      .get("http://localhost:4200/api/stock/searchProduct", {
+        params: { tempSearchObj, searchValue, sortingOption },
+      })
+      .then(function (response) {
+        console.log(response.data.data.items);
+        setProducts([...response.data.data.items]);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        setLoading(false);
+      });
+  }
   function colorArrayBuilderForChangeGet(color) {
     let selectedBool = false;
 
@@ -146,10 +166,14 @@ function ProductPage() {
 
     <div className="relative flex flex-col items-center justify-center w-screen border-2">
       {loading && <Loader />}
+      <div className="mt-10">
+        <ProductSearch searchProducts={searchProducts} />
+      </div>
       <div className="flex flex-col">
         <ProductViewHeader
           filterClicked={filterClicked}
           setSortingOption={setSortingOption}
+          setPostWidth={setPostWidth}
         />
         <div className="flex flex-row relative">
           <Filter
@@ -164,7 +188,13 @@ function ProductPage() {
           <div className="flex flex-wrap justify-left xl:w-[1150px]">
             {products.map((product, index) => (
               <Link to={`/product/${product._id}`}>
-                <Product key={index} doc={product} setGender={setGender} />
+                <Product
+                  postWidth={postWidth}
+                  key={index}
+                  doc={product}
+                  searchProducts={searchProducts}
+                  setGender={setGender}
+                />
               </Link>
             ))}
           </div>

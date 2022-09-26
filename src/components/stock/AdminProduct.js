@@ -5,12 +5,24 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import ItemLoader from "./ItemLoader";
+import DeleteConfirmModel from "./DeleteConfirmModel";
 
-function AdminProduct({ viewtype, docID }) {
-  const [product, setProduct] = useState({});
+function AdminProduct({ viewtype, product }) {
   const [archiveConfirmModel, setArchiveConfirmModel] = useState(false);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState("");
+  const [deleteConfirmModel, setDeleteConfirmModel] = useState(false);
+  const [id, setID] = useState();
+  const [archived, setArchived] = useState();
+  const [name, setName] = useState();
+  const [price, setPrice] = useState();
+
+  function showDeleteConfirmModel() {
+    setDeleteConfirmModel(true);
+  }
+  function closeDeleteConfirmModel() {
+    setDeleteConfirmModel(false);
+  }
 
   function showArchiveConfirmModel() {
     setArchiveConfirmModel(true);
@@ -19,19 +31,45 @@ function AdminProduct({ viewtype, docID }) {
     setArchiveConfirmModel(false);
   }
 
+  function deleteClicked() {
+    closeDeleteConfirmModel();
+    alert("nothing happend he he");
+    // setLoading(true);
+    // axios
+    //   .put("http://localhost:4200/api/stock/archiveProduct", {
+    //     _id: docID,
+    //     archived: !product.archived,
+    //   })
+    //   .then(function (response) {
+    //     console.log(response);
+
+    //     getProduct();
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //     alert("product was not Updated");
+    //   })
+    //   .then(() => {
+    //     setLoading(false);
+    //   });
+  }
+
   function archiveClicked() {
     closeArchiveConfirmModel();
 
     setLoading(true);
     axios
       .put("http://localhost:4200/api/stock/archiveProduct", {
-        _id: docID,
-        archived: !product.archived,
+        _id: product._id,
+        archived: !archived,
       })
       .then(function (response) {
-        console.log(response);
-
-        getProduct();
+        console.log(response.data.updatedobj);
+        setID(product._id);
+        setArchived(!response.data.updatedobj.archived);
+        setImage(response.data.updatedobj.imagesUrls[0][1]);
+        setName(response.data.updatedobj.name);
+        setPrice(response.data.updatedobj.price);
       })
       .catch(function (error) {
         console.log(error);
@@ -41,27 +79,14 @@ function AdminProduct({ viewtype, docID }) {
         setLoading(false);
       });
   }
-  function getProduct() {
-    setLoading(true);
-    axios
-      .get("http://localhost:4200/api/stock/getProduct", {
-        params: { id: docID },
-      })
-      .then(function (response) {
-        setProduct(response.data);
-        console.log(response.data);
-        setImage(response.data.imagesUrls[0][1]);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      .then(function () {
-        setLoading(false);
-      });
-  }
   useEffect(() => {
-    getProduct();
-  }, [docID]);
+    setID(product._id);
+    setArchived(product.archived);
+    setImage(product.imagesUrls[0][1]);
+    setName(product.name);
+    setPrice(product.price);
+  }, [product]);
+
   return (
     <div className="relative w-[330px] h-[470px]  mr-5 ml-5 mb-14 ">
       {archiveConfirmModel && (
@@ -90,11 +115,17 @@ function AdminProduct({ viewtype, docID }) {
         </div>
       )}
 
+      {deleteConfirmModel && (
+        <DeleteConfirmModel
+          deleteClicked={deleteClicked}
+          closeDeleteConfirmModel={closeDeleteConfirmModel}
+        />
+      )}
       <div className="relative ">
         <img className="w-[330px] h-[400px]" src={image} alt="car" />
         <div className="absolute w-full bottom-16 flex flex-row justify-evenly">
           <Link
-            to={`/stock/admin/editProduct/${docID}`}
+            to={`/admin/stocks/edit/${id}`}
             className="p-3 hover:cursor-pointer hover:bg-white/60 bg-white/50"
           >
             <FaRegEdit color="black" className="w-5 h-5" />
@@ -103,14 +134,17 @@ function AdminProduct({ viewtype, docID }) {
             onClick={showArchiveConfirmModel}
             className={
               "p-3 hover:cursor-pointer " +
-              (product.archived
+              (archived
                 ? "hover:bg-red-600/60 bg-red-600/50"
                 : "hover:bg-white/60 bg-white/50")
             }
           >
             <BsArchive color="black" className="w-5 h-5" />
           </span>
-          <span className="p-3 hover:cursor-pointer hover:bg-white/60 bg-white/50">
+          <span
+            className="p-3 hover:cursor-pointer hover:bg-white/60 bg-white/50"
+            onClick={showDeleteConfirmModel}
+          >
             <RiDeleteBin6Line color="black" className="w-5 h-5" />
           </span>
         </div>
@@ -119,9 +153,9 @@ function AdminProduct({ viewtype, docID }) {
 
       <div className="flex flex-col items-center p-2">
         <span className="text-xl w-full text-center  truncate max-h-[40px]">
-          {product.name}
+          {name}
         </span>
-        <span className="text-xl font-bold">Rs.{product.price}</span>
+        <span className="text-xl font-bold">Rs.{price}</span>
       </div>
     </div>
   );
