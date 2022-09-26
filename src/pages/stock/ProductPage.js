@@ -6,6 +6,9 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/stock/Loader";
 import ProductSearch from "../../components/stock/ProductSearch";
+import ReactPaginate from "react-paginate";
+import Header from "../../components/header";
+import Footer from "../../components/footer";
 
 function ProductPage() {
   let params = useParams();
@@ -22,6 +25,31 @@ function ProductPage() {
   const [minPrice, getminPrice] = useState("");
   const [loading, setLoading] = useState(false);
   const [postWidth, setPostWidth] = useState(3);
+
+  //pagination=======================================================================
+  // We start with an empty list of items.
+  const [currentItems, setCurrentItems] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
+  // Here we use item offsets; we could also use page offsets
+  // following the API or data you're working with.
+  const [itemOffset, setItemOffset] = useState(0);
+  const itemsPerPage = 3;
+
+  useEffect(() => {
+    // Fetch items from another resources.
+    const endOffset = itemOffset + itemsPerPage;
+    setCurrentItems(products.slice(itemOffset, endOffset));
+    setPageCount(Math.ceil(products.length / itemsPerPage));
+  }, [itemOffset, itemsPerPage, products]);
+
+  // Invoke when user click to request another page.
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % products.length;
+    setItemOffset(newOffset);
+  };
+
+  // pagination end====================================================================
+
   function makeObject() {
     let temSearchObj = { archived: false };
     if (!gender) {
@@ -165,11 +193,12 @@ function ProductPage() {
     // full screen div
 
     <div className="relative flex flex-col items-center justify-center w-screen border-2">
+      <Header />
       {loading && <Loader />}
       <div className="mt-10">
         <ProductSearch searchProducts={searchProducts} />
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col pb-20">
         <ProductViewHeader
           filterClicked={filterClicked}
           setSortingOption={setSortingOption}
@@ -186,7 +215,7 @@ function ProductPage() {
             colorArray={colorArray}
           />
           <div className="flex flex-wrap justify-left xl:w-[1150px]">
-            {products.map((product, index) => (
+            {currentItems.map((product, index) => (
               <Link to={`/product/${product._id}`}>
                 <Product
                   postWidth={postWidth}
@@ -199,7 +228,24 @@ function ProductPage() {
             ))}
           </div>
         </div>
+        <div className="w-full flex flex-row justify-end font-bold  ">
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel="next >"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={pageCount}
+            previousLabel="< previous"
+            renderOnZeroPageCount={null}
+            containerClassName="flex flex-row gap-1.5 items-center"
+            pageLinkClassName="px-4 py-2 bg-red-600 text-white hover:cursor-pointer font-bold hover:bg-red-500"
+            previousClassName="px-4 py-2 bg-red-600 text-white hover:cursor-pointer font-bold hover:bg-red-500"
+            nextClassName="px-4 py-2 bg-red-600 text-white hover:cursor-pointer font-bold hover:bg-red-500"
+            activeLinkClassName="px-4 py-2 bg-black text-white hover:cursor-pointer font-bold "
+          />
+        </div>
       </div>
+      <Footer />
     </div>
   );
 }
