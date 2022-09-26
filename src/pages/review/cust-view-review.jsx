@@ -17,6 +17,7 @@ function CusViewReview() {
   const [search, setSearch] = useState("");
   const [rating, setRating] = useState("");
   const [tempSearch, setTempSearch] = useState("");
+  const deleteMe = 100;
 
   function searchActivate() {
     setSearch(tempSearch);
@@ -80,7 +81,7 @@ function CusViewReview() {
                 <div
                   className="h-5 bg-red-600 rounded"
                   onClick={() => setRating("5")}
-                  style={{ width: "70%" }}
+                  style={{ width: deleteMe + "%" }}
                 ></div>
               </div>
               <span className="text-sm font-medium text-red-600 dark:text-blue-500">
