@@ -19,5 +19,5 @@ export const CustomerAPI = {
   updateMe: (data: any) => patchJson("/api/customer/me", data, false),
   deleteMe: (data: any) => postJson("/api/customer/me/delete", data, false),
   popularProducts: ({ queryKey: [_, limits] }: QueryParams) =>
-    getJson(`/api/customer/products/popular?limits=${limits}`, true),
+    getJson(`/api/customer/products/popular?limit=${limits}`, true),
 };
