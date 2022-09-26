@@ -1,25 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import { CustomerAPI } from "../../pages/customer/api";
 import HomeProduct from "../home-product";
 
 export default function HomePopular() {
-  const products = new Array(10);
-
-  products.fill(
-    <HomeProduct
-      title="Some Nice Product"
-      price={12.0}
-      image={
-        "https://img.ltwebstatic.com/images3_pi/2022/08/01/16593228520eb8906e0a881d44efa11330f61a584a_thumbnail_600x.webp"
-      }
-    />
+  const popular_products = useQuery(
+    ["products", 10],
+    CustomerAPI.popularProducts
   );
+  const products = popular_products.data ?? [];
 
+  console.log(products);
   return (
     <div className="py-8 ml-[3.5em] min-h-[30em]">
       <h1 className="font-open-sans text-xl font-semibold mb-4">
         Popular Right now
       </h1>
-      <div className="flex flex-row overflow-hidden">{products}</div>
+      <div className="flex flex-row overflow-hidden">
+        {products.map((v: any) => (
+          <HomeProduct
+            title={v.name}
+            price={v.price}
+            image={
+              v.imagesUrls.length > 0 && v.imagesUrls[0].length > 0
+                ? v.imagesUrls[0][1]
+                : ""
+            }
+            sold={v.sold}
+          />
+        ))}
+      </div>
     </div>
   );
 }

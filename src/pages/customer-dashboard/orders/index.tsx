@@ -1,7 +1,9 @@
 import React from "react";
 import { FiCopy } from "react-icons/fi";
+import { useAuth } from "../../../hooks/auth";
 
 export default function Orders() {
+  useAuth();
   return (
     <>
       <h1 className="font-bold text-2xl mb-4">Your Orders</h1>

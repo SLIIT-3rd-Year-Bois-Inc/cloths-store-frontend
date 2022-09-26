@@ -9,6 +9,7 @@ export function AdminSidebar() {
       <CollapsibleButton title="Customer Management">
         <CollapsibleSubButton title="Search" to="customers" />
         <CollapsibleSubButton title="Add Customer" to="customers/add" />
+        <CollapsibleSubButton title="Statistics" to="customers/statistics" />
       </CollapsibleButton>
       <CollapsibleButton title="Product Management">
         <CollapsibleSubButton title="Search" to="" />

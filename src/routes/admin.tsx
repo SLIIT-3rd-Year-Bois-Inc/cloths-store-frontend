@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import AdminAddCustomer from "../pages/admin/admin-add-customer";
+import AdminCustomerStats from "../pages/admin/admin-customer-stats";
 import { AdminHome } from "../pages/admin/admin-home";
 import { CustomerManagement } from "../pages/admin/customer-management";
 import AddNewProduct from "../pages/stock/AddNewProduct";
@@ -14,6 +15,7 @@ export default function AdminRouter() {
       <Route path="/admin" element={<AdminHome />}>
         <Route path="customers" element={<CustomerManagement />} />
         <Route path="customers/add" element={<AdminAddCustomer />} />
+        <Route path="customers/statistics" element={<AdminCustomerStats />} />
         <Route path="stocks" element={<AdminProductPage />} />
         <Route path="stocks/add" element={<AddNewProduct />} />
         <Route path="stocks/edit" element={<EditProduct />} />

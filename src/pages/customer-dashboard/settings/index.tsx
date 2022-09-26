@@ -1,8 +1,37 @@
 import React, { useState } from "react";
 import { Portal } from "react-portal";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { CustomerAPI } from "../../customer/api";
 
 export default function Settings() {
+  const navigate = useNavigate();
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const delete_customer = useMutation(CustomerAPI.deleteMe, {
+    onSuccess: () => {
+      setTimeout(() => {
+        navigate("/");
+        setShowDeleteConfirmation(false);
+      }, 2000);
+    },
+  });
+
+  const message = (() => {
+    switch (delete_customer.status) {
+      case "error":
+        return "Something went wrong";
+      case "loading":
+        return "Please wait";
+      case "success":
+        return "Your account was deleted. Redirecting to home...";
+      default:
+        return "";
+    }
+  })();
+
+  const _delete_customer = (data: any) => {
+    delete_customer.mutate(data);
+  };
 
   return (
     <>
@@ -24,7 +53,11 @@ export default function Settings() {
       </div>
       {showDeleteConfirmation && (
         <Portal>
-          <ConfirmDelete onClose={() => setShowDeleteConfirmation(false)} />
+          <ConfirmDelete
+            onClose={() => setShowDeleteConfirmation(false)}
+            onConfirm={_delete_customer}
+            message={message}
+          />
         </Portal>
       )}
     </>
@@ -33,9 +66,18 @@ export default function Settings() {
 
 interface ConfirmDeleteProps extends React.HTMLProps<HTMLDivElement> {
   onClose?: () => any;
+  onConfirm?: (password: any) => any;
+  message?: string;
 }
 
-function ConfirmDelete({ onClose, ...rest }: ConfirmDeleteProps) {
+function ConfirmDelete({
+  onClose,
+  onConfirm,
+  message,
+  ...rest
+}: ConfirmDeleteProps) {
+  const [data, setData] = useState({ password: "" });
+
   return (
     <div
       className="fixed w-screen h-screen bg-[#00000086] top-0 right-0 flex flex-col justify-center items-center"
@@ -46,9 +88,11 @@ function ConfirmDelete({ onClose, ...rest }: ConfirmDeleteProps) {
           <h1 className="text-lg mb-4">Delete Account</h1>
           <div className="w-full px-5">
             <input
-              type="text"
+              type="password"
               className="w-full rounded"
               placeholder="Password"
+              value={data.password}
+              onChange={(e) => setData({ password: e.target.value })}
             />
           </div>
           <div className="mt-4 mb-8">
@@ -59,7 +103,10 @@ function ConfirmDelete({ onClose, ...rest }: ConfirmDeleteProps) {
             the orders that are ongoing will get delivered regardless.
           </div>
           <div className="flex flex-col">
-            <button className="bg-red-600 hover:bg-red-800 text-white px-8 py-4 line-spacing-main open-sans-font text-sm mb-2">
+            <button
+              onClick={() => onConfirm && onConfirm(data)}
+              className="bg-red-600 hover:bg-red-800 text-white px-8 py-4 line-spacing-main open-sans-font text-sm mb-2"
+            >
               I understand the consequences, delete my account
             </button>
             <button
@@ -68,6 +115,9 @@ function ConfirmDelete({ onClose, ...rest }: ConfirmDeleteProps) {
             >
               Cancel
             </button>
+            <div className="text-red-600 text-center w-full font-bold mt-2">
+              {message}
+            </div>
           </div>
         </div>
       </div>
