@@ -10,10 +10,11 @@ import Failed from "../../components/review-modals/failed";
 import ImageBig from "../../components/review-modals/imageBig";
 import { uploadFile } from "../../firebase";
 import { async } from "@firebase/util";
+import { useLocation } from "react-router-dom";
 
 function CusCreateReview() {
   // put const for ishans stuff
-
+  const location = useLocation();
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(0);
   const [image1, setImage1] = useState(noImage);
@@ -38,6 +39,8 @@ function CusCreateReview() {
   // const clicked = () => {
   //   setModalOn(true);
   // };
+
+  console.log("hey" + location.state.data);
 
   const formSubmit = (e) => {
     e.preventDefault();
