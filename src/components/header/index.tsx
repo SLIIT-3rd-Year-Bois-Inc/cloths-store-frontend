@@ -74,13 +74,14 @@ export default function Header({ homeStyle }: { homeStyle?: boolean }) {
             color={`${bg ? "" : "white"}`}
           />
         </div>
-        <div
+        <Link
           className={`galada-font flex-grow font-bold text-[42px] text-center ${
             bg ? "" : "text-white"
           }`}
+          to="/"
         >
           Cloths
-        </div>
+        </Link>
         <div className="flex flex-row">
           <button
             className="p-4 cursor-pointer"
