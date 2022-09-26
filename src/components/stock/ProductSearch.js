@@ -35,6 +35,7 @@ function ProductSearch({ searchProducts }) {
         ref={searchref}
         type="text"
         className="h-full grow focus:outline-none border-none focus:ring-0 text-xl "
+        placeholder="Find items...."
       />
       <span
         onClick={() => {

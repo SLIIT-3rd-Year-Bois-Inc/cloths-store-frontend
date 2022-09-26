@@ -6,6 +6,7 @@ import AdminProductViewHeader from "../../components/stock/AdminProductViewHeade
 import AdminFilter from "../../components/stock/AdminFilter";
 import Loader from "../../components/stock/Loader";
 import ProductSearch from "../../components/stock/ProductSearch";
+import ReactPaginate from "react-paginate";
 
 function AdminProductPage() {
   const [filter, setFilter] = useState(false);
@@ -20,6 +21,30 @@ function AdminProductPage() {
   const [colorArray, setColorArray] = useState([]);
   const [loading, setLoading] = useState(false);
   const [archived, setArchived] = useState("all");
+
+  //pagination=======================================================================
+  // We start with an empty list of items.
+  const [currentItems, setCurrentItems] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
+  // Here we use item offsets; we could also use page offsets
+  // following the API or data you're working with.
+  const [itemOffset, setItemOffset] = useState(0);
+  const itemsPerPage = 3;
+
+  useEffect(() => {
+    // Fetch items from another resources.
+    const endOffset = itemOffset + itemsPerPage;
+    setCurrentItems(products.slice(itemOffset, endOffset));
+    setPageCount(Math.ceil(products.length / itemsPerPage));
+  }, [itemOffset, itemsPerPage, products]);
+
+  // Invoke when user click to request another page.
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % products.length;
+    setItemOffset(newOffset);
+  };
+
+  // pagination end====================================================================
 
   function makeObject() {
     let temSearchObj = {};
@@ -189,10 +214,26 @@ function AdminProductPage() {
           />
 
           <div className="flex flex-wrap justify-left xl:w-[1150px]">
-            {products.map((product, index) => (
+            {currentItems.map((product, index) => (
               <AdminProduct key={index} product={product} />
             ))}
           </div>
+        </div>
+        <div className="w-full flex flex-row justify-end font-bold  ">
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel="next >"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={pageCount}
+            previousLabel="< previous"
+            renderOnZeroPageCount={null}
+            containerClassName="flex flex-row gap-1.5 items-center"
+            pageLinkClassName="px-4 py-2 bg-red-600 text-white hover:cursor-pointer font-bold hover:bg-red-500"
+            previousClassName="px-4 py-2 bg-red-600 text-white hover:cursor-pointer font-bold hover:bg-red-500"
+            nextClassName="px-4 py-2 bg-red-600 text-white hover:cursor-pointer font-bold hover:bg-red-500"
+            activeLinkClassName="px-4 py-2 bg-black text-white hover:cursor-pointer font-bold "
+          />
         </div>
       </div>
     </div>
