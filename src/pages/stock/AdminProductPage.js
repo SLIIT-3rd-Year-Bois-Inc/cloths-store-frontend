@@ -21,6 +21,7 @@ function AdminProductPage() {
   const [colorArray, setColorArray] = useState([]);
   const [loading, setLoading] = useState(false);
   const [archived, setArchived] = useState("all");
+  const [postWidth, setPostWidth] = useState(3);
 
   //pagination=======================================================================
   // We start with an empty list of items.
@@ -199,6 +200,7 @@ function AdminProductPage() {
         <AdminProductViewHeader
           filterClicked={filterClicked}
           setSortingOption={setSortingOption}
+          setPostWidth={setPostWidth}
         />
         <div className="flex flex-row relative">
           <AdminFilter
@@ -215,7 +217,11 @@ function AdminProductPage() {
 
           <div className="flex flex-wrap justify-left xl:w-[1150px]">
             {currentItems.map((product, index) => (
-              <AdminProduct key={index} product={product} />
+              <AdminProduct
+                key={index}
+                product={product}
+                postWidth={postWidth}
+              />
             ))}
           </div>
         </div>

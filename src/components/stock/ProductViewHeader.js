@@ -88,18 +88,23 @@ function ProductViewHeader({ filterClicked, setSortingOption, setPostWidth }) {
           onClick={() => {
             setPostWidth(2);
           }}
-          size={40}
-          className="px-1"
+          className="px-1 w-10 h-10 hover:w-11 hover:h-11  hover:shadow-sm"
         />
         <CgViewGrid
           onClick={() => {
             setPostWidth(3);
           }}
           size={40}
-          className="px-1"
+          className="px-1 h-10 hover:w-11 hover:h-11  hover:shadow-sm"
         />
-        <CgViewMonth size={40} className="px-1" />
-        <CgViewList size={40} className="px-1" />
+        <CgViewMonth
+          size={40}
+          className="px-1 h-10 hover:w-11 hover:h-11  hover:shadow-sm"
+        />
+        <CgViewList
+          size={40}
+          className="px-1 h-10 hover:w-11 hover:h-11  hover:shadow-sm"
+        />
       </div>
     </div>
   );

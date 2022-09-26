@@ -7,7 +7,7 @@ import axios from "axios";
 import ItemLoader from "./ItemLoader";
 import DeleteConfirmModel from "./DeleteConfirmModel";
 
-function AdminProduct({ viewtype, product }) {
+function AdminProduct({ viewtype, product, postWidth }) {
   const [archiveConfirmModel, setArchiveConfirmModel] = useState(false);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState("");
@@ -88,7 +88,12 @@ function AdminProduct({ viewtype, product }) {
   }, [product]);
 
   return (
-    <div className="relative w-[330px] h-[470px]  mr-5 ml-5 mb-14 ">
+    <div
+      className={
+        "relative   mr-5 ml-5 mb-14 " +
+        (postWidth === 2 ? "w-[535px] h-[730px]" : "w-[330px] h-[470px]")
+      }
+    >
       {archiveConfirmModel && (
         <div className="absolute top-0 w-full h-full z-10 flex flex-row justify-center items-center">
           <div className="bg-white/75 px-6 py-6 min-w-[200px] border rounded-sm">
@@ -122,7 +127,13 @@ function AdminProduct({ viewtype, product }) {
         />
       )}
       <div className="relative ">
-        <img className="w-[330px] h-[400px]" src={image} alt="car" />
+        <img
+          className={
+            postWidth === 2 ? "w-[535px] h-[648px]" : "w-[330px] h-[400px]"
+          }
+          src={image}
+          alt="car"
+        />
         <div className="absolute w-full bottom-16 flex flex-row justify-evenly">
           <Link
             to={`/admin/stocks/edit/${id}`}
