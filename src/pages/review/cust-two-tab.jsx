@@ -2,7 +2,7 @@ import CusViewReview from "./cust-view-review";
 import Question from "./cust-questions";
 import { useState } from "react";
 
-function CustTwoTab() {
+function CustTwoTab(props) {
   const [ShowTab, setShowTab] = useState("rev");
   const [revButtonColor, setRevButtonColor] = useState("red");
   const [quesButtonColor, setQuesButtonColor] = useState("#b8b8b8");
