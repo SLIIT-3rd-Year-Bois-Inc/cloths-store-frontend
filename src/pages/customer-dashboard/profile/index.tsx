@@ -7,6 +7,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toDateOnly } from "../../../utils/date-time";
 import { ImagePicker } from "../../../components/customer-dashboard/image-picker";
+import { useAuth } from "../../../hooks/auth";
 
 const updateSchema = yup.object().shape({
   f_name: yup.string().max(255).required("First Name is required"),
@@ -21,6 +22,7 @@ const updateSchema = yup.object().shape({
 });
 
 export function Profile() {
+  useAuth();
   const {
     register,
     handleSubmit,

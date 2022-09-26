@@ -8,7 +8,10 @@ import { CustomerLoadingOverlay } from "../../../components/customer-loading-ove
 import AdminHeader from "../../../components/admin-header";
 
 export function CustomerManagement() {
-  const query = useQuery(["admin/all_customers", 0, 10], AdminAPI.allCustomers);
+  const query = useQuery(
+    ["admin", "all_customers", 0, 10],
+    AdminAPI.allCustomers
+  );
   const total = query.data?.total ?? "N/A";
   const data = query.data?.data ?? [];
 
