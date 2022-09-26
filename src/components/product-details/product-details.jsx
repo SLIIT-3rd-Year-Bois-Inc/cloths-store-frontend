@@ -43,6 +43,8 @@ const ProductDetails = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
 
+  const productData = [price, description, imagesUrlList[0], params.productID];
+
   useEffect(() => {
     axios
       .get("http://localhost:4200/api/stock/getProduct", {
@@ -320,12 +322,11 @@ const ProductDetails = () => {
         />
 
         <TwoTabs
-        // title={}
-        // price={}
-        // description={}
-        // image1={}
-        // custID={}
-        // productID={}
+          title={name}
+          price={price}
+          description={description}
+          image1={imagesUrlList[0]}
+          productData={productData}
         />
       </div>
     </>
