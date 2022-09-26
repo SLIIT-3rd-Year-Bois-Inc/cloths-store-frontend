@@ -80,7 +80,7 @@ function ConfirmDelete({
 
   return (
     <div
-      className="fixed w-screen h-screen bg-[#00000086] top-0 right-0 flex flex-col justify-center items-center"
+      className="fixed w-screen h-screen bg-[#00000086] top-0 right-0 flex flex-col justify-center items-center z-[500]"
       {...rest}
     >
       <div>

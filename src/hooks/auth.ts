@@ -13,7 +13,7 @@ export function useAuth() {
       console.log(protected_routes);
       if (matchPath(protected_routes[i], pathname)) {
         if (!sessionStorage.getItem("customer")) {
-          navigate("/");
+          navigate("/customer/login");
           return;
         }
       }
