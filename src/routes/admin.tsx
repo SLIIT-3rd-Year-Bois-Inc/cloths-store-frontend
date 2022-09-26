@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import AdminAddCustomer from "../pages/admin/admin-add-customer";
 import AdminCustomerStats from "../pages/admin/admin-customer-stats";
 import { AdminHome } from "../pages/admin/admin-home";
+import AdminLogin from "../pages/admin/admin-login";
 import { CustomerManagement } from "../pages/admin/customer-management";
 import AddNewProduct from "../pages/stock/AddNewProduct";
 import AdminProductPage from "../pages/stock/AdminProductPage";
@@ -12,6 +13,7 @@ import Reports from "../pages/stock/Reports";
 export default function AdminRouter() {
   return (
     <Routes>
+      <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin" element={<AdminHome />}>
         <Route path="customers" element={<CustomerManagement />} />
         <Route path="customers/add" element={<AdminAddCustomer />} />

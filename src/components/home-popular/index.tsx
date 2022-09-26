@@ -16,7 +16,7 @@ export default function HomePopular() {
       <h1 className="font-open-sans text-xl font-semibold mb-4">
         Popular Right now
       </h1>
-      <div className="flex flex-row overflow-hidden">
+      <div className="flex flex-row overflow-hidden overflow-x-auto">
         {products.map((v: any) => (
           <HomeProduct
             title={v.name}
@@ -27,6 +27,7 @@ export default function HomePopular() {
                 : ""
             }
             sold={v.sold}
+            link={`/product/${v._id}`}
           />
         ))}
       </div>

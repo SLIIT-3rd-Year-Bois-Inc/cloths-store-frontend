@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
+import { GrClose } from "react-icons/gr";
 import { uploadFile } from "../../../firebase";
 
 export interface ImagePickerProps {
@@ -10,9 +11,6 @@ export interface ImagePickerProps {
 export function ImagePicker({ currentImage, setImage }: ImagePickerProps) {
   const [showEdit, setShowEdit] = useState(false);
   const [status, setStatus] = useState("");
-
-  const default_image =
-    "https://media.istockphoto.com/photos/overjoyed-pretty-asian-woman-look-at-camera-with-sincere-laughter-picture-id1311084168?b=1&k=20&m=1311084168&s=170667a&w=0&h=mE8BgXPgcHO1UjSmdWYa21NIKDzJvMrjOffy39Ritpo=";
 
   const pick_image = async () => {
     const picker_options = {
@@ -55,15 +53,23 @@ export function ImagePicker({ currentImage, setImage }: ImagePickerProps) {
 
   return (
     <div
-      className="relative w-[8em] h-[8em] rounded-full border border-black overflow-hidden"
+      className="relative w-[8.5em] h-[8.5em] rounded-full border border-black overflow-hidden"
       onMouseEnter={() => setShowEdit(true)}
       onMouseLeave={() => setShowEdit(false)}
     >
-      <img
-        src={currentImage || default_image}
-        alt="Avatar"
-        className="w-full h-full object-cover"
-      />
+      <div className="w-full h-full flex justify-center items-center text-center font-bold">
+        {currentImage ? (
+          <img
+            src={currentImage}
+            alt="Avatar"
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <>
+            No image <br></br> Click to add <br></br> +{" "}
+          </>
+        )}
+      </div>
       <div
         className={`absolute top-0 w-full h-full bg-[#000000a2] flex flex-col justify-center items-center cursor-pointer ${
           showEdit ? "" : "hidden"
