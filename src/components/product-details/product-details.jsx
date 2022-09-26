@@ -324,6 +324,8 @@ const ProductDetails = () => {
         // price={}
         // description={}
         // image1={}
+        // custID={}
+        // productID={}
         />
       </div>
     </>
