@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Cart from "../cart/cart";
 import { FiHeart, FiCheckSquare, FiXSquare } from "react-icons/fi";
 import { useParams } from "react-router-dom";
+import TwoTabs from "../../pages/review/cust-two-tab";
 import axios from "axios";
 const ProductDetails = () => {
   let params = useParams();
@@ -316,6 +317,13 @@ const ProductDetails = () => {
           setToggle={setToggle}
           cartData={cartData}
           setCartData={setCartData}
+        />
+
+        <TwoTabs
+        // title={}
+        // price={}
+        // description={}
+        // image1={}
         />
       </div>
     </>
