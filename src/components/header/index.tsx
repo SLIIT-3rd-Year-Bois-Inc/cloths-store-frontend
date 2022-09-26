@@ -27,8 +27,8 @@ export interface UserModalState {
   mouse_over_modal: boolean;
 }
 
-export default function Header() {
-  const [bg, setBg] = useState(false);
+export default function Header({ homeStyle }: { homeStyle?: boolean }) {
+  const [bg, setBg] = useState(!homeStyle);
   const ref = useRef<HTMLDivElement>(null);
   const icon_size = 37;
 
@@ -44,17 +44,19 @@ export default function Header() {
   };
 
   useEffect(() => {
-    const on_scroll = () => {
-      let elem = ref.current;
-      let b = elem && window.scrollY > elem.getBoundingClientRect().height;
-      setBg(b ? true : false);
-    };
+    if (homeStyle) {
+      const on_scroll = () => {
+        let elem = ref.current;
+        let b = elem && window.scrollY > elem.getBoundingClientRect().height;
+        setBg(b ? true : false);
+      };
 
-    window.addEventListener("scroll", on_scroll);
+      window.addEventListener("scroll", on_scroll);
 
-    return () => {
-      window.removeEventListener("scroll", on_scroll);
-    };
+      return () => {
+        window.removeEventListener("scroll", on_scroll);
+      };
+    }
   }, []);
 
   return (
@@ -62,7 +64,7 @@ export default function Header() {
       ref={ref}
       className={`w-full ${
         bg ? "bg-[#ffffffb7] backdrop-blur-sm shadow-md" : ""
-      } fixed top-0 z-50 transition-all`}
+      } ${homeStyle ? "fixed" : "sticky"} top-0 z-50 transition-all`}
     >
       <div className="h-[85px] flex flex-row w-full justify-center items-center px-4">
         <div className="p-4 cursor-pointer">
@@ -104,7 +106,7 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="flex w-full mb-2 justify-center items-center">
+      <div className="flex w-full pb-2 justify-center items-center">
         <MenuItem light={!bg} to="/stock/W">
           Women
         </MenuItem>
