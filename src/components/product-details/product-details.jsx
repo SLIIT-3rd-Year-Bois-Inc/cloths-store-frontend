@@ -4,8 +4,10 @@ import { FiHeart, FiCheckSquare, FiXSquare } from "react-icons/fi";
 import { useParams } from "react-router-dom";
 import TwoTabs from "../../pages/review/cust-two-tab";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const ProductDetails = () => {
   let params = useParams();
+  let navigate = useNavigate();
 
   // const data = [
   //   {
@@ -191,6 +193,10 @@ const ProductDetails = () => {
     </div>
   );
 
+  function navigateToCreate() {
+    navigate("/createReview", { state: { data: productData } });
+  }
+
   return (
     <>
       <div className="md:flex flex-row  flex-row md:ml-24 md:pt-9">
@@ -282,6 +288,13 @@ const ProductDetails = () => {
                 // onClick={addToCart}
               >
                 ADD TO BAG
+              </button>
+
+              <button
+                className="mt-9 ml-4 w-28 h-9 md:w-40 md:h-12 bg-black text-white text-center items-center rounded"
+                onClick={navigateToCreate}
+              >
+                Add a review
               </button>
               <div
                 className="mt-9 cursor-pointer"
