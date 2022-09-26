@@ -9,6 +9,7 @@ import Loader from "../../components/stock/Loader";
 import { genRandFileName } from "./../../utils/random";
 import { uploadFile } from "../../firebase";
 import FullScreenModelAddNewItem from "../../components/stock/FullScreenModelAddNewItem";
+import { Link } from "react-router-dom";
 
 function AddNewProduct() {
   //form usestates-----------------------------------------------------------------------------------------------------------------
@@ -231,73 +232,48 @@ function AddNewProduct() {
         console.log(clothneeds);
       });
   }, []);
+
+  function tagArrayBuilderForChangeGet(tag) {
+    let selectedBool = false;
+
+    return {
+      tagName: tag,
+      selected: selectedBool,
+    };
+  }
   useEffect(() => {
     if (clothneeds) {
+      let data = [];
       if (gender === "M") {
-        let data = clothneeds.mensTags.map((tag) => {
-          {
-            let selectedBool = false;
-
-            return {
-              tagName: tag,
-              selected: selectedBool,
-            };
-          }
-        });
-
-        setTagsArray(data);
+        data = clothneeds.mensTags.map((tag) =>
+          tagArrayBuilderForChangeGet(tag)
+        );
       } else if (gender === "W") {
-        let data = clothneeds.womenTags.map((tag) => {
-          {
-            let selectedBool = false;
-
-            return {
-              tagName: tag,
-              selected: selectedBool,
-            };
-          }
-        });
-
-        setTagsArray(data);
+        data = clothneeds.womenTags.map((tag) =>
+          tagArrayBuilderForChangeGet(tag)
+        );
       } else if (gender === "K") {
-        let data = clothneeds.childTags.map((tag) => {
-          {
-            let selectedBool = false;
-
-            return {
-              tagName: tag,
-              selected: selectedBool,
-            };
-          }
-        });
-
-        setTagsArray(data);
+        data = clothneeds.childTags.map((tag) =>
+          tagArrayBuilderForChangeGet(tag)
+        );
       } else if (gender === "U") {
-        let data = clothneeds.unisexTags.map((tag) => {
-          {
-            let selectedBool = false;
-
-            return {
-              tagName: tag,
-              selected: selectedBool,
-            };
-          }
-        });
-
-        setTagsArray(data);
+        data = clothneeds.unisexTags.map((tag) =>
+          tagArrayBuilderForChangeGet(tag)
+        );
       }
+      setTagsArray(data);
     }
   }, [gender, clothneeds, loading]);
 
   return (
-    <div className="relative w-screen pt-20">
+    <div className="relative w-full pt-20">
       <span className="ml-80 pt-20 mb-10 text-3xl font-bold">Add New Item</span>
       {loading && <Loader />}
       {modelBox && (
         <FullScreenModelAddNewItem message="ITEM ADDED SUCCESSFULLY!" />
       )}
       {/* image upload and inputs set */}
-      <div className="w-screen flex flex-wrap 2xl:flex-row  justify-center  ">
+      <div className="w-full flex flex-wrap 2xl:flex-row  justify-center  ">
         {/* image upload */}
         <div className=" w-[600px] m-8 flex flex-row ">
           {/* selected image */}
@@ -621,16 +597,20 @@ function AddNewProduct() {
                 {errorMessage}
               </span>
             )}
-            <div>
+            <div className="flex flex-row">
               <input
                 onClick={(e) => sendData(e)}
                 type="submit"
                 value={"ADD"}
-                className="bg-red-600 text-white h-10 w-[200px] cursor-pointer hover:bg-red-700 mr-10 mt-10 mb-20"
+                className="bg-red-600 text-white h-10 w-[200px] cursor-pointer hover:bg-red-700 mr-10 mt-10 mb-20 font-bold"
               />
-              <button className="bg-black text-white h-10 w-[200px]">
+
+              <Link
+                to={"../stocks"}
+                className="bg-black h-10 w-[200px] hover:cursor-pointer hover:bg-black/90 flex flex-row justify-center items-center mr-10 mt-10 mb-20 text-white font-bold text-center"
+              >
                 CANCLE
-              </button>
+              </Link>
             </div>
           </div>
         </form>

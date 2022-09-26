@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ItemLoader from "./ItemLoader";
 
-function Product({ viewtype, doc }) {
+function Product({ viewtype, doc, postWidth }) {
   const [image, setImage] = useState("");
   const inputEl = useRef(null);
 
@@ -11,9 +11,16 @@ function Product({ viewtype, doc }) {
   }, [doc]);
 
   return (
-    <div className="relative w-[330px] h-[470px]  mr-5 ml-5 mb-14 ">
+    <div
+      className={
+        "relative   mr-5 ml-5 mb-14 " +
+        (postWidth === 2 ? "w-[535px] h-[730px]" : "w-[330px] h-[470px]")
+      }
+    >
       <img
-        className="w-[330px] h-[400px]"
+        className={
+          postWidth === 2 ? "w-[535px] h-[648px]" : "w-[330px] h-[400px]"
+        }
         height="100%"
         width="100%"
         src={image}

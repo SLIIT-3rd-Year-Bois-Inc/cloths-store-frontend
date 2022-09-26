@@ -1,30 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cart from "../cart/cart";
-import { FiHeart } from "react-icons/fi";
+import { FiHeart, FiCheckSquare, FiXSquare } from "react-icons/fi";
+import { useParams } from "react-router-dom";
+import TwoTabs from "../../pages/review/cust-two-tab";
+import axios from "axios";
 const ProductDetails = () => {
-  const data = [
-    {
-      id: "1",
-      img: [
-        "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/555bccc0efd24c26b79aaeb500dd25b5_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_01_laydown.jpg",
-        "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/c4efa9f4e66a41ad8979aeb500dce959_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_21_model.jpg",
-        "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/e3dea28f166549f4a787aeb500dd0788_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_41_detail.jpg",
-        "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/97293103e26045a5a35faeb500dcfc39_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_25_model.jpg",
-      ],
-      description:
-        "Make each rep count in this adidas x Peloton tee. AEROREADY manages moisture, so you can train distraction-free and focus on your form. A droptail hem with side slits adds coverage for deep squats and gives you greater freedom of movement on twisty ab and back exercises. So simple. So stellar Made with a series of recycled materials, and at least 60% recycled content, this product represents just one of our solutions to help end plastic waste.",
-      name: "CAPABLE OF GREATNESS TRAINING TEE",
-      gender: "m",
-      color: "Black",
-      brand: "adidas",
-      size: ["S", "M", "L"],
-      price: "3000",
-    },
-  ];
+  let params = useParams();
 
-  const [availableAmount, setAvailableAmount] = useState("2");
-  const [product, setProduct] = useState(data);
-  const [mainImage, setMainImage] = useState(data.map((obj) => obj.img[0]));
+  // const data = [
+  //   {
+  //     id: "1",
+  //     img: [
+  //       "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/555bccc0efd24c26b79aaeb500dd25b5_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_01_laydown.jpg",
+  //       "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/c4efa9f4e66a41ad8979aeb500dce959_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_21_model.jpg",
+  //       "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/e3dea28f166549f4a787aeb500dd0788_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_41_detail.jpg",
+  //       "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/97293103e26045a5a35faeb500dcfc39_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_25_model.jpg",
+  //     ],
+  //     description:
+  //       "Make each rep count in this adidas x Peloton tee. AEROREADY manages moisture, so you can train distraction-free and focus on your form. A droptail hem with side slits adds coverage for deep squats and gives you greater freedom of movement on twisty ab and back exercises. So simple. So stellar Made with a series of recycled materials, and at least 60% recycled content, this product represents just one of our solutions to help end plastic waste.",
+  //     name: "CAPABLE OF GREATNESS TRAINING TEE",
+  //     gender: "m",
+  //     color: "Black",
+  //     brand: "adidas",
+  //     size: ["S", "M", "L"],
+  //     price: "3000",
+  //   },
+  // ];
+
+  const [name, setName] = useState(params.productID);
+  const [price, setPrice] = useState("");
+  const [gender, setGender] = useState("X");
+  const [description, setDescription] = useState("");
+  const [color, setColor] = useState("");
+  const [sizeList, setSizeList] = useState([]);
+  const [imagesUrlList, setImagesUrlList] = useState([]);
+  const [mainImage, setMainImage] = useState("");
+
   const [isToggle, setToggle] = useState(false);
   const [size, setSize] = useState(null);
   const [cartData, setCartData] = useState([]);
@@ -32,11 +43,52 @@ const ProductDetails = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:4200/api/stock/getProduct", {
+        params: { id: params.productID },
+      })
+      .then(function (response) {
+        setName(response.data.name);
+        setPrice(response.data.price);
+        setGender(response.data.gender);
+        let data = [];
+        let dataUrls = [];
+        response.data.imagesUrls.forEach((image) => {
+          data.push(image[0]);
+          dataUrls.push(image[1]);
+        });
+        console.log("heres the use effect image name set" + data);
+        setImagesUrlList(dataUrls);
+        setMainImage(dataUrls[0]);
+        setColor(response.data.color);
+        setDescription(response.data.description);
+        let qObj = response.data.quantity;
+        let qArray = [];
+        for (const key in qObj) {
+          qArray.push({
+            size: key,
+            quantity: qObj[key],
+          });
+        }
+        setSizeList(qArray);
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {});
+  }, []);
+
+  useEffect(() => {
+    console.log();
+  });
+
   const changeImage = (event) => {
     document.querySelector(".main-img").src = event.target.src;
   };
+
   const changeSize = (e, key) => {
-    setSize(data[0].size[key]);
     setSizeId(key);
   };
 
@@ -74,22 +126,22 @@ const ProductDetails = () => {
     </div>
   );
 
-  const addToCart = () => {
-    if (size !== null) {
-      setCartData([
-        {
-          name: data[0].name,
-          img: data[0].img[0],
-          price: data[0].price,
-          size: size,
-        },
-        ...cartData,
-      ]);
-      setShowSuccess(true);
-    } else {
-      setShowError(true);
-    }
-  };
+  // const addToCart = () => {
+  //   if (size !== null) {
+  //     setCartData([
+  //       {
+  //         name: data[0].name,
+  //         img: data[0].img[0],
+  //         price: data[0].price,
+  //         size: size,
+  //       },
+  //       ...cartData,
+  //     ]);
+  //     setShowSuccess(true);
+  //   } else {
+  //     setShowError(true);
+  //   }
+  // };
 
   const addedToCartSuccess = () => (
     <div
@@ -141,18 +193,16 @@ const ProductDetails = () => {
     <>
       <div className="md:flex flex-row  flex-row md:ml-24 md:pt-9">
         <div className="w-0.5/4  flex flex-row md:flex-col ">
-          {product.map(({ img }) =>
-            img.map((val, index) => (
-              <div key={index} className="pt-2 ">
-                <img
-                  className="object-contain h-16 w-32  flex-row  "
-                  src={val}
-                  onClick={changeImage}
-                  alt="F.jpg"
-                />
-              </div>
-            ))
-          )}
+          {imagesUrlList.map((value, index) => (
+            <div key={index} className="pt-2 mr-6 ">
+              <img
+                className="object-contain h-32 w-42  flex-row  "
+                src={value}
+                alt="F.jpg"
+                onClick={changeImage}
+              />
+            </div>
+          ))}
         </div>
         <div className="  md:mr-14">
           <div className=" md:ml-0 pt-4 md:pt-0 mb-4">
@@ -165,69 +215,78 @@ const ProductDetails = () => {
         </div>
         <div className=" md:w-2/4  md: -ml-40">
           <div className="ml-44 md:ml-0 text-xs md:text-base">
-            {product.map((obj, index) => (
-              <div key={index}>
-                <div className=" font-extrabold italic">
-                  <label htmlFor="name" className=" text-xs pb-0">
-                    {obj.gender === "m" ? "Men's" : "Women's"}
-                  </label>
-                  <span className=" pt-0 block">{obj.name} </span>
-                </div>
-                <div className=" pt-3 ">
-                  <label htmlFor="brand ">brand:</label>
-                  <span className="font-semibold"> {obj.brand}</span>
-                </div>
-                <div className=" pt-1 text-xs ">
-                  <div>Availability</div>
-                </div>
-                <div className=" pt-3">
-                  <div>Rs {obj.price}.00</div>
-                </div>
-                <div className=" pt-3">
-                  <div>Available color</div>
-                  <div
-                    style={{
-                      height: "20px",
-                      width: "20px",
-                      backgroundColor: obj.color,
-                      borderRadius: "50%",
-                    }}
-                  ></div>
-                </div>
-                <div className=" pt-3 ">
-                  <div>
-                    <div>Size:</div>
-                    {obj.size.map((value, index) => (
-                      <button
-                        key={index}
-                        className={
-                          sizeID === index
-                            ? "sizeSelect inline-block  mr-3 bg-zinc-900 shadow-lg border w-16 h-7 md:w-24 md:h-9 bg-  text-white	 text-center items-center"
-                            : "sizeSelect inline-block  mr-3 bg-white-50 shadow-lg border w-16 h-7 md:w-24 md:h-9 bg-  text-center items-center"
-                        }
-                        id={index}
-                        onClick={(e) => changeSize(e, index)}
-                      >
-                        {value}
-                      </button>
-                    ))}
-                  </div>
+            <div>
+              <div className=" font-extrabold italic">
+                <label htmlFor="name" className=" text-xs pb-0">
+                  {gender === "M" ? "Men's" : "Women's"}
+                </label>
+                <div className=" pt-0 block text-l">{name} </div>
+              </div>
+
+              <div className=" pt-1 text-xs ">
+                {sizeList ? (
+                  <>
+                    <FiCheckSquare size={32} color="green" />
+                  </>
+                ) : (
+                  <>
+                    <FiXSquare size={32} color="red" />
+                  </>
+                )}
+              </div>
+              <div className=" pt-3">
+                <div className="font-bold md:text-lg">Rs {price}.00</div>
+              </div>
+              <div className=" pt-3">
+                <div className="font-bold md:text-lg">Available color</div>
+                <div
+                  className={`${color}`}
+                  style={{
+                    height: "20px",
+                    width: "20px",
+                    borderRadius: "50%",
+                  }}
+                ></div>
+              </div>
+              <div className=" pt-3 ">
+                <div>
+                  <div className="font-bold md:text-lg">Size:</div>
+                  {sizeList.map((value, index) => (
+                    <button
+                      className={
+                        sizeID === index
+                          ? "sizeSelect inline-block  mr-3 bg-zinc-900 shadow-lg border w-16 h-7 md:w-24 md:h-9 bg-  text-white	 text-center items-center"
+                          : "sizeSelect inline-block  mr-3 bg-white-50 shadow-lg border w-16 h-7 md:w-24 md:h-9 bg-  text-center items-center"
+                      }
+                      id={index}
+                      onClick={(e) => changeSize(e, index)}
+                    >
+                      {value.size}
+                    </button>
+                  ))}
                 </div>
               </div>
-            ))}
+              <div className="mt-6">
+                <label htmlFor="description" className="font-bold md:text-lg">
+                  Description:
+                </label>
+                <div className="">{description}</div>
+              </div>
+            </div>
+
             <div className="flex flex-row">
               <button
                 className="mt-9 w-28 h-9 md:w-40 md:h-12 bg-black text-white text-center items-center rounded"
-                onClick={addToCart}
+                // onClick={addToCart}
               >
                 ADD TO BAG
               </button>
               <div
                 className="mt-9 cursor-pointer"
-                onClick={() => {
-                  setToggle(!isToggle);
-                  console.log(cartData);
-                }}
+                // onClick={() => {
+                //   setToggle(!isToggle);
+                //   console.log(cartData);
+                // }}
               >
                 <FiHeart
                   size={16}
@@ -237,11 +296,11 @@ const ProductDetails = () => {
               </div>
             </div>
             <div>
-              <div>{showSuccess ? addedToCartSuccess() : <></>}</div>
-              <div>{showError ? chooseSizeError() : <></>}</div>
+              {/* <div>{showSuccess ? addedToCartSuccess() : <></>}</div>
+              <div>{showError ? chooseSizeError() : <></>}</div> */}
             </div>
             <div className=" pt-4 text-xs md:text-base ">
-              <div>Only {availableAmount} Available</div>
+              <div>Only {sizeList[sizeID]?.quantity} Available</div>
             </div>
             <div className=" pt-4 text-xs md:text-s ">
               <div>
@@ -253,23 +312,20 @@ const ProductDetails = () => {
         </div>
       </div>
       <div>
-        <div className="pt-6 text-xs md:text-base shadow-md  ml-2 mr-2 pt-4 pr-4 pl-4	 pb-4">
-          {data.map((obj, index) => (
-            <div key={index}>
-              <label htmlFor="description" className="font-bold md:text-lg">
-                Description:
-              </label>
-              <div className="pt-2">{obj.description}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div>
         <Cart
           isToggle={isToggle}
           setToggle={setToggle}
           cartData={cartData}
           setCartData={setCartData}
+        />
+
+        <TwoTabs
+        // title={}
+        // price={}
+        // description={}
+        // image1={}
+        // custID={}
+        // productID={}
         />
       </div>
     </>

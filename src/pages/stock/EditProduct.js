@@ -316,74 +316,42 @@ function EditProduct() {
       });
   }, []);
   //useEffect for get tags in gender change------------------------------------------------------------------
+  function tagArrayBuilderForChangeGet(tag) {
+    let selectedBool = false;
+    if (prevArray.indexOf(tag) !== -1) {
+      selectedBool = true;
+    }
+    return {
+      tagName: tag,
+      selected: selectedBool,
+    };
+  }
   useEffect(() => {
     if (clothneeds) {
+      let data = [];
       if (gender === "M") {
-        let data = clothneeds.mensTags.map((tag) => {
-          {
-            let selectedBool = false;
-            if (prevArray.indexOf(tag) !== -1) {
-              selectedBool = true;
-            }
-            return {
-              tagName: tag,
-              selected: selectedBool,
-            };
-          }
-        });
-
-        setTagsArray(data);
+        data = clothneeds.mensTags.map((tag) =>
+          tagArrayBuilderForChangeGet(tag)
+        );
       } else if (gender === "W") {
-        let data = clothneeds.womenTags.map((tag) => {
-          {
-            let selectedBool = false;
-            if (prevArray.indexOf(tag) !== -1) {
-              selectedBool = true;
-            }
-            return {
-              tagName: tag,
-              selected: selectedBool,
-            };
-          }
-        });
-
-        setTagsArray(data);
+        data = clothneeds.womenTags.map((tag) =>
+          tagArrayBuilderForChangeGet(tag)
+        );
       } else if (gender === "K") {
-        let data = clothneeds.childTags.map((tag) => {
-          {
-            let selectedBool = false;
-            if (prevArray.indexOf(tag) !== -1) {
-              selectedBool = true;
-            }
-            return {
-              tagName: tag,
-              selected: selectedBool,
-            };
-          }
-        });
-
-        setTagsArray(data);
+        data = clothneeds.childTags.map((tag) =>
+          tagArrayBuilderForChangeGet(tag)
+        );
       } else if (gender === "U") {
-        let data = clothneeds.unisexTags.map((tag) => {
-          {
-            let selectedBool = false;
-            if (prevArray.indexOf(tag) !== -1) {
-              selectedBool = true;
-            }
-            return {
-              tagName: tag,
-              selected: selectedBool,
-            };
-          }
-        });
-
-        setTagsArray(data);
+        data = clothneeds.unisexTags.map((tag) =>
+          tagArrayBuilderForChangeGet(tag)
+        );
       }
+      setTagsArray(data);
     }
   }, [gender, clothneeds, loading]);
 
   return (
-    <div className="relative w-screen pt-20">
+    <div className="relative w-full pt-20">
       {loading && <Loader />}
       {modelBox && (
         <FullScreenModelUpdateSuccess message="SUCCESSFULLY UPDATED" />
@@ -392,7 +360,7 @@ function EditProduct() {
         Edit New Item
       </span>
       {/* image upload and inputs set */}
-      <div className="w-screen flex flex-wrap 2xl:flex-row  justify-center  ">
+      <div className="w-full flex flex-wrap 2xl:flex-row  justify-center  ">
         {/* image upload */}
         <div className=" w-[600px] m-8 flex flex-row ">
           {/* selected image */}
@@ -550,7 +518,7 @@ function EditProduct() {
                         return (
                           <span
                             className={
-                              "h-8 m-1 bg-black text-base rounded-full px-4 py-1 text-white hover:cursor-pointer " +
+                              "h-8 m-1  text-base rounded-full px-4 py-1 text-white hover:cursor-pointer " +
                               (tag.selected
                                 ? "bg-red-600 hover:bg-red-500"
                                 : "bg-black hover:bg-gray-900")

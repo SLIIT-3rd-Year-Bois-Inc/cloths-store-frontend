@@ -4,6 +4,7 @@ import AddNewProduct from "../pages/stock/AddNewProduct";
 import ProductPage from "../pages/stock/ProductPage";
 import EditProduct from "../pages/stock/EditProduct";
 import AdminProductPage from "../pages/stock/AdminProductPage";
+import Reports from "../pages/stock/Reports";
 import ImageTest from "../pages/stock/ImageTest";
 
 export default function StockRouter() {
@@ -18,6 +19,7 @@ export default function StockRouter() {
         <Route path=":productID" element={<EditProduct />} />
       </Route>
       <Route path="/stock/admin/ProductPage" element={<AdminProductPage />} />
+      <Route path="/stock/admin/reports" element={<Reports />} />
     </Routes>
   );
 }

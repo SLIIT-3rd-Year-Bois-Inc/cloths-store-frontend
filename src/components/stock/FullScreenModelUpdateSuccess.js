@@ -4,7 +4,7 @@ import { BsCheckCircleFill } from "react-icons/bs";
 function FullScreenModelUpdateSuccess({ message }) {
   const navigate = useNavigate();
   function goToAdminPage() {
-    navigate("/stock/admin/ProductPage");
+    navigate("../../admin/stocks");
   }
   return (
     <div className="absolute top-0 bottom-0 right-0 left-0 bg-black/20 z-50 flex flex-row items-center justify-center">
