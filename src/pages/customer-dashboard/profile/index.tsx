@@ -23,26 +23,19 @@ const updateSchema = yup.object().shape({
 
 export function Profile() {
   useAuth();
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(updateSchema),
-  });
+  const { register, handleSubmit, setValue, getValues, reset, formState } =
+    useForm({
+      resolver: yupResolver(updateSchema),
+    });
+  const [image, setImage] = useState("");
 
   const profile_query = useQuery("profile", CustomerAPI.me, {
     onSuccess: (data) => {
       data.dob = toDateOnly(new Date(data.dob));
       reset(data);
+      setImage(data.image);
     },
   });
-
-  const [image, setImage] = useState("");
-
-  useEffect(() => setValue("image", image), [image]);
 
   const queryClient = useQueryClient();
 
@@ -57,13 +50,19 @@ export function Profile() {
       <h1 className="font-bold text-2xl mb-6">Profile</h1>
       <div className="w-100 flex-grow max-w-[60em] bg-white px-12">
         <form
-          onSubmit={handleSubmit((data) => update.mutate(data))}
+          onSubmit={handleSubmit((data) => {
+            data.image = image;
+            update.mutate(data);
+          })}
           className="mb-4"
         >
           <div className="flex flex-row justify-center items-center w-full pb-8">
             <ImagePicker
               currentImage={image}
-              setImage={(image) => setImage(image)}
+              setImage={(im) => {
+                setValue("image", im);
+                setImage(im);
+              }}
             />
           </div>
           <div className="flex flex-row">
