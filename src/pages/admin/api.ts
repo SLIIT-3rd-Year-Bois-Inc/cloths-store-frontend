@@ -6,6 +6,6 @@ interface QueryParams {
 }
 
 export const AdminAPI = {
-  allCustomers: ({ queryKey: [_, from, to] }: QueryParams) =>
-    getJson(`/api/admin/customer/all?from=${from}&to=${to}`, true),
+  allCustomers: ({ queryKey: [_, __, from, to, search] }: QueryParams) =>
+    getJson(`/api/admin/customer/all?from=${from}&to=${to}&q=${search}`, true),
 };

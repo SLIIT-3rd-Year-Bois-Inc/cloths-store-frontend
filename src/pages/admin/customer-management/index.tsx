@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Customer } from "../../../types";
 import { FiEdit2, FiSearch } from "react-icons/fi";
 import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
 import { useQuery } from "react-query";
 import { AdminAPI } from "../api";
 import { CustomerLoadingOverlay } from "../../../components/customer-loading-overlay";
-import AdminHeader from "../../../components/admin-header";
+import useDebounce from "../../../hooks/debounce";
 
 export function CustomerManagement() {
+  const [search_query, setSearchQuery] = useState("");
+  const debouncedSearch = useDebounce(search_query, 500);
+
   const query = useQuery(
-    ["admin", "all_customers", 0, 10],
+    ["admin", "all_customers", 0, 10, debouncedSearch],
     AdminAPI.allCustomers
   );
   const total = query.data?.total ?? "N/A";
@@ -24,6 +27,7 @@ export function CustomerManagement() {
               placeholder="Search"
               type="text"
               className="mr-4 rounded-md"
+              onChange={(e) => setSearchQuery(e.target.value)}
             ></input>
             <button className="p-2 rounded-full border-1 border">
               <FiSearch size={20} />
