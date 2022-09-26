@@ -7,6 +7,8 @@ import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/stock/Loader";
 import ProductSearch from "../../components/stock/ProductSearch";
 import ReactPaginate from "react-paginate";
+import Header from "../../components/header";
+import Footer from "../../components/footer";
 
 function ProductPage() {
   let params = useParams();
@@ -191,6 +193,7 @@ function ProductPage() {
     // full screen div
 
     <div className="relative flex flex-col items-center justify-center w-screen border-2">
+      <Header />
       {loading && <Loader />}
       <div className="mt-10">
         <ProductSearch searchProducts={searchProducts} />
@@ -242,6 +245,7 @@ function ProductPage() {
           />
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

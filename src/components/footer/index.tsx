@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 export default function Footer() {
   const icon_size = 40;
   return (
-    <div>
+    <>
       <div className="w-full bg-black flex flex-row text-white h-[18em]">
         <div className="flex flex-col items-center min-w-[15em] h-full pt-4">
           <div className="font-bold">Keep in touch</div>
@@ -72,6 +72,6 @@ export default function Footer() {
       <div className="w-full text-center font-semibold text-sm py-2 bg-black text-white">
         Copyright © 2022 Cloths, Inc.
       </div>
-    </div>
+    </>
   );
 }
