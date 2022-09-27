@@ -20,7 +20,6 @@ export default function AdminRouter() {
         <Route path="customers/statistics" element={<AdminCustomerStats />} />
         <Route path="stocks" element={<AdminProductPage />} />
         <Route path="stocks/add" element={<AddNewProduct />} />
-        <Route path="stocks/edit" element={<EditProduct />} />
         <Route path="stocks/reports" element={<Reports />} />
         <Route path="stocks/edit" element={<EditProduct />}>
           <Route path=":productID" element={<EditProduct />} />

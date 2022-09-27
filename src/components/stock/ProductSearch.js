@@ -29,7 +29,7 @@ function ProductSearch({ searchProducts }) {
     <div
       ref={ref}
       onChange={(e) => setSearchValue(e.target.value)}
-      className="w-[700px] h-14 border-2 rounded-full flex flex-row pl-5 mb-5"
+      className="md:w-[700px] w-[500px] h-14  border-2 rounded-full flex flex-row pl-5 mb-5"
     >
       <input
         ref={searchref}

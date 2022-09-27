@@ -48,7 +48,7 @@ function Filter({
   return (
     <div
       className={
-        "absolute pb-5 top-0 left-0 right-0  overflow-y-auto bg-white 2xl:static 2xl:w-[300px]  2xl:mr-10" +
+        "absolute pb-5 z-10 top-0 left-0 right-0  overflow-y-auto bg-white 2xl:static 2xl:w-[300px]  2xl:mr-10" +
         (filter
           ? " transition-h flex justify-around flex-wrap 2xl:flex-col "
           : " hidden 2xl:flex 2xl:flex-col transition-h xl:min-h-[400px]")

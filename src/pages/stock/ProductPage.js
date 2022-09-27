@@ -93,7 +93,7 @@ function ProductPage() {
       })
       .then(function (response) {
         setProducts([...response.data]);
-        console.log(response.data);
+        console.log("here:", response.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -183,10 +183,7 @@ function ProductPage() {
   }
   useEffect(() => {
     tagBuildOnGender(clothneeds, gender);
-  }, [gender, clothneeds]);
-
-  useEffect(() => {
-    tagBuildOnGender(clothneeds, gender);
+    console.log("in builder!!!!");
   }, [gender, clothneeds]);
 
   return (
@@ -214,7 +211,7 @@ function ProductPage() {
             setColorArray={setColorArray}
             colorArray={colorArray}
           />
-          <div className="flex flex-wrap justify-left xl:w-[1150px]">
+          <div className="flex flex-wrap justify-center xl:justify-start  w-screen  xl:w-[1150px]">
             {currentItems.map((product, index) => (
               <Link to={`/product/${product._id}`}>
                 <Product
@@ -222,7 +219,6 @@ function ProductPage() {
                   key={index}
                   doc={product}
                   searchProducts={searchProducts}
-                  setGender={setGender}
                 />
               </Link>
             ))}
