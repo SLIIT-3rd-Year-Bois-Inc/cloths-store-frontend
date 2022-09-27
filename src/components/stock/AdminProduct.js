@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import ItemLoader from "./ItemLoader";
 import DeleteConfirmModel from "./DeleteConfirmModel";
+import companyLogo from "./tempAssests/No-Image.png";
 
 function AdminProduct({ viewtype, product, postWidth }) {
   const [archiveConfirmModel, setArchiveConfirmModel] = useState(false);
@@ -82,9 +83,13 @@ function AdminProduct({ viewtype, product, postWidth }) {
   useEffect(() => {
     setID(product._id);
     setArchived(product.archived);
-    setImage(product.imagesUrls[0][1]);
     setName(product.name);
     setPrice(product.price);
+    if (product.imagesUrls.length > 0) {
+      setImage(product.imagesUrls[0][1]);
+    } else {
+      setImage(companyLogo);
+    }
   }, [product]);
 
   return (

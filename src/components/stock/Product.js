@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ItemLoader from "./ItemLoader";
+import companyLogo from "./tempAssests/No-Image.png";
 
 function Product({ viewtype, doc, postWidth }) {
   const [image, setImage] = useState("");
   const inputEl = useRef(null);
 
   useEffect(() => {
-    setImage(doc.imagesUrls[0][1]);
+    if (doc.imagesUrls.length > 0) {
+      setImage(doc.imagesUrls[0][1]);
+    } else {
+      setImage(companyLogo);
+    }
   }, [doc]);
 
   return (
