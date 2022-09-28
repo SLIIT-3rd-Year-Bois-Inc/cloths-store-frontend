@@ -103,8 +103,6 @@ function AdminProductViewHeader({
             size={40}
             className="px-1 h-10 hover:w-11 hover:h-11  hover:shadow-sm"
           />
-          <CgViewMonth size={40} className="px-1" />
-          <CgViewList size={40} className="px-1" />
         </div>
       </div>
     </div>

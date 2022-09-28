@@ -9,6 +9,7 @@ import ProductSearch from "../../components/stock/ProductSearch";
 import ReactPaginate from "react-paginate";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
+import useDebounce from "../../hooks/debounce";
 
 function ProductPage() {
   let params = useParams();
@@ -21,11 +22,17 @@ function ProductPage() {
   const [tagsArray, setTagsArray] = useState([]);
   const [clothneeds, setClothneeds] = useState(null);
   const [colorArray, setColorArray] = useState([]);
-  const [maxPrice, getMaxPrice] = useState("");
-  const [minPrice, getminPrice] = useState("");
+  const [minMaxObj, setminMaxObj] = useState({
+    minPrice: 0,
+    maxPrice: 5000,
+  });
   const [loading, setLoading] = useState(false);
   const [postWidth, setPostWidth] = useState(3);
-
+  const [priceRange, setPriceRange] = useState({
+    min: 0,
+    max: 0,
+  });
+  let debouncePriceRange = useDebounce(priceRange, 500);
   //pagination=======================================================================
   // We start with an empty list of items.
   const [currentItems, setCurrentItems] = useState([]);
@@ -81,6 +88,13 @@ function ProductPage() {
       temSearchObj.color = { $in: selectedColors };
     }
 
+    if (debouncePriceRange) {
+      temSearchObj.price = {
+        $gt: debouncePriceRange.min,
+        $lt: debouncePriceRange.max,
+      };
+    }
+
     return temSearchObj;
   }
 
@@ -101,7 +115,7 @@ function ProductPage() {
       .then(function () {
         setLoading(false);
       });
-  }, [sortingOption, gender, tagsArray, colorArray]);
+  }, [sortingOption, gender, tagsArray, colorArray, debouncePriceRange]);
   function searchProducts(searchValue) {
     setLoading(true);
     let tempSearchObj = makeObject();
@@ -147,6 +161,21 @@ function ProductPage() {
       .then(function () {
         // always executed
         console.log(clothneeds);
+      });
+    axios
+      .get("http://localhost:4200/api/stock/getMinMaxPrices")
+      .then(function (response) {
+        // handle success
+        setminMaxObj(response.data);
+        setPriceRange({
+          min: response.data.minPrice,
+          max: response.data.maxPrice,
+        });
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
       });
   }, []);
 
@@ -210,6 +239,8 @@ function ProductPage() {
             setTagsArray={setTagsArray}
             setColorArray={setColorArray}
             colorArray={colorArray}
+            setPriceRange={setPriceRange}
+            minMaxObj={minMaxObj}
           />
           <div className="flex flex-wrap justify-center xl:justify-start  w-screen  xl:w-[1150px]">
             {currentItems.map((product, index) => (

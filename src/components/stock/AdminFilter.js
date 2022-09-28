@@ -13,10 +13,9 @@ function AdminFilter({
   setColorArray,
   archived,
   setArchived,
+  setPriceRange,
+  minMaxObj,
 }) {
-  const [maxPrice, getMaxPrice] = useState("");
-  const [minPrice, getminPrice] = useState("");
-
   //states for functioning part
 
   const [genderView, setGenderView] = useState(true);
@@ -288,11 +287,9 @@ function AdminFilter({
           aria-labelledby="accordion-open-heading-1"
         >
           <MultiRangeSlider
-            min={0}
-            max={5000}
-            onChange={({ min, max }) =>
-              console.log(`min = ${min}, max = ${max}`)
-            }
+            min={minMaxObj.minPrice - 1}
+            max={minMaxObj.maxPrice + 1}
+            onChange={({ min, max }) => setPriceRange({ min, max })}
           />
         </div>
       </div>
