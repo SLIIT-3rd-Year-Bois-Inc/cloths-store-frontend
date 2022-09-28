@@ -11,11 +11,10 @@ function Filter({
   setTagsArray,
   colorArray,
   setColorArray,
+  setPriceRange,
+  minMaxObj,
 }) {
   //states for data
-
-  const [maxPrice, setMaxPrice] = useState(0);
-  const [minPrice, setminPrice] = useState(0);
 
   //states for functioning part
 
@@ -41,9 +40,6 @@ function Filter({
     temparr[index].selected = !temparr[index].selected;
     setColorArray(temparr);
   }
-  useEffect(() => {
-    console.log("price range:", minPrice, ":", maxPrice);
-  }, [minPrice, maxPrice]);
 
   return (
     <div
@@ -236,16 +232,11 @@ function Filter({
         <div
           class={priceRangeView ? "pl-4" : "hidden"}
           aria-labelledby="accordion-open-heading-1"
-          onMouseUp={() => alert("Up")}
         >
           <MultiRangeSlider
-            min={0}
-            max={5000}
-            onChange={({ min, max }) =>
-              console.log(`min = ${min}, max = ${max}`)
-            }
-            setMaxPrice={setMaxPrice}
-            setminPrice={setminPrice}
+            min={minMaxObj.minPrice - 1}
+            max={minMaxObj.maxPrice + 1}
+            onChange={({ min, max }) => setPriceRange({ min, max })}
           />
         </div>
       </div>

@@ -7,6 +7,7 @@ import AdminFilter from "../../components/stock/AdminFilter";
 import Loader from "../../components/stock/Loader";
 import ProductSearch from "../../components/stock/ProductSearch";
 import ReactPaginate from "react-paginate";
+import useDebounce from "../../hooks/debounce";
 
 function AdminProductPage() {
   const [filter, setFilter] = useState(false);
@@ -16,12 +17,19 @@ function AdminProductPage() {
   const [tagsArray, setTagsArray] = useState([]);
   const [gender, setGender] = useState();
   const [clothneeds, setClothneeds] = useState(null);
-  const [maxPrice, getMaxPrice] = useState("");
-  const [minPrice, getminPrice] = useState("");
+  const [minMaxObj, setminMaxObj] = useState({
+    minPrice: 0,
+    maxPrice: 5000,
+  });
   const [colorArray, setColorArray] = useState([]);
   const [loading, setLoading] = useState(false);
   const [archived, setArchived] = useState("all");
   const [postWidth, setPostWidth] = useState(3);
+  const [priceRange, setPriceRange] = useState({
+    min: 0,
+    max: 0,
+  });
+  let debouncePriceRange = useDebounce(priceRange, 500);
 
   //pagination=======================================================================
   // We start with an empty list of items.
@@ -84,6 +92,12 @@ function AdminProductPage() {
     if (selectedColors.length) {
       temSearchObj.color = { $in: selectedColors };
     }
+    if (debouncePriceRange) {
+      temSearchObj.price = {
+        $gt: debouncePriceRange.min,
+        $lt: debouncePriceRange.max,
+      };
+    }
 
     return temSearchObj;
   }
@@ -105,7 +119,14 @@ function AdminProductPage() {
       .then(function () {
         setLoading(false);
       });
-  }, [sortingOption, gender, tagsArray, colorArray, archived]);
+  }, [
+    sortingOption,
+    gender,
+    tagsArray,
+    colorArray,
+    archived,
+    debouncePriceRange,
+  ]);
 
   function searchProducts(searchValue) {
     alert(searchValue);
@@ -154,6 +175,23 @@ function AdminProductPage() {
       .then(function () {
         // always executed
         console.log(clothneeds);
+      });
+
+    //---------------set min max price for price range-------------------
+    axios
+      .get("http://localhost:4200/api/stock/getMinMaxPrices")
+      .then(function (response) {
+        // handle success
+        setminMaxObj(response.data);
+        setPriceRange({
+          min: response.data.minPrice,
+          max: response.data.maxPrice,
+        });
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
       });
   }, []);
 
@@ -213,6 +251,8 @@ function AdminProductPage() {
             setTagsArray={setTagsArray}
             setColorArray={setColorArray}
             colorArray={colorArray}
+            setPriceRange={setPriceRange}
+            minMaxObj={minMaxObj}
           />
 
           <div className="flex flex-wrap justify-left xl:w-[1150px]">

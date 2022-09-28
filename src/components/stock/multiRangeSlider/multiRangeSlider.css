@@ -24,20 +24,20 @@
 }
 
 .slider__track {
-  background-color: #4f4a4a;
+  background-color: #ed1c24;
   width: 100%;
   z-index: 1;
 }
 
 .slider__range {
-  background-color: #ed1c24;
+  background-color: none;
   z-index: 2;
 }
 
 .slider__left-value,
 .slider__right-value {
   color: #3f4143;
-  font-size: 12px;
+  font-size: 18px;
   margin-top: 20px;
 }
 

@@ -60,10 +60,14 @@ function AdminProduct({ viewtype, product, postWidth }) {
 
     setLoading(true);
     axios
-      .put("http://localhost:4200/api/stock/archiveProduct", {
-        _id: product._id,
-        archived: !archived,
-      })
+      .put(
+        "http://localhost:4200/api/stock/archiveProduct",
+        {
+          _id: product._id,
+          archived: !archived,
+        },
+        { withCredentials: true }
+      )
       .then(function (response) {
         console.log(response.data.updatedobj);
         setID(product._id);
@@ -103,7 +107,7 @@ function AdminProduct({ viewtype, product, postWidth }) {
         <div className="absolute top-0 w-full h-full z-10 flex flex-row justify-center items-center">
           <div className="bg-white/75 px-6 py-6 min-w-[200px] border rounded-sm">
             <span className="font-bold">
-              {product.archived
+              {archived
                 ? "Do you want to reveal this Product?"
                 : "Do you want to Archive this Product?"}
             </span>
