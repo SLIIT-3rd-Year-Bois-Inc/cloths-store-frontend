@@ -33,10 +33,11 @@ export default function AdminAddCustomer() {
   });
 
   return (
-    <>
+    <div>
+      <div className="text-lg pl-4 pt-4 font-bold">Add new Customer</div>
       <form
         onSubmit={handleSubmit((data) => sign_up.mutate(data))}
-        className="min-w-[10em]"
+        className="max-w-[35em] p-4"
       >
         <div className="w-full flex flex-row justify-center items-center">
           <div className="flex flex-col justify-center items-center flex-grow mr-3">
@@ -148,6 +149,6 @@ export default function AdminAddCustomer() {
       ) : (
         ""
       )}
-    </>
+    </div>
   );
 }
