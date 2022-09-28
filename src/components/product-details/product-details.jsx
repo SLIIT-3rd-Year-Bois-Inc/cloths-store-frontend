@@ -37,6 +37,7 @@ const ProductDetails = () => {
   const [sizeList, setSizeList] = useState([]);
   const [imagesUrlList, setImagesUrlList] = useState([]);
   const [mainImage, setMainImage] = useState("");
+  const [dataSend, setDataSend] = useState("");
 
   const [isToggle, setToggle] = useState(false);
   const [size, setSize] = useState(null);
@@ -76,6 +77,7 @@ const ProductDetails = () => {
           });
         }
         setSizeList(qArray);
+        setDataSend(response.data);
         console.log(response.data);
       })
       .catch(function (error) {
@@ -194,7 +196,9 @@ const ProductDetails = () => {
   );
 
   function navigateToCreate() {
-    navigate("/createReview", { state: { data: productData } });
+    navigate("/createReview", {
+      state: { data: dataSend, data2: imagesUrlList[0] },
+    });
   }
 
   return (
@@ -334,13 +338,7 @@ const ProductDetails = () => {
           setCartData={setCartData}
         />
 
-        <TwoTabs
-          title={name}
-          price={price}
-          description={description}
-          image1={imagesUrlList[0]}
-          productData={productData}
-        />
+        <TwoTabs productID={dataSend} />
       </div>
     </>
   );
