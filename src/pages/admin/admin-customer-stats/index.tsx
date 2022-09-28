@@ -33,10 +33,12 @@ export const data = {
 
 export default function AdminCustomerStats() {
   return (
-    <div className="mt-6 ml-4">
-      <div className="font-bold text-lg">Customer Statistics</div>
-      <div className="my-2">Current customers by gender</div>
-      <Pie data={data} className="p-6" />
-    </div>
+    <>
+      <div className="text-lg pl-4 pt-4 font-bold">Customer Statistics</div>
+      <div className="pt-1 ml-4">
+        <div className="my-2">Current customers by gender</div>
+        <Pie data={data} className="p-6" />
+      </div>
+    </>
   );
 }
