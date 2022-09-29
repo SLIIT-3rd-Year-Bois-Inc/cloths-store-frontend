@@ -20,6 +20,7 @@ export function CustomerManagement() {
 
   return (
     <>
+      <div className="text-lg pl-4 pt-4 font-bold">Manage customers</div>
       <div className="flex justify-center items-center w-full h-full flex-col">
         <div className="w-full">
           <form className="flex flex-row justify-center items-center">

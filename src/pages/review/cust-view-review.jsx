@@ -30,16 +30,20 @@ function CusViewReview(props) {
   console.log("check something " + pid);
 
   useEffect(() => {
-    fetch(
-      `${API_ENDPOINT}/api/review/getReviews?page=${page}&search=${search}&rating=${rating}&pid=${pid}`
-    ).then(async (response) => {
-      await response.json().then(({ review, total2, total }) => {
-        setReviews(review);
-        setTotalPage(total);
-        setTotalReviews(total2);
-        console.log(review);
-      });
-    });
+    if (pid) {
+      fetch(
+        `${API_ENDPOINT}/api/review/getReviews?page=${page}&search=${search}&rating=${rating}&pid=${pid}`
+      )
+        .then(async (response) => {
+          await response.json().then(({ review, total2, total }) => {
+            setReviews(review);
+            setTotalPage(total);
+            setTotalReviews(total2);
+            console.log(review);
+          });
+        })
+        .catch(console.error);
+    }
   }, [page, search, rating, pid]);
 
   return (
