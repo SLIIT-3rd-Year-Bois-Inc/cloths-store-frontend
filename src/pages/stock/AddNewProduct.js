@@ -611,6 +611,7 @@ function AddNewProduct() {
               >
                 CANCLE
               </Link>
+              <div className=" bg-white hidden bg-zinc-500 bg-red-600 bg-orange-500 bg-yellow-500 bg-yellow-300 bg-green-500 bg-green-300 bg-emerald-500 bg-teal-500 bg-cyan-500 bg-sky-700 bg-violet-500 bg-pink-500"></div>
             </div>
           </div>
         </form>

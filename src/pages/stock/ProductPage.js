@@ -90,8 +90,8 @@ function ProductPage() {
 
     if (debouncePriceRange) {
       temSearchObj.price = {
-        $gt: debouncePriceRange.min,
-        $lt: debouncePriceRange.max,
+        $gt: debouncePriceRange.min - 1,
+        $lt: debouncePriceRange.max + 1,
       };
     }
 
