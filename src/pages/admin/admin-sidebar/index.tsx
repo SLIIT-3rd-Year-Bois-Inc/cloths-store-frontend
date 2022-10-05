@@ -15,8 +15,6 @@ export function AdminSidebar() {
         <SubButton title="Search" to="stocks" />
         <SubButton title="Add Product" to="stocks/add" />
         <SubButton title="Reports" to="stocks/reports" />
-        <SubButton title="Search" to="" />
-        <SubButton title="Add Product" to="" />
       </CollapsibleButton>
     </div>
   );
