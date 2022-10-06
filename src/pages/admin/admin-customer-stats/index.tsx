@@ -16,16 +16,18 @@ export default function AdminCustomerStats() {
   return (
     <>
       <div className="text-lg pl-4 pt-4 font-bold">Customer Statistics</div>
-      <div className="pt-1 ml-4 max-w-[40em]">
-        <div className="my-2">Current customers by gender</div>
-        <Pie
-          data={getGenderGraphParams(gender_query.data ?? [])}
-          className="p-6"
-        />
-      </div>
-      <div className="pt-1 ml-4 max-w-[40em]">
-        <div className="my-2">Current customers by gender</div>
-        <Pie data={getAgeGraphParams(age_query.data ?? [])} className="p-6" />
+      <div className="flex flex-row flex-wrap">
+        <div className="pt-1 ml-4 min-w-[30em] max-w-[40em]">
+          <div className="my-2">Current customers by gender</div>
+          <Pie
+            data={getGenderGraphParams(gender_query.data ?? [])}
+            className="p-6"
+          />
+        </div>
+        <div className="pt-1 ml-4 min-w-[30em] max-w-[40em]">
+          <div className="my-2">Current customers by gender</div>
+          <Pie data={getAgeGraphParams(age_query.data ?? [])} className="p-6" />
+        </div>
       </div>
     </>
   );

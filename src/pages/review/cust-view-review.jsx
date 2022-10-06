@@ -32,14 +32,16 @@ function CusViewReview(props) {
   useEffect(() => {
     if (pid) {
       fetch(
-        `${API_ENDPOINT}/api/review/getReviews?page=${page}&search=${search}&rating=${rating}&pid=${pid}`
+        `${API_ENDPOINT}/api/review/getReviews?page=${page}&search=${search}&rating=${rating}&pid=${pid}`,
+        {
+          credentials: "include",
+        }
       )
         .then(async (response) => {
           await response.json().then(({ review, total2, total }) => {
             setReviews(review);
             setTotalPage(total);
             setTotalReviews(total2);
-            console.log(review);
           });
         })
         .catch(console.error);
