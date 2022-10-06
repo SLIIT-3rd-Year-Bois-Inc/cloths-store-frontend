@@ -8,6 +8,7 @@ function ReviewCard({ users }) {
   const [showImg, setShowImg] = useState(false);
   const handleOnClose = () => setShowImg(false);
   const [sendImg, setSendImg] = useState();
+  // console.dir("33" + users.logged)
 
   const handleDataSend1 = (image) => {
     setSendImg(image);
@@ -68,15 +69,19 @@ function ReviewCard({ users }) {
         </div>
         <aside>
           <div className="flex items-center mt-3 space-x-3 justify-end">
-            <button
-              href="#"
-              className="text-white bg-stone-700 border  hover:bg-red-500 focus:ring-4 font-medium rounded text-xs pl-5 pr-5 pt-2 pb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-              onClick={() => {
-                navigate("/updateReview", { state: users });
-              }}
-            >
-              update
-            </button>
+            {users.logged ? (
+              <button
+                href="#"
+                className="text-white bg-stone-700 border  hover:bg-red-500 focus:ring-4 font-medium rounded text-xs pl-5 pr-5 pt-2 pb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                onClick={() => {
+                  navigate("/updateReview", { state: users });
+                }}
+              >
+                update
+              </button>
+            ) : (
+              ""
+            )}
           </div>
         </aside>
 
