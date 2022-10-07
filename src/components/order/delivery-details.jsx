@@ -1,12 +1,12 @@
 import image2 from "../../../src/image/email.png";
 import { useState } from "react";
 
-const dataSubmit = (event) => {
-  // Do what you want here. send to another page or something.
-  event.preventDefault();
-};
-
 const DeliveryDetails = (data) => {
+  const dataSubmit = (event) => {
+    // Do what you want here. send to another page or something.
+    event.preventDefault();
+  };
+
   const [fname, setfname] = useState("");
   const [lname, setlname] = useState("");
   const [address, setAddress] = useState("");
