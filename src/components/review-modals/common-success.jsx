@@ -8,6 +8,9 @@ const CommonSuccess = ({ setCommonSuccess, message, topic, link1, link2 }) => {
     if (link1 == "deletedQ") {
       navigate("/");
     }
+    if (link1 == "review") {
+      navigate("/stock");
+    }
     setCommonSuccess(false);
   };
 

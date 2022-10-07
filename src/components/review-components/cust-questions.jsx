@@ -31,13 +31,17 @@ function QuestionCard({ user, setCurrentID, deleteQuestion }) {
         <div className=" w-full m-4">{user.answer}</div>
       </div>
       <div className="flex justify-end">
-        <button
-          className="bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 px-4 rounded"
-          onClick={handleCancelClick}
-        >
-          {" "}
-          Delete Question{" "}
-        </button>
+        {user.logged ? (
+          <button
+            className="bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 px-4 rounded"
+            onClick={handleCancelClick}
+          >
+            {" "}
+            Delete Question{" "}
+          </button>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

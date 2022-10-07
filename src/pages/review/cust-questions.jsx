@@ -33,12 +33,14 @@ function Question() {
 
   useEffect(() => {
     fetch(
-      `${API_ENDPOINT}/api/question/getQuestion?page=${page}&search=${search}`
+      `${API_ENDPOINT}/api/question/getQuestion?page=${page}&search=${search}`,
+      { credentials: "include" }
     ).then(async (response) => {
       await response.json().then(({ question, total2, total }) => {
         setQuestions(question);
         setTotalPage(total);
         setTotalQuestions(total2);
+        console.log(question);
       });
     });
   }, [page, search]);
@@ -78,6 +80,7 @@ function Question() {
         "Content-type": "application/json",
       },
       body: JSON.stringify(data),
+      credentials: "include",
     })
       .then((res) => {
         if (res.status === 200) {

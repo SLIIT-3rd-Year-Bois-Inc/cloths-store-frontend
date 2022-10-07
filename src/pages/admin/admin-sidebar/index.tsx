@@ -7,14 +7,14 @@ export function AdminSidebar() {
   return (
     <div className="h-full min-w-[18em] max-w-[50%] pt-2 pl-3">
       <CollapsibleButton title="Customer Management">
-        <CollapsibleSubButton title="Search" to="customers" />
-        <CollapsibleSubButton title="Add Customer" to="customers/add" />
-        <CollapsibleSubButton title="Statistics" to="customers/statistics" />
+        <SubButton title="Search" to="customers" />
+        <SubButton title="Add Customer" to="customers/add" />
+        <SubButton title="Statistics" to="customers/statistics" />
       </CollapsibleButton>
       <CollapsibleButton title="Product Management">
-        <CollapsibleSubButton title="Search" to="stocks" />
-        <CollapsibleSubButton title="Add Product" to="stocks/add" />
-        <CollapsibleSubButton title="Reports" to="stocks/reports" />
+        <SubButton title="Search" to="stocks" />
+        <SubButton title="Add Product" to="stocks/add" />
+        <SubButton title="Reports" to="stocks/reports" />
       </CollapsibleButton>
     </div>
   );
@@ -33,32 +33,33 @@ export function CollapsibleButton({ title, children }: CButtonProps) {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <div className="w-full mb-1">
-      <div className="w-full rounded-md transition-all p-3 bg-gray flex flex-col items-center justify-between bg-gray-300">
-        <div
-          className="w-full px-4 min-h-11 flex justify-between items-center cursor-pointer"
-          onClick={() => setOpen((prev) => !prev)}
-        >
+    <div className="w-full mb-1 select-none">
+      <div
+        className="w-full relative rounded-md transition-all p-3 bg-gray flex flex-col items-center justify-between bg-gray-300 overflow-hidden"
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        <div className="w-full relative px-4 min-h-11 flex justify-between items-center cursor-pointer">
           {title}
           <BsChevronDown
             size={38}
             className={`p-3 transition-all ${
               open ? "rotate-180" : ""
             } cursor-pointer`}
-            onClick={() => setOpen((prev) => !prev)}
           />
         </div>
-        <div className={`w-full mt-2 ${open ? "" : "hidden"}`}>{children}</div>
+        <div
+          className={`w-full transition-all overflow-hidden ${
+            open ? "max-h-100" : "max-h-0"
+          }`}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );
 }
 
-export function CollapsibleSubButton({
-  title,
-  className,
-  ...rest
-}: SubButtonProps) {
+export function SubButton({ title, className, ...rest }: SubButtonProps) {
   return (
     <Link
       className={`w-full min-h-10 bg-gray-200 block py-2 text-center ${className}`}

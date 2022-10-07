@@ -2,7 +2,7 @@ import { QueryKey } from "react-query";
 import { deleteRequest, getJson, postJson } from "../../utils/fetch";
 
 interface QueryParams {
-  queryKey: QueryKey;
+  queryKey: any;
 }
 
 export const AdminAPI = {
@@ -14,6 +14,13 @@ export const AdminAPI = {
     sessionStorage.removeItem("admin");
     return deleteRequest("/api/admin/session");
   },
-  allCustomers: ({ queryKey: [_, __, from, to, search] }: QueryParams) =>
+  allCustomers: ({ queryKey: [_, __, { from, to, search }] }: QueryParams) =>
     getJson(`/api/admin/customer/all?from=${from}&to=${to}&q=${search}`, true),
+
+  statsByGender: ({ queryKey: [_, __] }: QueryParams) => {
+    return getJson(`/api/admin/stats/by-gender`, true);
+  },
+  statsByAge: ({ queryKey: [_, __] }: QueryParams) => {
+    return getJson(`/api/admin/stats/by-age`, true);
+  },
 };

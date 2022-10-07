@@ -52,16 +52,20 @@ function CustTwoTab(props) {
       </div>
       <div className=" p-0 w-full bg-orange-00">
         {/* <Tabs TabSelect={ShowTab} /> */}
-        {ShowTab == "rev" ? <CusViewReview /> : <Question />}
+        {ShowTab == "rev" ? (
+          <CusViewReview productID={props.productID._id ?? ""} />
+        ) : (
+          <Question />
+        )}
       </div>
     </div>
   );
 }
 
-function Tabs({ TabSelect }) {
-  if (TabSelect == "rev") return <CusViewReview />;
+/* function Tabs({ TabSelect }) {
+  if (TabSelect == "rev") return <CusViewReview productID={pid} />;
 
   if (TabSelect == "ques") return <Question />;
-}
+} */
 
 export default CustTwoTab;

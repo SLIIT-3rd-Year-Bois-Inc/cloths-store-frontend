@@ -8,7 +8,7 @@ import { API_ENDPOINT } from "../../config";
 import { useEffect, useState } from "react";
 import { FiTerminal } from "react-icons/fi";
 
-function CusViewReview() {
+function CusViewReview(props) {
   const [reviews, setReviews] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState();
@@ -24,18 +24,29 @@ function CusViewReview() {
     console.log(search);
   }
 
+  // console.log("test" + props.productID)
+  // const pid = props.productID;
+  const pid = props.productID;
+  console.log("check something " + pid);
+
   useEffect(() => {
-    fetch(
-      `${API_ENDPOINT}/api/review/getReviews?page=${page}&search=${search}&rating=${rating}`
-    ).then(async (response) => {
-      await response.json().then(({ review, total2, total }) => {
-        setReviews(review);
-        setTotalPage(total);
-        setTotalReviews(total2);
-        console.log(review);
-      });
-    });
-  }, [page, search, rating]);
+    if (pid) {
+      fetch(
+        `${API_ENDPOINT}/api/review/getReviews?page=${page}&search=${search}&rating=${rating}&pid=${pid}`,
+        {
+          credentials: "include",
+        }
+      )
+        .then(async (response) => {
+          await response.json().then(({ review, total2, total }) => {
+            setReviews(review);
+            setTotalPage(total);
+            setTotalReviews(total2);
+          });
+        })
+        .catch(console.error);
+    }
+  }, [page, search, rating, pid]);
 
   return (
     <div>
