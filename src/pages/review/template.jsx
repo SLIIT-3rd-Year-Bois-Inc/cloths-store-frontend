@@ -1,26 +1,31 @@
 import React from "react";
+import OrderComplete from "../../components/order/order-complete";
+import DeliveryDetails from "../../components/order/delivery-details";
+import image2 from "../../../src/image/email.png";
+import { useState } from "react";
+
+// Use this URL
+// http://localhost:3000/template
 
 function Template() {
+  const dataTika = {
+    subTotal: "3000.00",
+    delivery: "20th Augest",
+    total: "3450.00",
+    arrive: "20th Augest",
+    image: image2,
+    title: "Mens Training Tee",
+    size: "M",
+    color: "Black",
+    qty: "1",
+    Rs: "3000",
+  };
+
   return (
     <div>
-      <div className="grid lg:grid-flow-col gap-1 2xl:grid-flex-row md:grid-flex-col">
-        <div className="bg-gray-300">
-          {" "}
-          <h1>hello</h1>
-        </div>
-        <div className="bg-gray-400">
-          {" "}
-          <h1>hello</h1>
-        </div>
-        <div className="bg-gray-600">
-          {" "}
-          <h1>hello</h1>
-        </div>
-        <div className="bg-gray-500">
-          {" "}
-          <h1>hello</h1>
-        </div>
-      </div>
+      {/* <OrderComplete /> */}
+
+      <DeliveryDetails data={dataTika} />
     </div>
   );
 }
