@@ -8,13 +8,17 @@ import {
 import { FiChevronUp, FiChevronDown, FiFilter } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-function AdminProductViewHeader({ filterClicked, setSortingOption }) {
+function AdminProductViewHeader({
+  filterClicked,
+  setSortingOption,
+  setPostWidth,
+}) {
   const [sortby, setSortBy] = useState(false);
   const sortbyClicked = () => setSortBy(!sortby);
   return (
     <div className=" h-24 px-10 flex flex-row justify-between ">
       <Link
-        to={"/stock/admin/newProduct"}
+        to={"../../admin/stocks/add"}
         className="bg-black w-[300px] hover:cursor-pointer hover:bg-black/90 flex flex-row justify-center items-center mr-[50px] my-3 text-white font-bold text-center"
       >
         <span>ADD NEW ITEM</span>
@@ -86,10 +90,19 @@ function AdminProductViewHeader({ filterClicked, setSortingOption }) {
         </div>
         <div className="flex justify-center items-center mr-10">
           <span className="px-1">View:</span>
-          <CgViewSplit size={40} className="px-1" />
-          <CgViewGrid size={40} className="px-1" />
-          <CgViewMonth size={40} className="px-1" />
-          <CgViewList size={40} className="px-1" />
+          <CgViewSplit
+            onClick={() => {
+              setPostWidth(2);
+            }}
+            className="px-1 w-10 h-10 hover:w-11 hover:h-11  hover:shadow-sm"
+          />
+          <CgViewGrid
+            onClick={() => {
+              setPostWidth(3);
+            }}
+            size={40}
+            className="px-1 h-10 hover:w-11 hover:h-11  hover:shadow-sm"
+          />
         </div>
       </div>
     </div>

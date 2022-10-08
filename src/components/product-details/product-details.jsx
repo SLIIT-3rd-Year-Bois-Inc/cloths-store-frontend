@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import Cart from "../cart/cart";
 import { FiHeart, FiCheckSquare, FiXSquare } from "react-icons/fi";
 import { useParams } from "react-router-dom";
+import TwoTabs from "../../pages/review/cust-two-tab";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const ProductDetails = () => {
   let params = useParams();
   const userId = "10001";
+  let navigate = useNavigate();
+
   const [name, setName] = useState(params.productID);
   const [price, setPrice] = useState("");
   const [gender, setGender] = useState("X");
@@ -14,6 +18,7 @@ const ProductDetails = () => {
   const [sizeList, setSizeList] = useState([]);
   const [imagesUrlList, setImagesUrlList] = useState([]);
   const [mainImage, setMainImage] = useState("");
+  const [dataSend, setDataSend] = useState("");
 
   var today = new Date();
   var nextWeek = new Date(
@@ -28,6 +33,8 @@ const ProductDetails = () => {
   const [sizeID, setSizeId] = useState();
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
+
+  const productData = [price, description, imagesUrlList[0], params.productID];
 
   useEffect(() => {
     axios
@@ -58,6 +65,7 @@ const ProductDetails = () => {
           });
         }
         setSizeList(qArray);
+        setDataSend(response.data);
         console.log(response.data);
       })
       .catch(function (error) {
@@ -178,6 +186,12 @@ const ProductDetails = () => {
     </div>
   );
 
+  function navigateToCreate() {
+    navigate("/createReview", {
+      state: { data: dataSend, data2: imagesUrlList[0] },
+    });
+  }
+
   return (
     <>
       <div className="md:flex flex-row  flex-row md:ml-24 md:pt-9">
@@ -270,6 +284,13 @@ const ProductDetails = () => {
               >
                 ADD TO BAG
               </button>
+
+              <button
+                className="mt-9 ml-4 w-28 h-9 md:w-40 md:h-12 bg-black text-white text-center items-center rounded"
+                onClick={navigateToCreate}
+              >
+                Add a review
+              </button>
               <div
                 className="mt-9 cursor-pointer"
                 onClick={() => {
@@ -309,6 +330,8 @@ const ProductDetails = () => {
           cartData={cartData}
           setCartData={setCartData}
         />
+
+        <TwoTabs productID={dataSend} />
       </div>
     </>
   );

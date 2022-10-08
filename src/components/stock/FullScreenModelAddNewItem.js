@@ -5,7 +5,7 @@ import { BsCheckCircleFill } from "react-icons/bs";
 function FullScreenModelAddNewItem({ message }) {
   const navigate = useNavigate();
   function goToAdminPage() {
-    navigate("/stock/admin/ProductPage");
+    navigate("../../admin/stocks");
   }
   function addAnother() {
     window.location.reload(false);

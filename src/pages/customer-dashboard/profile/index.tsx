@@ -7,6 +7,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toDateOnly } from "../../../utils/date-time";
 import { ImagePicker } from "../../../components/customer-dashboard/image-picker";
+import { useAuth } from "../../../hooks/auth";
 
 const updateSchema = yup.object().shape({
   f_name: yup.string().max(255).required("First Name is required"),
@@ -21,26 +22,20 @@ const updateSchema = yup.object().shape({
 });
 
 export function Profile() {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(updateSchema),
-  });
+  useAuth();
+  const { register, handleSubmit, setValue, getValues, reset, formState } =
+    useForm({
+      resolver: yupResolver(updateSchema),
+    });
+  const [image, setImage] = useState("");
 
   const profile_query = useQuery("profile", CustomerAPI.me, {
     onSuccess: (data) => {
       data.dob = toDateOnly(new Date(data.dob));
       reset(data);
+      setImage(data.image);
     },
   });
-
-  const [image, setImage] = useState("");
-
-  useEffect(() => setValue("image", image), [image]);
 
   const queryClient = useQueryClient();
 
@@ -53,19 +48,25 @@ export function Profile() {
   return (
     <>
       <h1 className="font-bold text-2xl mb-6">Profile</h1>
-      <div className="w-100 flex-grow max-w-[60em] bg-white px-12">
+      <div className="w-100 flex-grow max-w-[60em] px-12 shadow-xl pb-6 border-2 border-gray-300 rounded-md">
         <form
-          onSubmit={handleSubmit((data) => update.mutate(data))}
-          className="mb-4"
+          onSubmit={handleSubmit((data) => {
+            data.image = image;
+            update.mutate(data);
+          })}
+          className="mb-4 mt-[4em]"
         >
           <div className="flex flex-row justify-center items-center w-full pb-8">
             <ImagePicker
               currentImage={image}
-              setImage={(image) => setImage(image)}
+              setImage={(im) => {
+                setValue("image", im);
+                setImage(im);
+              }}
             />
           </div>
           <div className="flex flex-row">
-            <div className="flex flex-col flex-grow">
+            <div className="flex flex-col flex-grow rounded-md py-2 px-4 mr-3">
               <label htmlFor="f_name">First Name</label>
               <EditableInput
                 id="f_name"
@@ -74,7 +75,7 @@ export function Profile() {
                 {...register("f_name")}
               />
             </div>
-            <div className="flex flex-col flex-grow">
+            <div className="flex flex-col rounded-md py-2 px-4 flex-grow">
               <label htmlFor="l_name">Last Name</label>
               <EditableInput
                 id="l_name"
@@ -84,7 +85,7 @@ export function Profile() {
               />
             </div>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col rounded-md py-2 px-4 flex-grow mt-3">
             <label htmlFor="email">Email</label>
             <EditableInput
               id="email"
@@ -93,7 +94,7 @@ export function Profile() {
               {...register("email")}
             />
           </div>
-          <div>
+          <div className="rounded-md py-2 px-4 flex-grow mt-3">
             <label htmlFor="bday">Birthday</label>
             <EditableInput
               id="bday"
@@ -102,7 +103,7 @@ export function Profile() {
               {...register("dob")}
             />
           </div>
-          <div className="w-full flex flex-col justify-center items-center">
+          <div className="w-full flex flex-col justify-center items-center mt-4">
             <button
               type="submit"
               className="rounded bg-black text-white hover:bg-white hover:text-black px-10 py-3 text-sm shadow-lg"

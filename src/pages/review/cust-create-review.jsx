@@ -10,10 +10,12 @@ import Failed from "../../components/review-modals/failed";
 import ImageBig from "../../components/review-modals/imageBig";
 import { uploadFile } from "../../firebase";
 import { async } from "@firebase/util";
+import { useLocation } from "react-router-dom";
 
 function CusCreateReview() {
   // put const for ishans stuff
 
+  const location = useLocation();
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(0);
   const [image1, setImage1] = useState(noImage);
@@ -39,11 +41,15 @@ function CusCreateReview() {
   //   setModalOn(true);
   // };
 
+  // console.log("hey" + location.state.data);
+  const productID = location.state.data._id;
+  console.log("pd" + location.state.data.imagesUrls);
+
   const formSubmit = (e) => {
     e.preventDefault();
     // const data = { revive , stars, image1 etc}
 
-    const data = { review, rating, image1, image2, image3, date };
+    const data = { review, rating, image1, image2, image3, date, productID };
     fetch(`${API_ENDPOINT}/api/review/addReview`, {
       method: "post",
       headers: {
@@ -51,6 +57,7 @@ function CusCreateReview() {
         "Content-type": "application/json",
       },
       body: JSON.stringify(data),
+      credentials: "include",
     })
       .then((res) => {
         if (res.status === 200) {
@@ -167,25 +174,18 @@ function CusCreateReview() {
       </h1>
       <div className="grid lg:grid-flow-col gap-10 2xl:grid-flex-row md:grid-flex-col pb-10">
         <div className="bg-gray-00">
-          <img src={image} className="object-cover h-72 w-72 " />
+          <img src={location.state.data2} className="object-cover h-72 w-72 " />
         </div>
         <div className="bg-gray-000">
           <div className="">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:tracking-tight">
-              <span className="block">Red Peamugeon Dress </span>
-              <span className="block text-red-600">RS. 6500</span>
+              <span className="block">{location.state.data.name} </span>
+              <span className="block text-red-600">
+                RS. {location.state.data.price}
+              </span>
             </h1>
 
-            <p className="text-justify">
-              Merge pull request #3 from SLIIT-3rd-Year-Merge pull request #3
-              from SLIIT-3rd-Year-Merge pull request #3 from
-              SLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge
-              pull request #3 from SLIIT-3rd-Year-Merge pull request #3 from
-              SLIIT-3rd-Year-Merge pull request #3 from SLIIT-3rd-Year-Merge
-              pull request #3 from SLIIT-3rd-Year-Merge pull request #3 from
-              SLIIT-3rd-Year-Merge pull request #3 from SLIfxv dfv IT-3rd-Yea
-              r-Me rges dcMerges dcMer ges dv cMergesdc
-            </p>
+            <p className="text-justify">{location.state.data.description}</p>
             <br />
             <div className="grid lg:grid-flow-col gap-10 2xl:grid-flex-row md:grid-flex-col">
               <h1 className="font-bold">color selected : </h1>
@@ -361,7 +361,7 @@ function CusCreateReview() {
                             "Your Review has been added. Thank you for your review."
                           }
                           topic={"Review Added!"}
-                          link1={""}
+                          link1={"review"}
                           link2={""}
                         />
                       )}

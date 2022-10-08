@@ -7,7 +7,7 @@ import {
 } from "react-icons/cg";
 import { FiChevronUp, FiChevronDown, FiFilter } from "react-icons/fi";
 
-function ProductViewHeader({ filterClicked, setSortingOption }) {
+function ProductViewHeader({ filterClicked, setSortingOption, setPostWidth }) {
   const [sortby, setSortBy] = useState(false);
   const sortbyClicked = () => setSortBy(!sortby);
   return (
@@ -84,10 +84,19 @@ function ProductViewHeader({ filterClicked, setSortingOption }) {
       </div>
       <div className="flex justify-center items-center mr-10">
         <span className="px-1">View:</span>
-        <CgViewSplit size={40} className="px-1" />
-        <CgViewGrid size={40} className="px-1" />
-        <CgViewMonth size={40} className="px-1" />
-        <CgViewList size={40} className="px-1" />
+        <CgViewSplit
+          onClick={() => {
+            setPostWidth(2);
+          }}
+          className="px-1 w-10 h-10 hover:w-11 hover:h-11  hover:shadow-sm"
+        />
+        <CgViewGrid
+          onClick={() => {
+            setPostWidth(3);
+          }}
+          size={40}
+          className="px-1 h-10 hover:w-11 hover:h-11  hover:shadow-sm"
+        />
       </div>
     </div>
   );
