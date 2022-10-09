@@ -1,11 +1,5 @@
-import ImageView from "./image-view";
-import { useState } from "react";
-import Stars from "./stars";
-
 function QuestionCard({ user, setCurrentID, deleteQuestion }) {
   const handleCancelClick = () => {
-    console.log("1");
-    // setCurrentID(user._id);
     deleteQuestion(user._id);
   };
 
@@ -14,7 +8,6 @@ function QuestionCard({ user, setCurrentID, deleteQuestion }) {
       className=" p-5 mt-8 mb-8 rounded-2xl  border-stone-400  shadow-md"
       style={{ backgroundColor: "#f7f7f7" }}
     >
-      <h1> Asked By : {user.name}</h1>
       <h1>Date : {user.date}</h1>
 
       <div className="flex grid-flow-row items-center ">

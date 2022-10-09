@@ -2,13 +2,11 @@ import ImageView from "./image-view";
 import { useState } from "react";
 import Stars from "./stars";
 import { useNavigate } from "react-router-dom";
-import { ink } from "react-router-dom";
 
-function ReviewCard({ users }) {
+function ReviewCard({ users, proData }) {
   const [showImg, setShowImg] = useState(false);
   const handleOnClose = () => setShowImg(false);
   const [sendImg, setSendImg] = useState();
-  // console.dir("33" + users.logged)
 
   const handleDataSend1 = (image) => {
     setSendImg(image);
@@ -25,7 +23,10 @@ function ReviewCard({ users }) {
       <article>
         <div className="flex items-center mb-4 space-x-4 ">
           <div className="space-y-1 font-medium dark:text-white ">
-            <p> Review by : {users._id} </p>
+            <p>
+              {" "}
+              Review by : {users.fname} {users.lname}{" "}
+            </p>
           </div>
         </div>
 
@@ -74,7 +75,7 @@ function ReviewCard({ users }) {
                 href="#"
                 className="text-white bg-stone-700 border  hover:bg-red-500 focus:ring-4 font-medium rounded text-xs pl-5 pr-5 pt-2 pb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
                 onClick={() => {
-                  navigate("/updateReview", { state: users });
+                  navigate("/updateReview", { state: { users, proData } });
                 }}
               >
                 update

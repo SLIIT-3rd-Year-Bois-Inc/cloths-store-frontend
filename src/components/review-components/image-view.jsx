@@ -1,9 +1,7 @@
 import React from "react";
-import { useState } from "react";
 import bg1 from "../../../src/image/bg.png";
 
 function ImageView({ visible, onClose, image }) {
-  const [imgClose, setImgClose] = useState(true);
   if (!visible) return null;
 
   return (

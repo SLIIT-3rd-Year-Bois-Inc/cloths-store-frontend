@@ -1,23 +1,18 @@
 import React from "react";
-import image from "../../../src/image/ti.jpg";
 import noImage from "../../../src/image/no_image.jpg";
 import loading from "../../../src/image/loading.gif";
 import { useState } from "react";
 import { API_ENDPOINT } from "../../config";
-import Success from "../../components/review-modals/success";
 import CommonSuccess from "../../components/review-modals/common-success";
 import Failed from "../../components/review-modals/failed";
 import ImageBig from "../../components/review-modals/imageBig";
 import { uploadFile } from "../../firebase";
-import { async } from "@firebase/util";
 import { useLocation } from "react-router-dom";
 
 function CusCreateReview() {
-  // put const for ishans stuff
-
   const location = useLocation();
   const [review, setReview] = useState("");
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(1);
   const [image1, setImage1] = useState(noImage);
   const [image2, setImage2] = useState(noImage);
   const [image3, setImage3] = useState(noImage);
@@ -37,17 +32,10 @@ function CusCreateReview() {
   const [commonPop, setCommonPop] = useState(false);
   const [modalOn2, setModalOn2] = useState(false);
   const [choice2, setChoice2] = useState(false);
-  // const clicked = () => {
-  //   setModalOn(true);
-  // };
-
-  // console.log("hey" + location.state.data);
   const productID = location.state.data._id;
-  console.log("pd" + location.state.data.imagesUrls);
 
   const formSubmit = (e) => {
     e.preventDefault();
-    // const data = { revive , stars, image1 etc}
 
     const data = { review, rating, image1, image2, image3, date, productID };
     fetch(`${API_ENDPOINT}/api/review/addReview`, {
@@ -61,10 +49,8 @@ function CusCreateReview() {
     })
       .then((res) => {
         if (res.status === 200) {
-          console.log("success");
           setCommonPop(true);
         } else {
-          console.log("Failed");
           setModalOn2(true);
         }
       })
@@ -75,13 +61,7 @@ function CusCreateReview() {
 
   const starColor = (event) => {
     setRating(event);
-    if (event == 0) {
-      setStar1("");
-      setStar2("");
-      setStar3("");
-      setStar4("");
-      setStar5("");
-    } else if (event == 1) {
+    if (event == 1) {
       setStar1("#de3333");
       setStar2("");
       setStar3("");
@@ -137,7 +117,6 @@ function CusCreateReview() {
     let image = await files[0].getFile();
 
     if (image.size > 2 * 1024 * 1024) {
-      // do something
       setImageBig(true);
       return;
     }
@@ -160,9 +139,7 @@ function CusCreateReview() {
       } else if (event == 3) {
         setImage3(url);
       }
-      console.log(url);
     } catch (e) {
-      //do something
       return;
     }
   };
@@ -187,11 +164,7 @@ function CusCreateReview() {
 
             <p className="text-justify">{location.state.data.description}</p>
             <br />
-            <div className="grid lg:grid-flow-col gap-10 2xl:grid-flex-row md:grid-flex-col">
-              <h1 className="font-bold">color selected : </h1>
-              <h1 className="font-bold">size : </h1>
-              <h1 className="font-bold">qty : </h1>
-            </div>
+            <div className="grid lg:grid-flow-col gap-10 2xl:grid-flex-row md:grid-flex-col"></div>
           </div>
         </div>
       </div>
@@ -209,7 +182,7 @@ function CusCreateReview() {
               </label>
               <div className="mt-1">
                 <textarea
-                  id="about"
+                  maxlength="500"
                   className="shadow-sm focus:ring-red-600 focus:border-red-600 w-full mt-1 block sm:text-sm border border-gray-300 rounded-md h-64"
                   placeholder="Type your review here"
                   value={review}
@@ -292,7 +265,7 @@ function CusCreateReview() {
                 </div>
                 <br />
                 <h3>Maximum 3 Images can be added</h3>
-                <h3>Maximum 1000 characters</h3>
+                <h3>Maximum 500 characters</h3>
                 <h3>Image size should not exceed 2mb</h3>
               </div>
             </div>
