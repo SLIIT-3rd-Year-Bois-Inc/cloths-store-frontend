@@ -1,7 +1,6 @@
 import QuestionAnswerCard from "../../components/review-components/admin-question";
 import { useState } from "react";
 import { API_ENDPOINT } from "../../config";
-import CommonSuccess from "../../components/review-modals/common-success";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import emailjs from "@emailjs/browser";
@@ -31,16 +30,12 @@ function AnswerQuestion() {
   }, [page, search]);
 
   const deleteQuestion = (currentID) => {
-    console.log("2");
-    console.log(currentID);
     fetch(`${API_ENDPOINT}/api/question/deleteQuestion/` + currentID, {
       method: "DELETE",
     })
       .then((res) => {
         if (res.status === 200) {
           console.log("success del");
-          //   setCommonPop2(true);
-          // setDeletingM(true)
         } else {
           console.log("Failed");
           // setFailed(true)
@@ -88,8 +83,6 @@ function AnswerQuestion() {
 
   function sendEmail() {
     // e.preventDetault();
-    console.log("send email active");
-    // service ID / template ID / params / public key
     emailjs
       .send(
         "service_3zwlcgd",

@@ -28,7 +28,6 @@ function Question() {
   const [tempSearch, setTempSearch] = useState("");
   function searchActivate() {
     setSearch(tempSearch);
-    console.log(search);
   }
 
   useEffect(() => {
@@ -40,7 +39,6 @@ function Question() {
         setQuestions(question);
         setTotalPage(total);
         setTotalQuestions(total2);
-        console.log(question);
       });
     });
   }, [page, search]);
@@ -48,19 +46,14 @@ function Question() {
   const [currentID, setCurrentID] = useState("");
 
   const deleteQuestion = (currentID) => {
-    console.log("2");
-    console.log(currentID);
     fetch(`${API_ENDPOINT}/api/question/deleteQuestion/` + currentID, {
       method: "DELETE",
     })
       .then((res) => {
         if (res.status === 200) {
-          console.log("success del");
           setCommonPop2(true);
-          // setDeletingM(true)
         } else {
           console.log("Failed");
-          // setFailed(true)
         }
       })
       .catch((e) => {
@@ -70,7 +63,6 @@ function Question() {
 
   const formSubmit = (e) => {
     e.preventDefault();
-    console.log("refresh prevented");
 
     const data = { question, date, email };
     fetch(`${API_ENDPOINT}/api/question/addQuestion`, {
@@ -84,13 +76,8 @@ function Question() {
     })
       .then((res) => {
         if (res.status === 200) {
-          console.log("success");
           setPopOn(false);
           setCommonPop(true);
-          //do something
-        } else {
-          console.log("Failed");
-          //do something
         }
       })
       .catch((e) => {
@@ -137,12 +124,24 @@ function Question() {
             </form>
           </div>
           <div className="">
-            <button
-              onClick={() => setPopOn(true)}
-              className="btn px-8 py-2 w-36 border-2 ml-3 h-12 border-red-600 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded hover:bg-red-600 hover:border-red-600  focus:outline-none focus:ring-0  transition duration-150 ease-in-out"
-            >
-              Ask
-            </button>
+            {question ? (
+              <button
+                onClick={() => setPopOn(true)}
+                className="btn px-8 py-2 w-36 border-2 ml-3 h-12 border-red-600 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded hover:bg-red-600 hover:border-red-600  focus:outline-none focus:ring-0  transition duration-150 ease-in-out"
+              >
+                Ask
+              </button>
+            ) : (
+              ""
+            )}
+
+            {question ? (
+              ""
+            ) : (
+              <button className="btn px-8 py-2 w-36 border-2 ml-3 h-12 border-stone-600 bg-stone-600 text-white font-medium text-xs leading-tight uppercase rounded">
+                Type & ask
+              </button>
+            )}
           </div>
         </div>
 
@@ -217,7 +216,6 @@ function NotifyMe({ visible, onClose, setEmail, email, formSubmit }) {
   if (!visible) return null;
 
   return (
-    // <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center backdrop-blur-sm">
     <div className="fixed inset-0 bg-gradient-to-br from-gray-900/60 to-red-900/50  flex justify-center items-center backdrop-blur-sm">
       <div className="bg-red-000 bg-opacity-40 pt-16 pb-20 p-14  rounded-3xl bg-white">
         <button

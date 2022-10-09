@@ -1,7 +1,6 @@
 import React from "react";
 import image from "../../../src/image/ti.jpg";
 import Modal from "../../components/review-modals/delete-conf-modal";
-import noImage from "../../../src/image/no_image.jpg";
 import loading from "../../../src/image/loading.gif";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -15,9 +14,7 @@ import CommonSuccess from "../../components/review-modals/common-success";
 
 function CusUpdateReview() {
   const [modalOn, setModalOn] = useState(false);
-  const [choice, setChoice] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
-  const [closeUpdate, setCloseUpdate] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deletingM, setDeletingM] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -25,14 +22,13 @@ function CusUpdateReview() {
   const [commonPop, setCommonPop] = useState(false);
   const location = useLocation();
 
-  const [review, setReview] = useState(location.state.review);
-  const [rating, setRating] = useState(location.state.rating);
-  const [image1, setImage1] = useState(location.state.image1);
-  const [image2, setImage2] = useState(location.state.image2);
-  const [image3, setImage3] = useState(location.state.image3);
+  const [review, setReview] = useState(location.state.users.review);
+  const [rating, setRating] = useState(location.state.users.rating);
+  const [image1, setImage1] = useState(location.state.users.image1);
+  const [image2, setImage2] = useState(location.state.users.image2);
+  const [image3, setImage3] = useState(location.state.users.image3);
 
   const [imageBig, setImageBig] = useState(false);
-
   const [star1, setStar1] = useState("");
   const [star2, setStar2] = useState("");
   const [star3, setStar3] = useState("");
@@ -107,7 +103,6 @@ function CusUpdateReview() {
     let image = await files[0].getFile();
 
     if (image.size > 2 * 1024 * 1024) {
-      // do something
       setImageBig(true);
       return;
     }
@@ -130,35 +125,30 @@ function CusUpdateReview() {
       } else if (event == 3) {
         setImage3(url);
       }
-      console.log(url);
     } catch (e) {
-      //do something
       return;
     }
   };
 
   const formSubmit = (e) => {
     e.preventDefault();
-    // const data = { revive , stars, image1 etc}
 
     const data = { review, rating, image1, image2, image3 };
 
-    fetch(`${API_ENDPOINT}/api/review/updateReview/` + location.state._id, {
-      method: "put",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
+    fetch(
+      `${API_ENDPOINT}/api/review/updateReview/` + location.state.users._id,
+      {
+        method: "put",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    )
       .then((res) => {
         if (res.status === 200) {
-          console.log("update success");
-          // setShowUpdate(true);
           setCommonPop(true);
-        } else {
-          console.log("Failed");
-          // setModalOn2(true);
         }
       })
       .catch((e) => {
@@ -167,16 +157,16 @@ function CusUpdateReview() {
   };
 
   const deleteSubmit = (e) => {
-    console.log("it works");
-    fetch(`${API_ENDPOINT}/api/review/deleteReviews/` + location.state._id, {
-      method: "DELETE",
-    })
+    fetch(
+      `${API_ENDPOINT}/api/review/deleteReviews/` + location.state.users._id,
+      {
+        method: "DELETE",
+      }
+    )
       .then((res) => {
         if (res.status === 200) {
-          console.log("success");
           setDeletingM(true);
         } else {
-          console.log("Failed");
           setFailed(true);
         }
       })
@@ -201,23 +191,19 @@ function CusUpdateReview() {
         <div className="bg-gray-000">
           <div className="">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:tracking-tight">
-              <span className="block">Red Peamugeon Dress </span>
-              <span className="block text-red-600">RS. 6500</span>
+              <span className="block">
+                {location.state.proData.productID.name}{" "}
+              </span>
+              <span className="block text-red-600">
+                RS. {location.state.proData.productID.price}
+              </span>
             </h1>
 
             <p className="text-justify">
-              This section is still under construction. This section will work
-              when we integrate with my team member's part. Data from their side
-              will be shown here. This will be a read another additional read
-              CRUD operation as well. This section as well as additional
-              Sections will be implemented in sprint 2
+              {location.state.proData.productID.description}
             </p>
             <br />
-            <div className="grid lg:grid-flow-col gap-10 2xl:grid-flex-row md:grid-flex-col">
-              <h1 className="font-bold">color selected : </h1>
-              <h1 className="font-bold">size : </h1>
-              <h1 className="font-bold">qty : </h1>
-            </div>
+            <div className="grid lg:grid-flow-col gap-10 2xl:grid-flex-row md:grid-flex-col"></div>
           </div>
         </div>
       </div>
@@ -235,7 +221,8 @@ function CusUpdateReview() {
               </label>
               <div className="mt-1">
                 <textarea
-                  id="about"
+                  required
+                  maxLength={500}
                   className="shadow-sm focus:ring-red-600 focus:border-red-600 w-full mt-1 block sm:text-sm border border-gray-300 rounded-md h-64"
                   placeholder="Type your review here"
                   value={review}
@@ -317,7 +304,7 @@ function CusUpdateReview() {
                 </div>
                 <br />
                 <h3>Maximum 3 Images can be added</h3>
-                <h3>Maximum 1000 characters</h3>
+                <h3>Maximum 500 characters</h3>
                 <h3>Image size should not exceed 2mb</h3>
               </div>
             </div>

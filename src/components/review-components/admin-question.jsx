@@ -1,4 +1,3 @@
-import ImageView from "./image-view";
 import { useState } from "react";
 
 function QuestionAsnswerCard({
@@ -10,13 +9,11 @@ function QuestionAsnswerCard({
   const [adminAnswer, setAdminAnswer] = useState("");
 
   const handleCancelClick = () => {
-    console.log("admin del q worked");
     setCurrentID(user._id);
     deleteQuestion(user._id);
   };
 
   const handleCancelClick2 = () => {
-    console.log("admin add answer worked");
     addAnswer(user._id, user.question, user.date, user.email, adminAnswer);
   };
 
