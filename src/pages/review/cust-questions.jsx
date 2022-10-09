@@ -4,11 +4,12 @@ import { API_ENDPOINT } from "../../config";
 import CommonSuccess from "../../components/review-modals/common-success";
 import { useEffect } from "react";
 
-function Question() {
+function Question(props) {
   const [popOn, setPopOn] = useState(false);
   const handleOnClose = () => setPopOn(false);
   const [question, setQuestion] = useState("");
   const [email, setEmail] = useState("");
+  const pid = props.productID;
 
   const [totalPage, setTotalPage] = useState();
   const pagesButton = new Array(totalPage).fill(null).map((v, i) => i);
@@ -32,7 +33,7 @@ function Question() {
 
   useEffect(() => {
     fetch(
-      `${API_ENDPOINT}/api/question/getQuestion?page=${page}&search=${search}`,
+      `${API_ENDPOINT}/api/question/getQuestion?page=${page}&search=${search}&pid=${pid}`,
       { credentials: "include" }
     ).then(async (response) => {
       await response.json().then(({ question, total2, total }) => {
@@ -41,7 +42,7 @@ function Question() {
         setTotalQuestions(total2);
       });
     });
-  }, [page, search]);
+  }, [page, search, pid]);
 
   const [currentID, setCurrentID] = useState("");
 
@@ -64,7 +65,7 @@ function Question() {
   const formSubmit = (e) => {
     e.preventDefault();
 
-    const data = { question, date, email };
+    const data = { question, date, email, pid };
     fetch(`${API_ENDPOINT}/api/question/addQuestion`, {
       method: "post",
       headers: {
