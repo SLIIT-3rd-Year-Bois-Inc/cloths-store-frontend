@@ -11,9 +11,23 @@ import { getStorage, ref, deleteObject } from "firebase/storage";
 import { uploadFile } from "../../firebase";
 import { genRandFileName } from "./../../utils/random";
 import FullScreenModelUpdateSuccess from "../../components/stock/FullScreenModelUpdateSuccess";
+import { useNavigate } from "react-router-dom";
 
 let prevArray = [];
 function EditProduct() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4200/api/admin/me", { withCredentials: true })
+      .then((res) => {
+        console.log("ran normal", res);
+      })
+      .catch((err) => {
+        navigate("/admin/login");
+      });
+  }, []);
+
   //form usestates-----------------------------------------------------------------------------------------------------------------
   let params = useParams();
   const [errorMessage, setErrorMessage] = useState("");
@@ -236,7 +250,9 @@ function EditProduct() {
     console.log(newItem);
 
     axios
-      .put("http://localhost:4200/api/stock/updateProduct", newItem)
+      .put("http://localhost:4200/api/stock/updateProduct", newItem, {
+        withCredentials: true,
+      })
       .then(function (response) {
         console.log(response);
       })

@@ -234,8 +234,8 @@ function Filter({
           aria-labelledby="accordion-open-heading-1"
         >
           <MultiRangeSlider
-            min={minMaxObj.minPrice - 1}
-            max={minMaxObj.maxPrice + 1}
+            min={minMaxObj.minPrice}
+            max={minMaxObj.maxPrice}
             onChange={({ min, max }) => setPriceRange({ min, max })}
           />
         </div>

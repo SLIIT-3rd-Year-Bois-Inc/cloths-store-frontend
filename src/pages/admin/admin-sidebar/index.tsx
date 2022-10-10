@@ -1,11 +1,25 @@
 import React, { useState } from "react";
 import { BsChevronDown } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LinkProps } from "react-router-dom";
+import { useMutation } from "react-query";
+import { AdminAPI } from "../../../pages/admin/api";
 
 export function AdminSidebar() {
+  const navigate = useNavigate();
+  const sign_out = useMutation(AdminAPI.signOut, {
+    onSuccess: () => {
+      setTimeout(() => {
+        navigate("/admin/login");
+        sign_out.reset();
+      }, 1000);
+    },
+    onError: () => {
+      setTimeout(() => sign_out.reset(), 1000);
+    },
+  });
   return (
-    <div className="h-full min-w-[18em] max-w-[50%] pt-2 pl-3">
+    <div className="h-full min-w-[18em] max-w-[50%] pt-2 px-1">
       <CollapsibleButton title="Customer Management">
         <SubButton title="Search" to="customers" />
         <SubButton title="Add Customer" to="customers/add" />
@@ -16,6 +30,12 @@ export function AdminSidebar() {
         <SubButton title="Add Product" to="stocks/add" />
         <SubButton title="Reports" to="stocks/reports" />
       </CollapsibleButton>
+      <div
+        className="px-10 py-3 bg-red-600 text-white text-center mt-3 hover:bg-red-500 hover:cursor-pointer"
+        onClick={() => sign_out.mutate()}
+      >
+        Log Out
+      </div>
     </div>
   );
 }
