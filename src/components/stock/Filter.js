@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import MultiRangeSlider from "./multiRangeSlider";
 
 function Filter({
   filter,
-  from,
   setGender,
   gender,
   tagsArray,
