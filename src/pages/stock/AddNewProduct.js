@@ -10,8 +10,22 @@ import { genRandFileName } from "./../../utils/random";
 import { uploadFile } from "../../firebase";
 import FullScreenModelAddNewItem from "../../components/stock/FullScreenModelAddNewItem";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function AddNewProduct() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4200/api/admin/me", { withCredentials: true })
+      .then((res) => {
+        console.log("ran normal", res);
+      })
+      .catch((err) => {
+        navigate("/admin/login");
+      });
+  }, []);
+
   //form usestates-----------------------------------------------------------------------------------------------------------------
   const [errorMessage, setErrorMessage] = useState("");
   const [clothneeds, setClothneeds] = useState(null);
@@ -195,7 +209,9 @@ function AddNewProduct() {
     console.log(newItem);
 
     axios
-      .post("http://localhost:4200/api/stock/newProduct", newItem)
+      .post("http://localhost:4200/api/stock/newProduct", newItem, {
+        withCredentials: true,
+      })
       .then(function (response) {
         console.log(response);
       })

@@ -8,8 +8,25 @@ import Loader from "../../components/stock/Loader";
 import ProductSearch from "../../components/stock/ProductSearch";
 import ReactPaginate from "react-paginate";
 import useDebounce from "../../hooks/debounce";
+import { useNavigate } from "react-router-dom";
+import MyAlert from "../../components/stock/MyAlert";
 
 function AdminProductPage() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4200/api/admin/me", { withCredentials: true })
+      .then((res) => {
+        console.log("ran normal", res);
+      })
+      .catch((err) => {
+        navigate("/admin/login");
+      });
+  }, []);
+
+  const [productChanged, setProductChanged] = useState(true);
+  const [deleteAlertChanged, setDeleteAlertChanged] = useState(0);
   const [filter, setFilter] = useState(false);
   const filterClicked = () => setFilter(!filter);
   const [products, setProducts] = useState([]);
@@ -125,6 +142,8 @@ function AdminProductPage() {
     tagsArray,
     colorArray,
     archived,
+    productChanged,
+
     debouncePriceRange,
   ]);
 
@@ -234,7 +253,12 @@ function AdminProductPage() {
     <div className="relative flex flex-col items-center justify-center w-full mt-10">
       {loading && <Loader />}
       <ProductSearch searchProducts={searchProducts} />
+
       <div className="flex flex-col">
+        <MyAlert
+          deleteAlertChanged={deleteAlertChanged}
+          setDeleteAlertChanged={setDeleteAlertChanged}
+        />
         <AdminProductViewHeader
           filterClicked={filterClicked}
           setSortingOption={setSortingOption}
@@ -258,6 +282,9 @@ function AdminProductPage() {
           <div className="flex flex-wrap justify-left xl:w-[1150px]">
             {currentItems.map((product, index) => (
               <AdminProduct
+                setDeleteAlertChanged={setDeleteAlertChanged}
+                setProductChanged={setProductChanged}
+                productChanged={productChanged}
                 key={index}
                 product={product}
                 postWidth={postWidth}
@@ -265,7 +292,7 @@ function AdminProductPage() {
             ))}
           </div>
         </div>
-        <div className="w-full flex flex-row justify-end font-bold  ">
+        <div className="w-full flex flex-row justify-end font-bold mb-20 ">
           <ReactPaginate
             breakLabel="..."
             nextLabel="next >"
@@ -281,7 +308,6 @@ function AdminProductPage() {
             activeLinkClassName="px-4 py-2 bg-black text-white hover:cursor-pointer font-bold "
           />
         </div>
-        <div className=" bg-white hidden bg-zinc-500 bg-red-600 bg-orange-500 bg-yellow-500 bg-yellow-300 bg-green-500 bg-green-300 bg-emerald-500 bg-teal-500 bg-cyan-500 bg-sky-700 bg-violet-500 bg-pink-500"></div>
       </div>
     </div>
   );

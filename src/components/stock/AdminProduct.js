@@ -7,8 +7,16 @@ import axios from "axios";
 import ItemLoader from "./ItemLoader";
 import DeleteConfirmModel from "./DeleteConfirmModel";
 import companyLogo from "./tempAssests/No-Image.png";
+import { API_ENDPOINT } from "../../config";
 
-function AdminProduct({ viewtype, product, postWidth }) {
+function AdminProduct({
+  viewtype,
+  product,
+  postWidth,
+  setProductChanged,
+  productChanged,
+  setDeleteAlertChanged,
+}) {
   const [archiveConfirmModel, setArchiveConfirmModel] = useState(false);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState("");
@@ -34,25 +42,20 @@ function AdminProduct({ viewtype, product, postWidth }) {
 
   function deleteClicked() {
     closeDeleteConfirmModel();
-    alert("nothing happend he he");
-    // setLoading(true);
-    // axios
-    //   .put("http://localhost:4200/api/stock/archiveProduct", {
-    //     _id: docID,
-    //     archived: !product.archived,
-    //   })
-    //   .then(function (response) {
-    //     console.log(response);
-
-    //     getProduct();
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //     alert("product was not Updated");
-    //   })
-    //   .then(() => {
-    //     setLoading(false);
-    //   });
+    axios
+      .post(
+        `${API_ENDPOINT}/api/stock/deleteProduct`,
+        { _id: product._id },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        setProductChanged(!productChanged);
+        setDeleteAlertChanged(1);
+      })
+      .catch((err) => {
+        setProductChanged(!productChanged);
+        setDeleteAlertChanged(2);
+      });
   }
 
   function archiveClicked() {
@@ -61,7 +64,7 @@ function AdminProduct({ viewtype, product, postWidth }) {
     setLoading(true);
     axios
       .put(
-        "http://localhost:4200/api/stock/archiveProduct",
+        `${API_ENDPOINT}/api/stock/archiveProduct`,
         {
           _id: product._id,
           archived: !archived,
@@ -72,13 +75,17 @@ function AdminProduct({ viewtype, product, postWidth }) {
         console.log(response.data.updatedobj);
         setID(product._id);
         setArchived(!response.data.updatedobj.archived);
-        setImage(response.data.updatedobj.imagesUrls[0][1]);
+        if (product.imagesUrls.length > 0) {
+          setImage(product.imagesUrls[0][1]);
+        } else {
+          setImage(companyLogo);
+        }
         setName(response.data.updatedobj.name);
         setPrice(response.data.updatedobj.price);
       })
       .catch(function (error) {
         console.log(error);
-        alert("product was not Updated");
+        alert("You need to loging into do the update!");
       })
       .then(() => {
         setLoading(false);
