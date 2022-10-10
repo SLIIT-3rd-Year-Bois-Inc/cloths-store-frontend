@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -37,19 +37,9 @@ export default function Login() {
   const navigate = useNavigate();
   const login = useMutation(CustomerAPI.login, {
     onSuccess: (data) => {
-      setCustomerData(data);
-    },
-  });
-  const verification = useMutation(CustomerAPI.verifyCustomer);
-
-  const onSubmitHandler = async (data: any) => {
-    data.remember_me = rememberMe;
-    login.mutate(data);
-  };
-
-  useEffect(() => {
-    if (login.isSuccess) {
-      if (!login.data.verified) {
+      console.log(data, "d");
+      if (!data.verified) {
+        setCustomerData(data);
         login.reset();
         setShowVerificationModal(true);
         return;
@@ -59,10 +49,19 @@ export default function Login() {
         navigate("/");
         login.reset();
       }, 1000);
-    } else {
+    },
+    onError: () => {
       setTimeout(() => login.reset(), 5000);
-    }
-  }, [login.status]);
+    },
+  });
+
+  const verification = useMutation(CustomerAPI.verifyCustomer);
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  const onSubmitHandler = async (data: any) => {
+    data.remember_me = rememberMe;
+    login.mutate(data);
+  };
 
   const verify = (code: string) => {
     try {
@@ -71,15 +70,27 @@ export default function Login() {
     } catch (_) {}
   };
 
-  console.log(login.data?.message);
-  console.dir(login.error as any);
+  useEffect(() => {
+    let image = imageRef.current;
+
+    if (image) {
+      if (image.clientHeight != 0) {
+        image.style.opacity = "1";
+      }
+
+      image.onload = (e) => {
+        (e.target as any).style.opacity = "1";
+      };
+    }
+  }, []);
   return (
     <div className="w-screen h-screen flex flex-row relative">
-      <div className="w-[50%] flex-shrink-0">
+      <div className="w-[50%] flex-shrink-0 bg-black">
         <img
+          ref={imageRef}
           src="/philipp-arlt-NmH9A0obon8-unsplash.jpg"
           alt="Welcome"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover opacity-0 transition-all duration-500"
         />
       </div>
       <div className="flex flex-col items-center w-full">

@@ -32,7 +32,7 @@ export async function postJson(
     });
   }
 
-  if (json_response) return data;
+  if (json_response) return res_data;
 }
 
 export async function deleteRequest(endpoint: string) {

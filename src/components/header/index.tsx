@@ -4,6 +4,7 @@ import { Portal } from "react-portal";
 import { Link, LinkProps } from "react-router-dom";
 import UserModal from "../home-user-modal";
 import { useNavigate } from "react-router-dom";
+import CustomerSideBar from "../customer-side-bar";
 
 interface MenuItemProps extends LinkProps {
   children: string;
@@ -37,6 +38,7 @@ export default function Header({ homeStyle }: { homeStyle?: boolean }) {
     show: false,
     mouse_over_modal: false,
   });
+  const [sideBarModal, setSideBarModal] = useState(false);
 
   const close_user_modal = () => {
     setUserModal((prev) => {
@@ -69,6 +71,9 @@ export default function Header({ homeStyle }: { homeStyle?: boolean }) {
     >
       <div className="h-[85px] flex flex-row w-full justify-center items-center px-4">
         <div
+          onClick={() => {
+            setSideBarModal(true);
+          }}
           className={`p-4 cursor-pointer transition-all rounded-full ${
             bg ? "hover:bg-[#ffffff9a]" : "hover:bg-[#0000009a]"
           }`}
@@ -141,6 +146,15 @@ export default function Header({ homeStyle }: { homeStyle?: boolean }) {
       {userModal.show && (
         <Portal>
           <UserModal onClose={close_user_modal} />
+        </Portal>
+      )}
+      {sideBarModal && (
+        <Portal>
+          <CustomerSideBar
+            onClickClose={() => {
+              setSideBarModal(false);
+            }}
+          />
         </Portal>
       )}
     </div>
