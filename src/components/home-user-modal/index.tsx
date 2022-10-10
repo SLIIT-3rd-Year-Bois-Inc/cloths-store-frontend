@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { GrClose } from "react-icons/gr";
 import { AiOutlineUser } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { CustomerAPI } from "../../pages/customer/api";
 
 interface UserModalProps {
@@ -14,8 +14,11 @@ export default function UserModal({ onClose, ...rest }: UserModalProps) {
   const navigate = useNavigate();
 
   const query = useQuery(["customer", "session"], CustomerAPI.me);
+  const queryClient = useQueryClient();
+
   const sign_out = useMutation(CustomerAPI.signOut, {
     onSuccess: () => {
+      queryClient.invalidateQueries(["customer"]);
       onClose && onClose();
       setTimeout(() => {
         navigate("/");

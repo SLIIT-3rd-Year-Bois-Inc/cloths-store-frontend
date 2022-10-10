@@ -79,7 +79,9 @@ export default function Login() {
       }
 
       image.onload = (e) => {
-        (e.target as any).style.opacity = "1";
+        setTimeout(() => {
+          (e.target as any).style.opacity = "1";
+        }, 500);
       };
     }
   }, []);
