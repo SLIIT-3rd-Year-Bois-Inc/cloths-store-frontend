@@ -6,6 +6,7 @@ import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { CustomerLoadingOverlay } from "../../../components/customer-loading-overlay";
 import { signUpSchema } from "../../../schema/customer";
+import Header from "../../../components/header";
 
 export default function SignUp() {
   const {
@@ -32,7 +33,7 @@ export default function SignUp() {
 
   return (
     <div
-      className="w-screen h-screen bg-black flex justify-center items-center relative"
+      className="w-screen h-screen bg-black flex flex-col overflow-y-auto items-center relative"
       style={{
         backgroundImage:
           "url('/alexandra-dementyeva-OXU7rATxRoE-unsplash 1.png')",
@@ -41,7 +42,8 @@ export default function SignUp() {
         backgroundPosition: "center",
       }}
     >
-      <div className="py-6 px-10 bg-white w-[30em] shadow-lg backdrop-blur-sm bg-[#ffffffdc]">
+      <Header />
+      <div className="py-6 px-10 bg-white w-[30em] mt-12 shadow-lg backdrop-blur-sm bg-[#ffffffdc]">
         <form
           onSubmit={handleSubmit((data) => sign_up.mutate(data))}
           className="w-full"

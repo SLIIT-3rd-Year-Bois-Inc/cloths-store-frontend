@@ -58,8 +58,17 @@ export default function Footer() {
           <Link to="" className="pb-3 px-2 font-bold">
             My Account
           </Link>
-          <Link to="" className="pb-3 px-2 text-sm hover:font-semibold">
-            Sign In/Register
+          <Link
+            to="/customer/login"
+            className="pb-3 px-2 text-sm hover:font-semibold"
+          >
+            Sign In
+          </Link>
+          <Link
+            to="/customer/sign-up"
+            className="pb-3 px-2 text-sm hover:font-semibold"
+          >
+            Register
           </Link>
           <Link to="" className="pb-3 px-2 text-sm hover:font-semibold">
             My Wishlist

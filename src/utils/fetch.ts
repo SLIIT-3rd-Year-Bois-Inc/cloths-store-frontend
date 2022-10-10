@@ -1,5 +1,14 @@
 import { API_ENDPOINT } from "../config";
 
+class HTTPError extends Error {
+  data: any;
+
+  constructor(message: string, data: any) {
+    super(message);
+    this.data = data;
+  }
+}
+
 export async function postJson(
   endpoint: string,
   data: any,
@@ -14,11 +23,16 @@ export async function postJson(
     body: JSON.stringify(data),
   });
 
+  let res_data = await res.json();
+
   if (res.status >= 300) {
-    throw new Error(`Received status ${res.status}`);
+    throw new HTTPError(`Received status ${res.status}`, {
+      status: res.status,
+      ...res_data,
+    });
   }
 
-  if (json_response) return await res.json();
+  if (json_response) return data;
 }
 
 export async function deleteRequest(endpoint: string) {

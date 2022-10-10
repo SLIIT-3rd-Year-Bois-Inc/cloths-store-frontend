@@ -68,7 +68,11 @@ export default function Header({ homeStyle }: { homeStyle?: boolean }) {
       } ${homeStyle ? "fixed" : "sticky"} top-0 z-50 transition-all`}
     >
       <div className="h-[85px] flex flex-row w-full justify-center items-center px-4">
-        <div className="p-4 cursor-pointer">
+        <div
+          className={`p-4 cursor-pointer transition-all rounded-full ${
+            bg ? "hover:bg-[#ffffff9a]" : "hover:bg-[#0000009a]"
+          }`}
+        >
           <FiMenu
             size={icon_size}
             className="stroke-1"
@@ -85,7 +89,9 @@ export default function Header({ homeStyle }: { homeStyle?: boolean }) {
         </Link>
         <div className="flex flex-row">
           <button
-            className="p-4 cursor-pointer"
+            className={`p-4 cursor-pointer transition-all rounded-full ${
+              bg ? "hover:bg-[#ffffff9a]" : "hover:bg-[#0000009a]"
+            }`}
             onClick={() =>
               setUserModal((prev) => {
                 return { ...prev, show: true };
@@ -98,7 +104,11 @@ export default function Header({ homeStyle }: { homeStyle?: boolean }) {
               color={`${bg ? "" : "white"}`}
             />
           </button>
-          <div className="p-4 cursor-pointer">
+          <div
+            className={`p-4 cursor-pointer transition-all rounded-full ${
+              bg ? "hover:bg-[#ffffff9a]" : "hover:bg-[#0000009a]"
+            }`}
+          >
             <FiShoppingBag
               size={icon_size}
               className="stroke-1"

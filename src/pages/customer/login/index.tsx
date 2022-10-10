@@ -7,6 +7,8 @@ import { CustomerAPI } from "../api";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { CustomerLoadingOverlay } from "../../../components/customer-loading-overlay";
+import { Portal } from "react-portal";
+import CustomerVerificationModal from "../../../components/customer-verification-modal";
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -29,9 +31,16 @@ export default function Login() {
   });
 
   const [rememberMe, setRememberMe] = useState(false);
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
+  const [customerData, setCustomerData] = useState({} as any);
 
   const navigate = useNavigate();
-  const login = useMutation(CustomerAPI.login);
+  const login = useMutation(CustomerAPI.login, {
+    onSuccess: (data) => {
+      setCustomerData(data);
+    },
+  });
+  const verification = useMutation(CustomerAPI.verifyCustomer);
 
   const onSubmitHandler = async (data: any) => {
     data.remember_me = rememberMe;
@@ -40,7 +49,12 @@ export default function Login() {
 
   useEffect(() => {
     if (login.isSuccess) {
-      console.log("success");
+      if (!login.data.verified) {
+        login.reset();
+        setShowVerificationModal(true);
+        return;
+      }
+
       setTimeout(() => {
         navigate("/");
         login.reset();
@@ -50,6 +64,15 @@ export default function Login() {
     }
   }, [login.status]);
 
+  const verify = (code: string) => {
+    try {
+      verification.mutate({ code, id: customerData._id ?? "" });
+      navigate("/");
+    } catch (_) {}
+  };
+
+  console.log(login.data?.message);
+  console.dir(login.error as any);
   return (
     <div className="w-screen h-screen flex flex-row relative">
       <div className="w-[50%] flex-shrink-0">
@@ -128,11 +151,22 @@ export default function Login() {
       {login.isLoading || login.isSuccess || login.isError ? (
         <CustomerLoadingOverlay>
           {login.isLoading ? <div>Loading</div> : ""}
-          {login.isError ? <div>Error</div> : ""}
+          {login.isError ? <div>Error {}</div> : ""}
           {login.isSuccess ? <div>Success</div> : ""}
         </CustomerLoadingOverlay>
       ) : (
         ""
+      )}
+
+      {showVerificationModal && (
+        <Portal>
+          <CustomerVerificationModal
+            onClose={() => {
+              setShowVerificationModal(false);
+            }}
+            onClickVerify={verify}
+          />
+        </Portal>
       )}
     </div>
   );
