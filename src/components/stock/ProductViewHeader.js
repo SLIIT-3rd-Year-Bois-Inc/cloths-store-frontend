@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  CgViewSplit,
-  CgViewGrid,
-  CgViewMonth,
-  CgViewList,
-} from "react-icons/cg";
+import { CgViewSplit, CgViewGrid } from "react-icons/cg";
 import { FiChevronUp, FiChevronDown, FiFilter } from "react-icons/fi";
 
 function ProductViewHeader({ filterClicked, setSortingOption, setPostWidth }) {
