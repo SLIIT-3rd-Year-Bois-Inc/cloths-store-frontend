@@ -75,7 +75,7 @@ function AnswerQuestion() {
       });
   };
 
-  var templateParams = {
+  let templateParams = {
     Question: questions,
     Answer: answer,
     email: "senalweerasekara@gmail.com",
