@@ -6,7 +6,7 @@ export default function TopSection() {
       <img
         src="lindsay-martin-2WHey8IZcLw-unsplash.jpg"
         alt="cool girl"
-        className="object-cover w-full brightness-75 relative lg:top-[-10em]"
+        className="object-cover w-full h-full brightness-75 relative object-top lg:object-[0,-225px]"
       />
       <div className="w-full h-[calc(100%-9em)] flex flex-col absolute bottom-0">
         <div className="flex-grow"></div>

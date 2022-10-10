@@ -20,7 +20,7 @@ const Storage = getStorage(FirebaseApp);
 // it will generate random filename
 // Returns file_name and url
 // Example -
-// const [name, url] = uploadFile(some_file);
+// const [name, url] = await uploadFile(some_file);
 
 export async function uploadFile(
   file: File | Blob,
