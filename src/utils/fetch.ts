@@ -23,7 +23,9 @@ export async function postJson(
     body: JSON.stringify(data),
   });
 
-  let res_data = await res.json();
+  let res_data: any = {};
+
+  if (json_response) res_data = await res.json();
 
   if (res.status >= 300) {
     throw new HTTPError(`Received status ${res.status}`, {
