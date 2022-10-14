@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { CustomerAPI } from "../../pages/customer/api";
+import { CustomerAPI } from "../../../pages/customer/api";
 import HomeProduct from "../home-product";
 
 export default function HomePopular() {
