@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import CustomerFormError from "../../../components/customer-form-error";
+import CustomerFormError from "../../../components/customer/form-error";
 import { AdminAPI } from "../api";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { CustomerLoadingOverlay } from "../../../components/customer-loading-overlay";
+import { CustomerLoadingOverlay } from "../../../components/customer/loading-overlay";
 
 const loginSchema = yup.object().shape({
   email: yup
