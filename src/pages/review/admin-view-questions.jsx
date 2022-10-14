@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import CommonSuccess from "../../components/review-modals/common-success";
+import CommonAlert from "../../components/review-modals/common-alert";
 
 function AnswerQuestion() {
   const [totalPage, setTotalPage] = useState();
@@ -17,7 +18,9 @@ function AnswerQuestion() {
   const [answer, setAnswer] = useState("");
   const location = useLocation();
   const [commonPop, setCommonPop] = useState(false);
-
+  const [commonPop2, setCommonPop2] = useState(false);
+  const [commonPop3, setCommonPop3] = useState(false);
+  const [commonPop4, setCommonPop4] = useState(false);
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
@@ -28,7 +31,6 @@ function AnswerQuestion() {
         setQuestions(question);
         setTotalPage(total);
         setTotalQuestions(total2);
-        // setEmail(email);
       });
     });
   }, [page, search]);
@@ -40,15 +42,21 @@ function AnswerQuestion() {
       .then((res) => {
         if (res.status === 200) {
           console.log("success del");
+          setCommonPop2(true);
         } else {
           console.log("Failed");
-          // setFailed(true)
-          // set failed / success msgs to missing places
+          setCommonPop4(true);
         }
       })
       .catch((e) => {
         console.error(e);
       });
+  };
+
+  let templateParams = {
+    Question: questions,
+    Answer: answer,
+    email: email,
   };
 
   const addAnswer = (
@@ -71,25 +79,17 @@ function AnswerQuestion() {
     })
       .then((res) => {
         if (res.status === 200) {
-          setCommonPop(true);
+          if (res.status === 200 && email == "") setCommonPop(true);
           if (email != "") {
+            templateParams.email = email;
             sendEmail();
+            setCommonPop(true);
           }
-        } else {
-          console.log("Failed");
-          //do something
         }
       })
       .catch((e) => {
         console.error(e);
       });
-  };
-
-  let templateParams = {
-    Question: questions,
-    Answer: answer,
-    email: "senalweerasekara@gmail.com",
-    // Get these details from each section.
   };
 
   function sendEmail() {
@@ -104,15 +104,27 @@ function AnswerQuestion() {
       .then(
         function (response) {
           console.log("SUCCESS!", response.status, response.text);
+          setCommonPop(true);
         },
         function (error) {
           console.log("FAILED...", error);
+          setCommonPop3(true);
         }
       );
   }
 
   return (
     <div>
+      {commonPop2 && (
+        <CommonSuccess
+          setCommonSuccess={setCommonPop2}
+          message={"Question has been removed successfully."}
+          topic={"Question Removed!"}
+          link1={"deletedQ"}
+          link2={""}
+        />
+      )}
+
       {questions.map((user, index) => {
         return (
           <div key={index}>
@@ -121,6 +133,7 @@ function AnswerQuestion() {
               setCurrentID={setCurrentID}
               deleteQuestion={deleteQuestion}
               addAnswer={addAnswer}
+              setEmail={setEmail}
             />
           </div>
         );
@@ -146,8 +159,34 @@ function AnswerQuestion() {
       {commonPop && (
         <CommonSuccess
           setCommonSuccess={setCommonPop}
-          message={"Your Answer has been added successfully."}
+          message={
+            "Your Answer has been added successfully. If Email is available the user will be notified"
+          }
           topic={"Answer Added!"}
+          link1={"deletedQ"}
+          link2={""}
+        />
+      )}
+
+      {commonPop3 && (
+        <CommonAlert
+          setCommonAlert={setCommonPop3}
+          message={
+            "Customer Email is Incorrect or does not exist. User is not notified!"
+          }
+          topic={"Email Not Sent!"}
+          link1={"deletedQ"}
+          link2={""}
+        />
+      )}
+
+      {commonPop4 && (
+        <CommonAlert
+          setCommonAlert={setCommonPop4}
+          message={
+            "Deleting this question was not successfull. Please Try again later!"
+          }
+          topic={"Deletion Failed!"}
           link1={"deletedQ"}
           link2={""}
         />
