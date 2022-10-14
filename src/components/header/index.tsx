@@ -5,6 +5,7 @@ import { Link, LinkProps } from "react-router-dom";
 import UserModal from "../customer/home-user-modal";
 import CustomerSideBar from "../customer/side-bar";
 
+
 interface MenuItemProps extends LinkProps {
   children: string;
   light?: boolean;
