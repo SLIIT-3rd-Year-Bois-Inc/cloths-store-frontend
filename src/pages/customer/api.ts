@@ -28,4 +28,10 @@ export const CustomerAPI = {
       )}&code=${data.code}`,
       false
     ),
+  getCustomerOrders: (data: any) => getJson(`/api/order/me`, true),
+  addPaymentMethod: (data: any) =>
+    postJson("/api/customer/payment-method", data, false),
+  getPaymentMethods: () => getJson(`/api/customer/payment-method`, true),
+  deletePaymentMethod: (data: any) =>
+    deleteRequest(`/api/customer/payment-method/${data.id}`),
 };
