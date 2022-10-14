@@ -12,7 +12,7 @@ export default function CustomerDashBoard() {
       <CustomerDashHeader />
       <div className="flex h-screen w-full">
         <SideBar />
-        <div className="flex-grow m-6 rounded-2xl border-4 border-dashed border-gray-500 pt-[5em] px-[6em] min-w-0 overflow-y-auto">
+        <div className="flex-grow m-4 rounded-2xl border-4 border-dashed border-gray-500 pt-[3em] px-[3em] min-w-0 overflow-y-auto">
           <Outlet />
         </div>
       </div>
