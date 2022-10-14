@@ -1,5 +1,6 @@
 import { postJson, deleteRequest, getJson, patchJson } from "../../utils/fetch";
 import { QueryKey } from "react-query";
+import { Buffer } from "buffer";
 
 interface QueryParams {
   queryKey: QueryKey;
@@ -20,4 +21,17 @@ export const CustomerAPI = {
   deleteMe: (data: any) => postJson("/api/customer/me/delete", data, false),
   popularProducts: ({ queryKey: [_, limits] }: QueryParams) =>
     getJson(`/api/customer/products/popular?limit=${limits}`, true),
+  verifyCustomer: (data: any) =>
+    getJson(
+      `/api/customer/verify?id=${Buffer.from(data.id).toString(
+        "base64"
+      )}&code=${data.code}`,
+      false
+    ),
+  getCustomerOrders: (data: any) => getJson(`/api/order/me`, true),
+  addPaymentMethod: (data: any) =>
+    postJson("/api/customer/payment-method", data, false),
+  getPaymentMethods: () => getJson(`/api/customer/payment-method`, true),
+  deletePaymentMethod: (data: any) =>
+    deleteRequest(`/api/customer/payment-method/${data.id}`),
 };

@@ -4,11 +4,15 @@ import { API_ENDPOINT } from "../../config";
 import CommonSuccess from "../../components/review-modals/common-success";
 import { useEffect } from "react";
 
-function Question() {
+function Question(props) {
   const [popOn, setPopOn] = useState(false);
   const handleOnClose = () => setPopOn(false);
   const [question, setQuestion] = useState("");
   const [email, setEmail] = useState("");
+  const pid = props.productData.productID._id;
+  const product_id = pid;
+  const description = props.productData.productID.description;
+  const title = props.productData.productID.name;
 
   const [totalPage, setTotalPage] = useState();
   const pagesButton = new Array(totalPage).fill(null).map((v, i) => i);
@@ -23,44 +27,39 @@ function Question() {
 
   const [commonPop, setCommonPop] = useState(false);
   const [commonPop2, setCommonPop2] = useState(false);
+  const [logged, setLogged] = useState(false);
 
   const [questions, setQuestions] = useState([]);
   const [tempSearch, setTempSearch] = useState("");
   function searchActivate() {
     setSearch(tempSearch);
-    console.log(search);
   }
 
   useEffect(() => {
     fetch(
-      `${API_ENDPOINT}/api/question/getQuestion?page=${page}&search=${search}`,
+      `${API_ENDPOINT}/api/question/getQuestion?page=${page}&search=${search}&pid=${pid}`,
       { credentials: "include" }
     ).then(async (response) => {
-      await response.json().then(({ question, total2, total }) => {
+      await response.json().then(({ question, total2, total, logged }) => {
         setQuestions(question);
         setTotalPage(total);
         setTotalQuestions(total2);
-        console.log(question);
+        setLogged(logged);
       });
     });
-  }, [page, search]);
+  }, [page, search, pid]);
 
   const [currentID, setCurrentID] = useState("");
 
   const deleteQuestion = (currentID) => {
-    console.log("2");
-    console.log(currentID);
     fetch(`${API_ENDPOINT}/api/question/deleteQuestion/` + currentID, {
       method: "DELETE",
     })
       .then((res) => {
         if (res.status === 200) {
-          console.log("success del");
           setCommonPop2(true);
-          // setDeletingM(true)
         } else {
           console.log("Failed");
-          // setFailed(true)
         }
       })
       .catch((e) => {
@@ -70,9 +69,8 @@ function Question() {
 
   const formSubmit = (e) => {
     e.preventDefault();
-    console.log("refresh prevented");
+    const data = { question, date, email, product_id, title, description };
 
-    const data = { question, date, email };
     fetch(`${API_ENDPOINT}/api/question/addQuestion`, {
       method: "post",
       headers: {
@@ -84,13 +82,8 @@ function Question() {
     })
       .then((res) => {
         if (res.status === 200) {
-          console.log("success");
           setPopOn(false);
           setCommonPop(true);
-          //do something
-        } else {
-          console.log("Failed");
-          //do something
         }
       })
       .catch((e) => {
@@ -131,18 +124,39 @@ function Question() {
                   setQuestion(e.target.value);
                 }}
                 id="about"
+                maxLength={500}
                 className="shadow-sm focus:ring-red-500 focus:border-red-500 w-full mt-1 block sm:text-sm border border-gray-300 rounded-md h-40"
                 placeholder="Type your question here"
               ></textarea>
             </form>
           </div>
           <div className="">
-            <button
-              onClick={() => setPopOn(true)}
-              className="btn px-8 py-2 w-36 border-2 ml-3 h-12 border-red-600 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded hover:bg-red-600 hover:border-red-600  focus:outline-none focus:ring-0  transition duration-150 ease-in-out"
-            >
-              Ask
-            </button>
+            {question && logged ? (
+              <button
+                onClick={() => setPopOn(true)}
+                className="btn px-8 py-2 w-36 border-2 ml-3 h-12 border-red-600 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded hover:bg-red-600 hover:border-red-600  focus:outline-none focus:ring-0  transition duration-150 ease-in-out"
+              >
+                Ask
+              </button>
+            ) : (
+              ""
+            )}
+
+            {question ? (
+              ""
+            ) : (
+              <button className="btn px-8 py-2 w-36 border-2 ml-3 h-12 border-stone-600 bg-stone-600 text-white font-medium text-xs leading-tight uppercase rounded">
+                Type & ask
+              </button>
+            )}
+
+            {!logged && question ? (
+              <button className=" animate-pulse btn px-8 py-2 w-36 border-2 ml-3 h-12 border-stone-600 bg-stone-600 text-white font-medium text-xs leading-tight uppercase rounded">
+                Login to ask
+              </button>
+            ) : (
+              ""
+            )}
           </div>
         </div>
 
@@ -217,7 +231,6 @@ function NotifyMe({ visible, onClose, setEmail, email, formSubmit }) {
   if (!visible) return null;
 
   return (
-    // <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center backdrop-blur-sm">
     <div className="fixed inset-0 bg-gradient-to-br from-gray-900/60 to-red-900/50  flex justify-center items-center backdrop-blur-sm">
       <div className="bg-red-000 bg-opacity-40 pt-16 pb-20 p-14  rounded-3xl bg-white">
         <button

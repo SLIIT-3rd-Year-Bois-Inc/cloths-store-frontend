@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import CustomerFormError from "../../../components/customer-form-error";
+import CustomerFormError from "../../../components/customer/form-error";
 import { CustomerAPI } from "../api";
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
-import { CustomerLoadingOverlay } from "../../../components/customer-loading-overlay";
+import { Link, useNavigate } from "react-router-dom";
+import { CustomerLoadingOverlay } from "../../../components/customer/loading-overlay";
+import { Portal } from "react-portal";
+import CustomerVerificationModal from "../../../components/customer/verification-modal";
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -29,34 +31,68 @@ export default function Login() {
   });
 
   const [rememberMe, setRememberMe] = useState(false);
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
+  const [customerData, setCustomerData] = useState({} as any);
 
   const navigate = useNavigate();
-  const login = useMutation(CustomerAPI.login);
+  const login = useMutation(CustomerAPI.login, {
+    onSuccess: (data) => {
+      console.log(data, "d");
+      if (!data.verified) {
+        setCustomerData(data);
+        login.reset();
+        setShowVerificationModal(true);
+        return;
+      }
+
+      setTimeout(() => {
+        navigate("/");
+        login.reset();
+      }, 1000);
+    },
+    onError: () => {
+      setTimeout(() => login.reset(), 5000);
+    },
+  });
+
+  const verification = useMutation(CustomerAPI.verifyCustomer);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   const onSubmitHandler = async (data: any) => {
     data.remember_me = rememberMe;
     login.mutate(data);
   };
 
-  useEffect(() => {
-    if (login.isSuccess) {
-      console.log("success");
-      setTimeout(() => {
-        navigate("/");
-        login.reset();
-      }, 1000);
-    } else {
-      setTimeout(() => login.reset(), 5000);
-    }
-  }, [login.status]);
+  const verify = (code: string) => {
+    try {
+      verification.mutate({ code, id: customerData._id ?? "" });
+      navigate("/");
+    } catch (_) {}
+  };
 
+  useEffect(() => {
+    let image = imageRef.current;
+
+    if (image) {
+      if (image.clientHeight != 0) {
+        image.style.opacity = "1";
+      }
+
+      image.onload = (e) => {
+        setTimeout(() => {
+          (e.target as any).style.opacity = "1";
+        }, 500);
+      };
+    }
+  }, []);
   return (
     <div className="w-screen h-screen flex flex-row relative">
-      <div className="w-[50%] flex-shrink-0">
+      <div className="w-[50%] flex-shrink-0 bg-black">
         <img
+          ref={imageRef}
           src="/philipp-arlt-NmH9A0obon8-unsplash.jpg"
           alt="Welcome"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover opacity-0 transition-all duration-500"
         />
       </div>
       <div className="flex flex-col items-center w-full">
@@ -120,19 +156,34 @@ export default function Login() {
         </div>
         <div className="flex-grow"></div>
         <div className="flex flex-row w-full py-4 px-6">
-          <div>Trouble Logging in ?</div>
+          <Link to="/admin/login" className="hover:underline">
+            Looking for admin login?
+          </Link>
           <div className="flex-grow"></div>
-          <div>Back to home</div>
+          <Link to="/" className="hover:underline">
+            Back to home
+          </Link>
         </div>
       </div>
       {login.isLoading || login.isSuccess || login.isError ? (
         <CustomerLoadingOverlay>
           {login.isLoading ? <div>Loading</div> : ""}
-          {login.isError ? <div>Error</div> : ""}
+          {login.isError ? <div>Error {}</div> : ""}
           {login.isSuccess ? <div>Success</div> : ""}
         </CustomerLoadingOverlay>
       ) : (
         ""
+      )}
+
+      {showVerificationModal && (
+        <Portal>
+          <CustomerVerificationModal
+            onClose={() => {
+              setShowVerificationModal(false);
+            }}
+            onClickVerify={verify}
+          />
+        </Portal>
       )}
     </div>
   );

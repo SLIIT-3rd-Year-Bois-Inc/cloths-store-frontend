@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { GrClose } from "react-icons/gr";
 import { AiOutlineUser } from "react-icons/ai";
-import { Link } from "react-router-dom";
-import { useQuery } from "react-query";
-import { CustomerAPI } from "../../pages/customer/api";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { CustomerAPI } from "../../../pages/customer/api";
 
 interface UserModalProps {
   onClose: () => any;
@@ -11,7 +11,24 @@ interface UserModalProps {
 
 export default function UserModal({ onClose, ...rest }: UserModalProps) {
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
+
   const query = useQuery(["customer", "session"], CustomerAPI.me);
+  const queryClient = useQueryClient();
+
+  const sign_out = useMutation(CustomerAPI.signOut, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["customer"]);
+      onClose && onClose();
+      setTimeout(() => {
+        navigate("/");
+        sign_out.reset();
+      }, 1000);
+    },
+    onError: () => {
+      setTimeout(() => sign_out.reset(), 1000);
+    },
+  });
 
   useEffect(() => {
     setShow(true);
@@ -68,7 +85,12 @@ export default function UserModal({ onClose, ...rest }: UserModalProps) {
               >
                 Dashboard
               </Link>
-              <button className="bg-white text-center text-black px-1 py-2 line-spacing-main open-sans-font text-sm">
+              <button
+                onClick={() => {
+                  sign_out.mutate();
+                }}
+                className="bg-white text-center text-black px-1 py-2 line-spacing-main open-sans-font text-sm"
+              >
                 Logout
               </button>
             </>

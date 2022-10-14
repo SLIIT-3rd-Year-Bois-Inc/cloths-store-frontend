@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { CustomerAPI } from "../../pages/customer/api";
+import { CustomerAPI } from "../../../pages/customer/api";
 import HomeProduct from "../home-product";
 
 export default function HomePopular() {
@@ -8,7 +8,7 @@ export default function HomePopular() {
     ["products", 10],
     CustomerAPI.popularProducts
   );
-  const products = popular_products.data ?? [];
+  const products = popular_products.data ?? new Array(10).fill({});
 
   console.log(products);
   return (
@@ -19,15 +19,17 @@ export default function HomePopular() {
       <div className="flex flex-row overflow-hidden overflow-x-auto">
         {products.map((v: any) => (
           <HomeProduct
-            title={v.name}
-            price={v.price}
+            title={v.name ?? ""}
+            price={v.price ?? ""}
             image={
-              v.imagesUrls.length > 0 && v.imagesUrls[0].length > 0
-                ? v.imagesUrls[0][1]
+              v.imagesUrls
+                ? v.imagesUrls.length > 0 && v.imagesUrls[0].length > 0
+                  ? v.imagesUrls[0][1]
+                  : ""
                 : ""
             }
-            sold={v.sold}
-            link={`/product/${v._id}`}
+            sold={v.sold ?? ""}
+            link={v._id ? `/product/${v._id}` : ""}
           />
         ))}
       </div>

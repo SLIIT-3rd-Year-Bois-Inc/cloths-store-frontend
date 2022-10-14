@@ -1,10 +1,11 @@
 import QuestionAnswerCard from "../../components/review-components/admin-question";
 import { useState } from "react";
 import { API_ENDPOINT } from "../../config";
-import CommonSuccess from "../../components/review-modals/common-success";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import emailjs from "@emailjs/browser";
+import CommonSuccess from "../../components/review-modals/common-success";
+import CommonAlert from "../../components/review-modals/common-alert";
 
 function AnswerQuestion() {
   const [totalPage, setTotalPage] = useState();
@@ -13,14 +14,18 @@ function AnswerQuestion() {
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
   const [currentID, setCurrentID] = useState("");
+  const [email, setEmail] = useState("");
   const [answer, setAnswer] = useState("");
   const location = useLocation();
-
+  const [commonPop, setCommonPop] = useState(false);
+  const [commonPop2, setCommonPop2] = useState(false);
+  const [commonPop3, setCommonPop3] = useState(false);
+  const [commonPop4, setCommonPop4] = useState(false);
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
     fetch(
-      `${API_ENDPOINT}/api/question/getQuestion?page=${page}&search=${search}`
+      `${API_ENDPOINT}/api/question/getQuestionAdmin?page=${page}&search=${search}`
     ).then(async (response) => {
       await response.json().then(({ question, total2, total }) => {
         setQuestions(question);
@@ -31,19 +36,16 @@ function AnswerQuestion() {
   }, [page, search]);
 
   const deleteQuestion = (currentID) => {
-    console.log("2");
-    console.log(currentID);
     fetch(`${API_ENDPOINT}/api/question/deleteQuestion/` + currentID, {
       method: "DELETE",
     })
       .then((res) => {
         if (res.status === 200) {
           console.log("success del");
-          //   setCommonPop2(true);
-          // setDeletingM(true)
+          setCommonPop2(true);
         } else {
           console.log("Failed");
-          // setFailed(true)
+          setCommonPop4(true);
         }
       })
       .catch((e) => {
@@ -51,8 +53,22 @@ function AnswerQuestion() {
       });
   };
 
-  const addAnswer = (currentID, question, date, email, answer) => {
-    const data = { question, date, email, answer };
+  let templateParams = {
+    Question: questions,
+    Answer: answer,
+    email: email,
+  };
+
+  const addAnswer = (
+    currentID,
+    question,
+    date,
+    email,
+    answer,
+    title,
+    description
+  ) => {
+    const data = { question, date, email, answer, title, description };
     fetch(`${API_ENDPOINT}/api/question/addAnswerToQuestion/` + currentID, {
       method: "put",
       headers: {
@@ -63,16 +79,12 @@ function AnswerQuestion() {
     })
       .then((res) => {
         if (res.status === 200) {
-          console.log("success");
-          //   setPopOn(false);
-          //   setCommonPop(true);
-          //do something
+          if (res.status === 200 && email == "") setCommonPop(true);
           if (email != "") {
+            templateParams.email = email;
             sendEmail();
+            setCommonPop(true);
           }
-        } else {
-          console.log("Failed");
-          //do something
         }
       })
       .catch((e) => {
@@ -80,16 +92,8 @@ function AnswerQuestion() {
       });
   };
 
-  var templateParams = {
-    Question: questions,
-    Answer: answer,
-    email: "senalweerasekara@gmail.com",
-  };
-
   function sendEmail() {
     // e.preventDetault();
-    console.log("send email active");
-    // service ID / template ID / params / public key
     emailjs
       .send(
         "service_3zwlcgd",
@@ -100,15 +104,27 @@ function AnswerQuestion() {
       .then(
         function (response) {
           console.log("SUCCESS!", response.status, response.text);
+          setCommonPop(true);
         },
         function (error) {
           console.log("FAILED...", error);
+          setCommonPop3(true);
         }
       );
   }
 
   return (
     <div>
+      {commonPop2 && (
+        <CommonSuccess
+          setCommonSuccess={setCommonPop2}
+          message={"Question has been removed successfully."}
+          topic={"Question Removed!"}
+          link1={"deletedQ"}
+          link2={""}
+        />
+      )}
+
       {questions.map((user, index) => {
         return (
           <div key={index}>
@@ -117,6 +133,7 @@ function AnswerQuestion() {
               setCurrentID={setCurrentID}
               deleteQuestion={deleteQuestion}
               addAnswer={addAnswer}
+              setEmail={setEmail}
             />
           </div>
         );
@@ -138,6 +155,42 @@ function AnswerQuestion() {
           </button>
         );
       })}
+
+      {commonPop && (
+        <CommonSuccess
+          setCommonSuccess={setCommonPop}
+          message={
+            "Your Answer has been added successfully. If Email is available the user will be notified"
+          }
+          topic={"Answer Added!"}
+          link1={"deletedQ"}
+          link2={""}
+        />
+      )}
+
+      {commonPop3 && (
+        <CommonAlert
+          setCommonAlert={setCommonPop3}
+          message={
+            "Customer Email is Incorrect or does not exist. User is not notified!"
+          }
+          topic={"Email Not Sent!"}
+          link1={"deletedQ"}
+          link2={""}
+        />
+      )}
+
+      {commonPop4 && (
+        <CommonAlert
+          setCommonAlert={setCommonPop4}
+          message={
+            "Deleting this question was not successfull. Please Try again later!"
+          }
+          topic={"Deletion Failed!"}
+          link1={"deletedQ"}
+          link2={""}
+        />
+      )}
     </div>
   );
 }

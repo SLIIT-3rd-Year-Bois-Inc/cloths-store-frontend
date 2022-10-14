@@ -7,46 +7,24 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const ProductDetails = () => {
   let params = useParams();
+  const userId = "10001";
   let navigate = useNavigate();
 
-  // const data = [
-  //   {
-  //     id: "1",
-  //     img: [
-  //       "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/555bccc0efd24c26b79aaeb500dd25b5_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_01_laydown.jpg",
-  //       "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/c4efa9f4e66a41ad8979aeb500dce959_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_21_model.jpg",
-  //       "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/e3dea28f166549f4a787aeb500dd0788_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_41_detail.jpg",
-  //       "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/97293103e26045a5a35faeb500dcfc39_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_25_model.jpg",
-  //     ],
-  //     description:
-  //       "Make each rep count in this adidas x Peloton tee. AEROREADY manages moisture, so you can train distraction-free and focus on your form. A droptail hem with side slits adds coverage for deep squats and gives you greater freedom of movement on twisty ab and back exercises. So simple. So stellar Made with a series of recycled materials, and at least 60% recycled content, this product represents just one of our solutions to help end plastic waste.",
-  //     name: "CAPABLE OF GREATNESS TRAINING TEE",
-  //     gender: "m",
-  //     color: "Black",
-  //     brand: "adidas",
-  //     size: ["S", "M", "L"],
-  //     price: "3000",
-  //   },
-  // ];
+  // Fixed
+  const [product, setProduct] = useState({});
+  const [selectedSize, setSelectedSize] = useState("");
 
-  const [name, setName] = useState(params.productID);
-  const [price, setPrice] = useState("");
-  const [gender, setGender] = useState("X");
-  const [description, setDescription] = useState("");
-  const [color, setColor] = useState("");
-  const [sizeList, setSizeList] = useState([]);
-  const [imagesUrlList, setImagesUrlList] = useState([]);
-  const [mainImage, setMainImage] = useState("");
-  const [dataSend, setDataSend] = useState("");
+  var today = new Date();
+  var nextWeek = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() + 7
+  );
 
   const [isToggle, setToggle] = useState(false);
-  const [size, setSize] = useState(null);
   const [cartData, setCartData] = useState([]);
-  const [sizeID, setSizeId] = useState();
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
-
-  const productData = [price, description, imagesUrlList[0], params.productID];
 
   useEffect(() => {
     axios
@@ -54,48 +32,27 @@ const ProductDetails = () => {
         params: { id: params.productID },
       })
       .then(function (response) {
-        setName(response.data.name);
-        setPrice(response.data.price);
-        setGender(response.data.gender);
-        let data = [];
-        let dataUrls = [];
-        response.data.imagesUrls.forEach((image) => {
-          data.push(image[0]);
-          dataUrls.push(image[1]);
-        });
-        console.log("heres the use effect image name set" + data);
-        setImagesUrlList(dataUrls);
-        setMainImage(dataUrls[0]);
-        setColor(response.data.color);
-        setDescription(response.data.description);
-        let qObj = response.data.quantity;
-        let qArray = [];
-        for (const key in qObj) {
-          qArray.push({
-            size: key,
-            quantity: qObj[key],
-          });
+        // Fixed
+        let res = response.data;
+        res.imageUrls = res.imagesUrls.map((image) => image[1]);
+
+        setProduct(res);
+
+        let keys = res.quantity ? Object.keys(res.quantity) : [];
+        if (keys.length > 0) {
+          setSelectedSize(keys[0]);
         }
-        setSizeList(qArray);
-        setDataSend(response.data);
-        console.log(response.data);
       })
       .catch(function (error) {
         console.log(error);
-      })
-      .then(function () {});
+      });
   }, []);
 
-  useEffect(() => {
-    console.log();
-  });
+  const main_image =
+    product.imageUrls && product.imageUrls.length ? product.imageUrls[0] : "";
 
   const changeImage = (event) => {
     document.querySelector(".main-img").src = event.target.src;
-  };
-
-  const changeSize = (e, key) => {
-    setSizeId(key);
   };
 
   const chooseSizeError = () => (
@@ -132,22 +89,23 @@ const ProductDetails = () => {
     </div>
   );
 
-  // const addToCart = () => {
-  //   if (size !== null) {
-  //     setCartData([
-  //       {
-  //         name: data[0].name,
-  //         img: data[0].img[0],
-  //         price: data[0].price,
-  //         size: size,
-  //       },
-  //       ...cartData,
-  //     ]);
-  //     setShowSuccess(true);
-  //   } else {
-  //     setShowError(true);
-  //   }
-  // };
+  const addToCart = () => {
+    if (selectedSize !== "") {
+      setCartData([
+        {
+          name: product.name,
+          img: main_image,
+          price: product.price,
+          size: selectedSize,
+          id: product._id,
+        },
+        ...cartData,
+      ]);
+      setShowSuccess(true);
+    } else {
+      setShowError(true);
+    }
+  };
 
   const addedToCartSuccess = () => (
     <div
@@ -197,7 +155,7 @@ const ProductDetails = () => {
 
   function navigateToCreate() {
     navigate("/createReview", {
-      state: { data: dataSend, data2: imagesUrlList[0] },
+      state: { data: product, data2: main_image },
     });
   }
 
@@ -205,21 +163,22 @@ const ProductDetails = () => {
     <>
       <div className="md:flex flex-row  flex-row md:ml-24 md:pt-9">
         <div className="w-0.5/4  flex flex-row md:flex-col ">
-          {imagesUrlList.map((value, index) => (
-            <div key={index} className="pt-2 mr-6 ">
-              <img
-                className="object-contain h-32 w-42  flex-row  "
-                src={value}
-                alt="F.jpg"
-                onClick={changeImage}
-              />
-            </div>
-          ))}
+          {product.imageUrls &&
+            product.imageUrls.map((value, index) => (
+              <div key={index} className="pt-2 mr-6 ">
+                <img
+                  className="object-contain h-32 w-42  flex-row  "
+                  src={value}
+                  alt="F.jpg"
+                  onClick={changeImage}
+                />
+              </div>
+            ))}
         </div>
         <div className="  md:mr-14">
           <div className=" md:ml-0 pt-4 md:pt-0 mb-4">
             <img
-              src={mainImage}
+              src={main_image}
               className="main-img  ml-12 md:ml-0 object-contain h-2/4 w-3/4   md:h-3/4  md:w-3/4	"
               alt="F.jpg"
             />
@@ -230,13 +189,13 @@ const ProductDetails = () => {
             <div>
               <div className=" font-extrabold italic">
                 <label htmlFor="name" className=" text-xs pb-0">
-                  {gender === "M" ? "Men's" : "Women's"}
+                  {product.gender === "M" ? "Men's" : "Women's"}
                 </label>
-                <div className=" pt-0 block text-l">{name} </div>
+                <div className=" pt-0 block text-l">{product.name}</div>
               </div>
 
               <div className=" pt-1 text-xs ">
-                {sizeList ? (
+                {product.quantity && product.quantity[selectedSize] ? (
                   <>
                     <FiCheckSquare size={32} color="green" />
                   </>
@@ -247,12 +206,14 @@ const ProductDetails = () => {
                 )}
               </div>
               <div className=" pt-3">
-                <div className="font-bold md:text-lg">Rs {price}.00</div>
+                <div className="font-bold md:text-lg">
+                  Rs {product.price}.00
+                </div>
               </div>
               <div className=" pt-3">
                 <div className="font-bold md:text-lg">Available color</div>
                 <div
-                  className={`${color}`}
+                  className={`${product.color}`}
                   style={{
                     height: "20px",
                     width: "20px",
@@ -263,33 +224,35 @@ const ProductDetails = () => {
               <div className=" pt-3 ">
                 <div>
                   <div className="font-bold md:text-lg">Size:</div>
-                  {sizeList.map((value, index) => (
-                    <button
-                      className={
-                        sizeID === index
-                          ? "sizeSelect inline-block  mr-3 bg-zinc-900 shadow-lg border w-16 h-7 md:w-24 md:h-9 bg-  text-white	 text-center items-center"
-                          : "sizeSelect inline-block  mr-3 bg-white-50 shadow-lg border w-16 h-7 md:w-24 md:h-9 bg-  text-center items-center"
-                      }
-                      id={index}
-                      onClick={(e) => changeSize(e, index)}
-                    >
-                      {value.size}
-                    </button>
-                  ))}
+                  {product.quantity
+                    ? Object.keys(product.quantity).map((key, index) => (
+                        <button
+                          className={
+                            selectedSize === key
+                              ? "sizeSelect inline-block  mr-3 bg-zinc-900 shadow-lg border w-16 h-7 md:w-24 md:h-9 bg-  text-white	 text-center items-center"
+                              : "sizeSelect inline-block  mr-3 bg-white-50 shadow-lg border w-16 h-7 md:w-24 md:h-9 bg-  text-center items-center"
+                          }
+                          id={index}
+                          onClick={() => setSelectedSize(key)}
+                        >
+                          {key}
+                        </button>
+                      ))
+                    : null}
                 </div>
               </div>
               <div className="mt-6">
                 <label htmlFor="description" className="font-bold md:text-lg">
                   Description:
                 </label>
-                <div className="">{description}</div>
+                <div className="">{product.description}</div>
               </div>
             </div>
 
             <div className="flex flex-row">
               <button
                 className="mt-9 w-28 h-9 md:w-40 md:h-12 bg-black text-white text-center items-center rounded"
-                // onClick={addToCart}
+                onClick={addToCart}
               >
                 ADD TO BAG
               </button>
@@ -302,10 +265,9 @@ const ProductDetails = () => {
               </button>
               <div
                 className="mt-9 cursor-pointer"
-                // onClick={() => {
-                //   setToggle(!isToggle);
-                //   console.log(cartData);
-                // }}
+                onClick={() => {
+                  setToggle(!isToggle);
+                }}
               >
                 <FiHeart
                   size={16}
@@ -315,16 +277,22 @@ const ProductDetails = () => {
               </div>
             </div>
             <div>
-              {/* <div>{showSuccess ? addedToCartSuccess() : <></>}</div>
-              <div>{showError ? chooseSizeError() : <></>}</div> */}
+              <div>{showSuccess ? addedToCartSuccess() : <></>}</div>
+              <div>{showError ? chooseSizeError() : <></>}</div>
             </div>
             <div className=" pt-4 text-xs md:text-base ">
-              <div>Only {sizeList[sizeID]?.quantity} Available</div>
+              <div>
+                Only {product.quantity ? product.quantity[selectedSize] : "N/A"}{" "}
+                Available
+              </div>
             </div>
             <div className=" pt-4 text-xs md:text-s ">
               <div>
-                Order now to get it between Tuesday, 9th August and Monday, 22nd
-                August
+                Order now to get by &nbsp;
+                {nextWeek.toLocaleString("en-us", { day: "2-digit" })}
+                &nbsp;
+                {nextWeek.toLocaleString("en-us", { month: "long" })}, &nbsp;
+                {nextWeek.getFullYear()}
               </div>
             </div>
           </div>
@@ -338,7 +306,7 @@ const ProductDetails = () => {
           setCartData={setCartData}
         />
 
-        <TwoTabs productID={dataSend} />
+        <TwoTabs productID={product} />
       </div>
     </>
   );

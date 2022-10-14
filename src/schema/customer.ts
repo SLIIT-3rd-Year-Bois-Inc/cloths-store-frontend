@@ -20,4 +20,24 @@ const signUpSchema = yup.object().shape({
   gender: yup.string().required("Select a gender"),
 });
 
-export { signUpSchema };
+const cardSchema = yup.object().shape({
+  card_number: yup
+    .string()
+    .label("Card number")
+    .max(16)
+    .required("The Card Number is required"),
+  cvc: yup.string().label("CVC").min(3).max(4).required("CVC is required"),
+  name_on_card: yup
+    .string()
+    .label("Name on card")
+    .required("Name in card is Required"),
+  expiry_month: yup.string().label("Expiry month").min(1).max(2).required(),
+  expiry_year: yup
+    .string()
+    .label("Expiry year")
+    .min(4)
+    .max(4)
+    .required("Expiry year is Required"),
+});
+
+export { signUpSchema, cardSchema };

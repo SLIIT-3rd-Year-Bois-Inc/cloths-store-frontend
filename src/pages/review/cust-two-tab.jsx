@@ -1,7 +1,6 @@
 import CusViewReview from "./cust-view-review";
 import Question from "./cust-questions";
 import { useState } from "react";
-// import { Session } from "";
 
 function CustTwoTab(props) {
   const [ShowTab, setShowTab] = useState("rev");
@@ -9,8 +8,6 @@ function CustTwoTab(props) {
   const [quesButtonColor, setQuesButtonColor] = useState("#b8b8b8");
   const [rc, setRc] = useState("#ff5959");
   const [qc, setQc] = useState("#c9c9c9");
-  // const test = session.req.customer_id;
-  // console.log(test);
 
   const revButton = () => {
     setShowTab("rev");
@@ -27,8 +24,6 @@ function CustTwoTab(props) {
     setRc("#c9c9c9");
     setQc("#ff5959");
   };
-
-  //   style={{ width: "89%" }}
 
   return (
     <div>
@@ -51,21 +46,14 @@ function CustTwoTab(props) {
         </div>
       </div>
       <div className=" p-0 w-full bg-orange-00">
-        {/* <Tabs TabSelect={ShowTab} /> */}
         {ShowTab == "rev" ? (
-          <CusViewReview productID={props.productID._id ?? ""} />
+          <CusViewReview productID={props.productID._id} productData={props} />
         ) : (
-          <Question />
+          <Question productData={props} />
         )}
       </div>
     </div>
   );
 }
-
-/* function Tabs({ TabSelect }) {
-  if (TabSelect == "rev") return <CusViewReview productID={pid} />;
-
-  if (TabSelect == "ques") return <Question />;
-} */
 
 export default CustTwoTab;

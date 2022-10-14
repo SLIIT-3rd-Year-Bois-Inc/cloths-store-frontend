@@ -1,12 +1,8 @@
 import React from "react";
 import ReviewCard from "../../components/review-components/user-review";
-import ImageView from "../../components/review-components/image-view";
-import users from "./data";
 import Stars from "../../components/review-components/stars";
 import { API_ENDPOINT } from "../../config";
-// change later with quarry
 import { useEffect, useState } from "react";
-import { FiTerminal } from "react-icons/fi";
 
 function CusViewReview(props) {
   const [reviews, setReviews] = useState([]);
@@ -17,17 +13,13 @@ function CusViewReview(props) {
   const [search, setSearch] = useState("");
   const [rating, setRating] = useState("");
   const [tempSearch, setTempSearch] = useState("");
-  const deleteMe = 100;
+  const [rates, setRates] = useState([""]);
+  const [maxStar, setMaxStar] = useState(0);
+  const pid = props.productID;
 
   function searchActivate() {
     setSearch(tempSearch);
-    console.log(search);
   }
-
-  // console.log("test" + props.productID)
-  // const pid = props.productID;
-  const pid = props.productID;
-  console.log("check something " + pid);
 
   useEffect(() => {
     if (pid) {
@@ -38,15 +30,28 @@ function CusViewReview(props) {
         }
       )
         .then(async (response) => {
-          await response.json().then(({ review, total2, total }) => {
+          await response.json().then(({ review, total }) => {
             setReviews(review);
             setTotalPage(total);
-            setTotalReviews(total2);
           });
         })
         .catch(console.error);
     }
   }, [page, search, rating, pid]);
+
+  useEffect(() => {
+    fetch(`${API_ENDPOINT}/api/review/getReviewsRate?pid=${pid}`, {
+      credentials: "include",
+    })
+      .then(async (response) => {
+        await response.json().then(({ total2, rates, max }) => {
+          setTotalReviews(total2);
+          setRates(rates);
+          setMaxStar(max);
+        });
+      })
+      .catch(console.error);
+  }, [maxStar]);
 
   return (
     <div>
@@ -92,11 +97,11 @@ function CusViewReview(props) {
                 <div
                   className="h-5 bg-red-600 rounded"
                   onClick={() => setRating("5")}
-                  style={{ width: deleteMe + "%" }}
+                  style={{ width: rates[4] + "%" }}
                 ></div>
               </div>
               <span className="text-sm font-medium text-red-600 dark:text-blue-500">
-                70%
+                {Math.round(rates[4])} %
               </span>
             </div>
             <div className="flex items-center mt-4">
@@ -110,11 +115,11 @@ function CusViewReview(props) {
                 <div
                   className="h-5 bg-red-600 rounded"
                   onClick={() => setRating("4")}
-                  style={{ width: "17%" }}
+                  style={{ width: rates[3] + "%" }}
                 ></div>
               </div>
               <span className="text-sm font-medium text-red-600 dark:text-blue-500">
-                17%
+                {Math.round(rates[3])} %
               </span>
             </div>
             <div className="flex items-center mt-4">
@@ -128,11 +133,11 @@ function CusViewReview(props) {
                 <div
                   className="h-5 bg-red-600 rounded"
                   onClick={() => setRating("3")}
-                  style={{ width: "8%" }}
+                  style={{ width: rates[2] + "%" }}
                 ></div>
               </div>
               <span className="text-sm font-medium text-red-600 dark:text-blue-500">
-                8%
+                {Math.round(rates[2])} %
               </span>
             </div>
             <div className="flex items-center mt-4">
@@ -146,11 +151,11 @@ function CusViewReview(props) {
                 <div
                   className="h-5 bg-red-600 rounded"
                   onClick={() => setRating("2")}
-                  style={{ width: "4%" }}
+                  style={{ width: rates[1] + "%" }}
                 ></div>
               </div>
               <span className="text-sm font-medium text-red-600 dark:text-blue-500">
-                4%
+                {Math.round(rates[1])} %
               </span>
             </div>
 
@@ -165,19 +170,19 @@ function CusViewReview(props) {
                 <div
                   className="h-5 bg-red-600 rounded"
                   onClick={() => setRating("1")}
-                  style={{ width: "89%" }}
+                  style={{ width: rates[0] + "%" }}
                 ></div>
               </div>
               <span className="text-sm font-medium text-red-600 dark:text-blue-500">
-                89%
+                {Math.round(rates[0])} %
               </span>
             </div>
           </div>
 
           <div className="bg-teal-00 m-auto ">
-            <Stars count="4" size="60" />
+            <Stars count={maxStar} size="60" />
             <p className="ml-2 text-lg font-medium text-gray-900 dark:text-white">
-              4.95 out of 5
+              {maxStar} out of 5
             </p>
             <button
               className="bg-stone-400 hover:bg-stone-600 hover:text-white active:bg-red-500 ml-2 mt-2  p-2 "
@@ -198,12 +203,10 @@ function CusViewReview(props) {
         </div>
 
         <div className="">
-          {/* {users.map((user, index) => { */}
-
           {reviews.map((user, index) => {
             return (
               <div key={index}>
-                <ReviewCard users={user} />
+                <ReviewCard users={user} proData={props.productData} />
               </div>
             );
           })}
@@ -232,6 +235,3 @@ function CusViewReview(props) {
 }
 
 export default CusViewReview;
-// = {(var > k ? "ihbii" : "utfuyb")}
-
-// FiTerminal.js / tags
