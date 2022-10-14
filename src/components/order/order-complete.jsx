@@ -1,12 +1,15 @@
 import image from "../../../src/image/ok.gif";
 import image2 from "../../../src/image/email.png";
 import image3 from "../../../src/image/print.png";
-
-const buttonClick = () => {
-  // Do what you want here. send to another page or something.
-};
+import { useNavigate } from "react-router-dom";
 
 const OrderComplete = () => {
+  const navigate = useNavigate();
+
+  const buttonClick = () => {
+    navigate("/");
+  };
+
   return (
     <div className=" fixed inset-0 bg-gradient-to-br from-stone-300/50 to-stone-300/50 flex justify-center items-center backdrop-blur-sm ">
       <div className="bg-white  justify-center items-center pl-40 pr-40 pb-20 rounded-2xl">
@@ -44,7 +47,7 @@ const OrderComplete = () => {
             onClick={buttonClick}
             className="p-2 pr-10 pl-10 bg-stone-400 rounded hover:bg-red-500 active:bg-red-700 text-white "
           >
-            Ok
+            Back To Shopping
           </button>
         </div>
       </div>

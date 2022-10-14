@@ -304,6 +304,8 @@ const ProductDetails = () => {
           setToggle={setToggle}
           cartData={cartData}
           setCartData={setCartData}
+          today={today}
+          arrival={nextWeek}
         />
 
         <TwoTabs productID={product} />
