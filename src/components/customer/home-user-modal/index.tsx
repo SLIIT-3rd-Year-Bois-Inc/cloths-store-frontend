@@ -3,7 +3,7 @@ import { GrClose } from "react-icons/gr";
 import { AiOutlineUser } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { CustomerAPI } from "../../pages/customer/api";
+import { CustomerAPI } from "../../../pages/customer/api";
 
 interface UserModalProps {
   onClose: () => any;

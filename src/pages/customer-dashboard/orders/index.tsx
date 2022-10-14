@@ -39,9 +39,9 @@ function transformOrders(data: any[]) {
   return data.map((d) => {
     let name =
       d.products.length > 1
-        ? `${d.products[0].name} and More +${d.products.length}`
-        : d.products[0].name;
-    let images = d.products.map((p: any) => p.imagesUrls[0][1]);
+        ? `${d.products[0].resolved.name} and More +${d.products.length}`
+        : d.products[0].resolved.name;
+    let images = d.products.map((p: any) => p.resolved.imagesUrls[0][1]);
 
     return {
       name,

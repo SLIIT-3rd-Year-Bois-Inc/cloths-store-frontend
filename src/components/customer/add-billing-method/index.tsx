@@ -1,11 +1,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { cardSchema } from "../../schema/customer";
+import { cardSchema } from "../../../schema/customer";
 import { Portal } from "react-portal";
-import CustomerFormError from "../customer-form-error";
+import CustomerFormError from "../form-error";
 import { useMutation, useQueryClient } from "react-query";
-import { CustomerAPI } from "../../pages/customer/api";
+import { CustomerAPI } from "../../../pages/customer/api";
 
 interface CustomerAddBillingMethodProps {
   onClickClose?: () => void;

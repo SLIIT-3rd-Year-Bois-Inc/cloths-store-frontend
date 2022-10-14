@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import CustomerFormError from "../../../components/customer-form-error";
+import CustomerFormError from "../../../components/customer/form-error";
 import { CustomerAPI } from "../api";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { CustomerLoadingOverlay } from "../../../components/customer-loading-overlay";
+import { CustomerLoadingOverlay } from "../../../components/customer/loading-overlay";
 import { signUpSchema } from "../../../schema/customer";
 import Header from "../../../components/header";
 

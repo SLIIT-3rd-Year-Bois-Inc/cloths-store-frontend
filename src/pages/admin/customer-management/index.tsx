@@ -4,7 +4,7 @@ import { FiEdit2, FiSearch } from "react-icons/fi";
 import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
 import { useQuery } from "react-query";
 import { AdminAPI } from "../api";
-import { CustomerLoadingOverlay } from "../../../components/customer-loading-overlay";
+import { CustomerLoadingOverlay } from "../../../components/customer/loading-overlay";
 import useDebounce from "../../../hooks/debounce";
 import { ToggleSwitch } from "flowbite-react";
 

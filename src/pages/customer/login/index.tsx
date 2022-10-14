@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import CustomerFormError from "../../../components/customer-form-error";
+import CustomerFormError from "../../../components/customer/form-error";
 import { CustomerAPI } from "../api";
 import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
-import { CustomerLoadingOverlay } from "../../../components/customer-loading-overlay";
+import { CustomerLoadingOverlay } from "../../../components/customer/loading-overlay";
 import { Portal } from "react-portal";
-import CustomerVerificationModal from "../../../components/customer-verification-modal";
+import CustomerVerificationModal from "../../../components/customer/verification-modal";
 
 const loginSchema = yup.object().shape({
   email: yup
