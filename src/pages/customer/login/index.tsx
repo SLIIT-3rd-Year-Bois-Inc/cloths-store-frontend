@@ -5,7 +5,7 @@ import * as yup from "yup";
 import CustomerFormError from "../../../components/customer-form-error";
 import { CustomerAPI } from "../api";
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CustomerLoadingOverlay } from "../../../components/customer-loading-overlay";
 import { Portal } from "react-portal";
 import CustomerVerificationModal from "../../../components/customer-verification-modal";
@@ -156,9 +156,13 @@ export default function Login() {
         </div>
         <div className="flex-grow"></div>
         <div className="flex flex-row w-full py-4 px-6">
-          <div>Trouble Logging in ?</div>
+          <Link to="/admin/login" className="hover:underline">
+            Looking for admin login?
+          </Link>
           <div className="flex-grow"></div>
-          <div>Back to home</div>
+          <Link to="/" className="hover:underline">
+            Back to home
+          </Link>
         </div>
       </div>
       {login.isLoading || login.isSuccess || login.isError ? (
