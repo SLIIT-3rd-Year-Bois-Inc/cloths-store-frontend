@@ -30,12 +30,18 @@ export function AdminSidebar() {
         <SubButton title="Add Product" to="stocks/add" />
         <SubButton title="Reports" to="stocks/reports" />
       </CollapsibleButton>
+
+      <CollapsibleButton title="Question Management">
+        <SubButton title="View Questions" to="/admin/adminAnswer" />
+      </CollapsibleButton>
+
       <div
         className="px-10 py-3 bg-red-600 text-white text-center mt-3 hover:bg-red-500 hover:cursor-pointer"
         onClick={() => sign_out.mutate()}
       >
         Log Out
       </div>
+
     </div>
   );
 }

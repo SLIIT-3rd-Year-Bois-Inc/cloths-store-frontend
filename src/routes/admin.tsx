@@ -9,6 +9,7 @@ import AddNewProduct from "../pages/stock/AddNewProduct";
 import AdminProductPage from "../pages/stock/AdminProductPage";
 import EditProduct from "../pages/stock/EditProduct";
 import Reports from "../pages/stock/Reports";
+import AdminAnswer from "../pages/review/admin-view-questions";
 
 export default function AdminRouter() {
   return (
@@ -21,6 +22,7 @@ export default function AdminRouter() {
         <Route path="stocks" element={<AdminProductPage />} />
         <Route path="stocks/add" element={<AddNewProduct />} />
         <Route path="stocks/reports" element={<Reports />} />
+        <Route path="adminAnswer" element={<AdminAnswer />} />
         <Route path="stocks/edit" element={<EditProduct />}>
           <Route path=":productID" element={<EditProduct />} />
         </Route>

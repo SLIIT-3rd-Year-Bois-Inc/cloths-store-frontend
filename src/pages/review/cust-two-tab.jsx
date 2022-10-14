@@ -49,7 +49,7 @@ function CustTwoTab(props) {
         {ShowTab == "rev" ? (
           <CusViewReview productID={props.productID._id} productData={props} />
         ) : (
-          <Question productID={props.productID._id} />
+          <Question productData={props} />
         )}
       </div>
     </div>

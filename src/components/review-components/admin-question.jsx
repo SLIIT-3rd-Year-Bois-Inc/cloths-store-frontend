@@ -14,7 +14,15 @@ function QuestionAsnswerCard({
   };
 
   const handleCancelClick2 = () => {
-    addAnswer(user._id, user.question, user.date, user.email, adminAnswer);
+    addAnswer(
+      user._id,
+      user.question,
+      user.date,
+      user.email,
+      adminAnswer,
+      user.title,
+      user.description
+    );
   };
 
   return (
@@ -22,8 +30,9 @@ function QuestionAsnswerCard({
       className=" p-5 mt-8 mb-8 rounded-2xl  border-stone-400  shadow-md"
       style={{ backgroundColor: "#f7f7f7" }}
     >
-      <h1> Asked By : {user.name}</h1>
       <h1>Date : {user.date}</h1>
+      <h1>Product name : {user.title}</h1>
+      <h1>Product Description : {user.description}</h1>
 
       <div className="flex grid-flow-row items-center ">
         <div className=" font-semibold text-red-600 text-5xl mt-4 mb-4 ml-4 pr-4 border-r border-stone-700">

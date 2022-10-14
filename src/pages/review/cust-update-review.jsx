@@ -11,8 +11,10 @@ import Failed from "../../components/review-modals/failed";
 import Deleted from "../../components/review-modals/deleted";
 import ImageBig from "../../components/review-modals/imageBig";
 import CommonSuccess from "../../components/review-modals/common-success";
+import { useNavigate } from "react-router-dom";
 
 function CusUpdateReview() {
+  let navigate = useNavigate();
   const [modalOn, setModalOn] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -21,7 +23,7 @@ function CusUpdateReview() {
 
   const [commonPop, setCommonPop] = useState(false);
   const location = useLocation();
-
+  const image4 = location.state.proData.productID.imagesUrls[0];
   const [review, setReview] = useState(location.state.users.review);
   const [rating, setRating] = useState(location.state.users.rating);
   const [image1, setImage1] = useState(location.state.users.image1);
@@ -186,7 +188,7 @@ function CusUpdateReview() {
       </h1>
       <div className="grid lg:grid-flow-col gap-10 2xl:grid-flex-row md:grid-flex-col pb-10">
         <div className="bg-gray-00">
-          <img src={image} className="object-cover h-72 w-72 " />
+          <img src={image4[1]} className="object-cover h-72 w-72 " />
         </div>
         <div className="bg-gray-000">
           <div className="">
@@ -353,7 +355,11 @@ function CusUpdateReview() {
                 <div>
                   <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
                     <div className="inline-flex rounded-md shadow ">
-                      <button className="inline-flex w-32 h-12 items-center justify-center px-5 py-3 border border-transparent text-base font-medium text-white bg-stone-900 hover:bg-stone-700 rounded-sm">
+                      <button
+                        type="button"
+                        onClick={() => navigate(-1)}
+                        className="inline-flex w-32 h-12 items-center justify-center px-5 py-3 border border-transparent text-base font-medium text-white bg-stone-900 hover:bg-stone-700 rounded-sm"
+                      >
                         {" "}
                         Cancel{" "}
                       </button>
@@ -380,7 +386,7 @@ function CusUpdateReview() {
                           setCommonSuccess={setCommonPop}
                           message={"Your Review has been updated."}
                           topic={"Review Updated!"}
-                          link1={"deletedQ"}
+                          link1={"review"}
                           link2={""}
                         />
                       )}
