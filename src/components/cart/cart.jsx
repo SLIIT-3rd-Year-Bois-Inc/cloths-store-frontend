@@ -3,6 +3,8 @@ import "./cartStyle.css";
 
 import useOnClickOutside from "./useOnClickOutside";
 import { FiX } from "react-icons/fi";
+import axios from "axios";
+import { API_ENDPOINT } from "../../config";
 
 export default function Cart({ isToggle, setToggle, cartData, setCartData }) {
   const $sideBarRef = useRef();
@@ -16,6 +18,34 @@ export default function Cart({ isToggle, setToggle, cartData, setCartData }) {
     });
     setCartData(newData);
     setShowModal(false);
+  };
+
+  const checkOut = async () => {
+    let products = [];
+
+    for (let c of cartData) {
+      products.push({
+        product_id: c.id,
+        size: c.size,
+        qty: 1, // TODO
+      });
+    }
+
+    let request = {
+      products,
+      note: "None",
+    };
+
+    try {
+      let response = await axios.post(`${API_ENDPOINT}/api/order/`, request, {
+        withCredentials: true,
+      });
+
+      if (response.status != 200)
+        throw Error("Responded with " + response.status);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const modalOn = () => (
@@ -77,7 +107,10 @@ export default function Cart({ isToggle, setToggle, cartData, setCartData }) {
         )}
         {cartData[0] !== undefined && (
           <div>
-            <button className="mt-3 w-28 h-9 md:w-40 md:h-12 bg-red-600	 text-white text-center items-center rounded-sm	 float-right	">
+            <button
+              onClick={checkOut}
+              className="mt-3 w-28 h-9 md:w-40 md:h-12 bg-red-600	 text-white text-center items-center rounded-sm	 float-right	"
+            >
               CHECKOUT
             </button>
             {showModal ? modalOn() : <></>}
