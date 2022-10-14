@@ -40,7 +40,7 @@ function CusViewReview(props) {
   }, [page, search, rating, pid]);
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/api/review/getReviewsRate`, {
+    fetch(`${API_ENDPOINT}/api/review/getReviewsRate?pid=${pid}`, {
       credentials: "include",
     })
       .then(async (response) => {

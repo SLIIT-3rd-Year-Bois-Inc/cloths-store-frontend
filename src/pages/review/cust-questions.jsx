@@ -12,8 +12,6 @@ function Question(props) {
   const pid = props.productData.productID._id;
   const product_id = pid;
   const description = props.productData.productID.description;
-  // console.log("testing des "+ imageUrl);
-  // const imageUrl = "test";
   const title = props.productData.productID.name;
 
   const [totalPage, setTotalPage] = useState();
@@ -29,6 +27,7 @@ function Question(props) {
 
   const [commonPop, setCommonPop] = useState(false);
   const [commonPop2, setCommonPop2] = useState(false);
+  const [logged, setLogged] = useState(false);
 
   const [questions, setQuestions] = useState([]);
   const [tempSearch, setTempSearch] = useState("");
@@ -41,10 +40,11 @@ function Question(props) {
       `${API_ENDPOINT}/api/question/getQuestion?page=${page}&search=${search}&pid=${pid}`,
       { credentials: "include" }
     ).then(async (response) => {
-      await response.json().then(({ question, total2, total }) => {
+      await response.json().then(({ question, total2, total, logged }) => {
         setQuestions(question);
         setTotalPage(total);
         setTotalQuestions(total2);
+        setLogged(logged);
       });
     });
   }, [page, search, pid]);
@@ -124,13 +124,14 @@ function Question(props) {
                   setQuestion(e.target.value);
                 }}
                 id="about"
+                maxLength={500}
                 className="shadow-sm focus:ring-red-500 focus:border-red-500 w-full mt-1 block sm:text-sm border border-gray-300 rounded-md h-40"
                 placeholder="Type your question here"
               ></textarea>
             </form>
           </div>
           <div className="">
-            {question ? (
+            {question && logged ? (
               <button
                 onClick={() => setPopOn(true)}
                 className="btn px-8 py-2 w-36 border-2 ml-3 h-12 border-red-600 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded hover:bg-red-600 hover:border-red-600  focus:outline-none focus:ring-0  transition duration-150 ease-in-out"
@@ -147,6 +148,14 @@ function Question(props) {
               <button className="btn px-8 py-2 w-36 border-2 ml-3 h-12 border-stone-600 bg-stone-600 text-white font-medium text-xs leading-tight uppercase rounded">
                 Type & ask
               </button>
+            )}
+
+            {!logged && question ? (
+              <button className=" animate-pulse btn px-8 py-2 w-36 border-2 ml-3 h-12 border-stone-600 bg-stone-600 text-white font-medium text-xs leading-tight uppercase rounded">
+                Login to ask
+              </button>
+            ) : (
+              ""
             )}
           </div>
         </div>

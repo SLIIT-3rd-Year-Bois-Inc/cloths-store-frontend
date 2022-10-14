@@ -5,6 +5,7 @@ function QuestionAsnswerCard({
   setCurrentID,
   deleteQuestion,
   addAnswer,
+  setEmail,
 }) {
   const [adminAnswer, setAdminAnswer] = useState("");
 
@@ -14,6 +15,9 @@ function QuestionAsnswerCard({
   };
 
   const handleCancelClick2 = () => {
+    setEmail(user.email);
+    console.log("card" + user.email);
+
     addAnswer(
       user._id,
       user.question,
