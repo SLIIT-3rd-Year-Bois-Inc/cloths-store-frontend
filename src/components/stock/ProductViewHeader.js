@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  CgViewSplit,
-  CgViewGrid,
-  CgViewMonth,
-  CgViewList,
-} from "react-icons/cg";
+import { CgViewSplit, CgViewGrid } from "react-icons/cg";
 import { FiChevronUp, FiChevronDown, FiFilter } from "react-icons/fi";
 
 function ProductViewHeader({ filterClicked, setSortingOption, setPostWidth }) {
@@ -15,7 +10,7 @@ function ProductViewHeader({ filterClicked, setSortingOption, setPostWidth }) {
       <div className="flex flex-row items-center ">
         {/*sort by */}
         <div
-          class="relative inline-block text-left hover:cursor-pointer"
+          class="relative inline-block text-left hover:cursor-pointer z-20"
           onBlur={sortbyClicked}
         >
           <div
@@ -63,12 +58,6 @@ function ProductViewHeader({ filterClicked, setSortingOption, setPostWidth }) {
                 className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-50"
               >
                 Price: high to low
-              </span>
-              <span
-                onClick={() => setSortingOption({})}
-                className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-50"
-              >
-                Price: random
               </span>
             </div>
           </div>

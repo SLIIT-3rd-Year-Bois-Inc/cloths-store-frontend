@@ -1,17 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineRight } from "react-icons/ai";
 import { Portal } from "react-portal";
 import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
+import { useInfoMessage } from "../../../hooks/info-message";
 import { CustomerAPI } from "../../../pages/customer/api";
 import { CustomerLoadingOverlay } from "../../customer-loading-overlay";
+import { InfoMessage } from "../../info-message";
 import SideBarItem from "../sidebar-item";
 
 export default function SideBar() {
   const navigate = useNavigate();
+  const [infoMessage, hideMessage] = useInfoMessage(
+    InfoMessage.logged_out,
+    true
+  );
 
   const sign_out = useMutation(CustomerAPI.signOut, {
     onSuccess: () => {
+      hideMessage(false);
+
       setTimeout(() => {
         navigate("/");
         sign_out.reset();
@@ -78,6 +86,8 @@ export default function SideBar() {
             />
           </button>
         </Portal>
+
+        {infoMessage}
       </div>
     </div>
   );

@@ -7,27 +7,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const ProductDetails = () => {
   let params = useParams();
+  const userId = "10001";
   let navigate = useNavigate();
-
-  // const data = [
-  //   {
-  //     id: "1",
-  //     img: [
-  //       "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/555bccc0efd24c26b79aaeb500dd25b5_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_01_laydown.jpg",
-  //       "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/c4efa9f4e66a41ad8979aeb500dce959_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_21_model.jpg",
-  //       "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/e3dea28f166549f4a787aeb500dd0788_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_41_detail.jpg",
-  //       "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/97293103e26045a5a35faeb500dcfc39_9366/Capable_of_Greatness_Training_Tee_Black_HG7895_25_model.jpg",
-  //     ],
-  //     description:
-  //       "Make each rep count in this adidas x Peloton tee. AEROREADY manages moisture, so you can train distraction-free and focus on your form. A droptail hem with side slits adds coverage for deep squats and gives you greater freedom of movement on twisty ab and back exercises. So simple. So stellar Made with a series of recycled materials, and at least 60% recycled content, this product represents just one of our solutions to help end plastic waste.",
-  //     name: "CAPABLE OF GREATNESS TRAINING TEE",
-  //     gender: "m",
-  //     color: "Black",
-  //     brand: "adidas",
-  //     size: ["S", "M", "L"],
-  //     price: "3000",
-  //   },
-  // ];
 
   const [name, setName] = useState(params.productID);
   const [price, setPrice] = useState("");
@@ -39,8 +20,15 @@ const ProductDetails = () => {
   const [mainImage, setMainImage] = useState("");
   const [dataSend, setDataSend] = useState("");
 
+  var today = new Date();
+  var nextWeek = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() + 7
+  );
+
   const [isToggle, setToggle] = useState(false);
-  const [size, setSize] = useState(null);
+  const [key, setKey] = useState("");
   const [cartData, setCartData] = useState([]);
   const [sizeID, setSizeId] = useState();
   const [showSuccess, setShowSuccess] = useState(false);
@@ -96,6 +84,7 @@ const ProductDetails = () => {
 
   const changeSize = (e, key) => {
     setSizeId(key);
+    setKey(key);
   };
 
   const chooseSizeError = () => (
@@ -132,22 +121,24 @@ const ProductDetails = () => {
     </div>
   );
 
-  // const addToCart = () => {
-  //   if (size !== null) {
-  //     setCartData([
-  //       {
-  //         name: data[0].name,
-  //         img: data[0].img[0],
-  //         price: data[0].price,
-  //         size: size,
-  //       },
-  //       ...cartData,
-  //     ]);
-  //     setShowSuccess(true);
-  //   } else {
-  //     setShowError(true);
-  //   }
-  // };
+  const addToCart = () => {
+    if (key !== "") {
+      setCartData([
+        {
+          userId: userId,
+          name: name,
+          img: mainImage,
+          price: price,
+          size: sizeList[key].size,
+        },
+        ...cartData,
+      ]);
+      console.log(sizeList[key].size);
+      setShowSuccess(true);
+    } else {
+      setShowError(true);
+    }
+  };
 
   const addedToCartSuccess = () => (
     <div
@@ -289,7 +280,7 @@ const ProductDetails = () => {
             <div className="flex flex-row">
               <button
                 className="mt-9 w-28 h-9 md:w-40 md:h-12 bg-black text-white text-center items-center rounded"
-                // onClick={addToCart}
+                onClick={addToCart}
               >
                 ADD TO BAG
               </button>
@@ -302,10 +293,9 @@ const ProductDetails = () => {
               </button>
               <div
                 className="mt-9 cursor-pointer"
-                // onClick={() => {
-                //   setToggle(!isToggle);
-                //   console.log(cartData);
-                // }}
+                onClick={() => {
+                  setToggle(!isToggle);
+                }}
               >
                 <FiHeart
                   size={16}
@@ -315,16 +305,19 @@ const ProductDetails = () => {
               </div>
             </div>
             <div>
-              {/* <div>{showSuccess ? addedToCartSuccess() : <></>}</div>
-              <div>{showError ? chooseSizeError() : <></>}</div> */}
+              <div>{showSuccess ? addedToCartSuccess() : <></>}</div>
+              <div>{showError ? chooseSizeError() : <></>}</div>
             </div>
             <div className=" pt-4 text-xs md:text-base ">
               <div>Only {sizeList[sizeID]?.quantity} Available</div>
             </div>
             <div className=" pt-4 text-xs md:text-s ">
               <div>
-                Order now to get it between Tuesday, 9th August and Monday, 22nd
-                August
+                Order now to get by &nbsp;
+                {nextWeek.toLocaleString("en-us", { day: "2-digit" })}
+                &nbsp;
+                {nextWeek.toLocaleString("en-us", { month: "long" })}, &nbsp;
+                {nextWeek.getFullYear()}
               </div>
             </div>
           </div>

@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import MultiRangeSlider from "./multiRangeSlider";
 
 function Filter({
   filter,
-  from,
   setGender,
   gender,
   tagsArray,
@@ -234,8 +233,8 @@ function Filter({
           aria-labelledby="accordion-open-heading-1"
         >
           <MultiRangeSlider
-            min={minMaxObj.minPrice - 1}
-            max={minMaxObj.maxPrice + 1}
+            min={minMaxObj.minPrice}
+            max={minMaxObj.maxPrice}
             onChange={({ min, max }) => setPriceRange({ min, max })}
           />
         </div>

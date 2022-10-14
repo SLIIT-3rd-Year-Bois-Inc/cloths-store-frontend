@@ -8,19 +8,19 @@ export default function HomeProduct({
   sold,
   link,
 }: {
-  title: string;
-  price: number;
-  image: string;
-  sold: number;
-  link: string;
+  title?: string;
+  price?: number;
+  image?: string;
+  sold?: number;
+  link?: string;
 }) {
   return (
     <Link
-      to={link}
-      className="w-[275px] min-h-[350px] transition-all group bg-gray-50 flex flex-col pr-6 flex-shrink-0"
+      to={link || ""}
+      className="w-[275px] transition-all group bg-gray-50 flex flex-col pr-6 flex-shrink-0"
     >
       <div className="w-full flex flex-grow relative">
-        <div className="flex-grow overflow-hidden">
+        <div className="overflow-hidden w-full h-[350px]">
           <img
             className="w-full h-full object-cover group-hover:scale-105 transition-all"
             src={image}

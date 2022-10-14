@@ -55,17 +55,39 @@ export default function Footer() {
           </Link>
         </div>
         <div className="flex flex-col py-4">
-          <Link to="" className="pb-3 px-2 font-bold">
-            My Account
+          <div className="pb-3 px-2 font-bold">My Account</div>
+          <Link
+            to="/customer/login"
+            className="pb-3 px-2 text-sm hover:font-semibold"
+          >
+            Sign In
           </Link>
-          <Link to="" className="pb-3 px-2 text-sm hover:font-semibold">
-            Sign In/Register
+          <Link
+            to="/customer/sign-up"
+            className="pb-3 px-2 text-sm hover:font-semibold"
+          >
+            Register
           </Link>
           <Link to="" className="pb-3 px-2 text-sm hover:font-semibold">
             My Wishlist
           </Link>
           <Link to="" className="pb-3 px-2 text-sm hover:font-semibold">
             My Cart
+          </Link>
+        </div>
+        <div className="flex flex-col py-4">
+          <div className="pb-3 px-2 font-bold">Administration</div>
+          <Link
+            to="/admin/login"
+            className="pb-3 px-2 text-sm hover:font-semibold"
+          >
+            Sign In
+          </Link>
+          <Link
+            to="/admin/customers"
+            className="pb-3 px-2 text-sm hover:font-semibold"
+          >
+            Dashboard
           </Link>
         </div>
       </div>
