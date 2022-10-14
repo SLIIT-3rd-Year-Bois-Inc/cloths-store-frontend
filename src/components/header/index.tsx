@@ -3,7 +3,6 @@ import { FiUser, FiShoppingBag, FiMenu } from "react-icons/fi";
 import { Portal } from "react-portal";
 import { Link, LinkProps } from "react-router-dom";
 import UserModal from "../home-user-modal";
-import { useNavigate } from "react-router-dom";
 
 interface MenuItemProps extends LinkProps {
   children: string;
