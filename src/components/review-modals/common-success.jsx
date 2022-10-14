@@ -6,16 +6,16 @@ const CommonSuccess = ({ setCommonSuccess, message, topic, link1, link2 }) => {
 
   const handleCancelClick = () => {
     if (link1 == "deletedQ") {
-      navigate("/");
+      navigate(0);
     }
     if (link1 == "review") {
-      navigate("/stock");
+      navigate(-1);
     }
     setCommonSuccess(false);
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-900/60 to-red-900/50  flex justify-center items-center backdrop-blur-sm">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-900/60 to-lime-800/50  flex justify-center items-center backdrop-blur-sm">
       <div className="bg-red-000  pt-16 pb-20 p-14  rounded-3xl bg-gradient-to-br from-lime-700/40 to-teal-600/40">
         <div className="flex grid-flow-row ">
           <div className="bg-white p-10 rounded-3xl">

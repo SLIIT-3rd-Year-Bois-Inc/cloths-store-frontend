@@ -8,8 +8,10 @@ import Failed from "../../components/review-modals/failed";
 import ImageBig from "../../components/review-modals/imageBig";
 import { uploadFile } from "../../firebase";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function CusCreateReview() {
+  let navigate = useNavigate();
   const location = useLocation();
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(1);
@@ -314,7 +316,11 @@ function CusCreateReview() {
                 <div>
                   <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
                     <div className="inline-flex rounded-md shadow ">
-                      <button className="inline-flex w-32 h-12 items-center justify-center px-5 py-3 border border-transparent text-base font-medium text-white bg-stone-900 hover:bg-stone-700 rounded-sm">
+                      <button
+                        onClick={() => navigate(-1)}
+                        type="button"
+                        className="inline-flex w-32 h-12 items-center justify-center px-5 py-3 border border-transparent text-base font-medium text-white bg-stone-900 hover:bg-stone-700 rounded-sm"
+                      >
                         {" "}
                         Cancel{" "}
                       </button>

@@ -4,6 +4,7 @@ import { API_ENDPOINT } from "../../config";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import emailjs from "@emailjs/browser";
+import CommonSuccess from "../../components/review-modals/common-success";
 
 function AnswerQuestion() {
   const [totalPage, setTotalPage] = useState();
@@ -12,19 +13,22 @@ function AnswerQuestion() {
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
   const [currentID, setCurrentID] = useState("");
+  const [email, setEmail] = useState("");
   const [answer, setAnswer] = useState("");
   const location = useLocation();
+  const [commonPop, setCommonPop] = useState(false);
 
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
     fetch(
-      `${API_ENDPOINT}/api/question/getQuestion?page=${page}&search=${search}`
+      `${API_ENDPOINT}/api/question/getQuestionAdmin?page=${page}&search=${search}`
     ).then(async (response) => {
       await response.json().then(({ question, total2, total }) => {
         setQuestions(question);
         setTotalPage(total);
         setTotalQuestions(total2);
+        // setEmail(email);
       });
     });
   }, [page, search]);
@@ -39,6 +43,7 @@ function AnswerQuestion() {
         } else {
           console.log("Failed");
           // setFailed(true)
+          // set failed / success msgs to missing places
         }
       })
       .catch((e) => {
@@ -46,8 +51,16 @@ function AnswerQuestion() {
       });
   };
 
-  const addAnswer = (currentID, question, date, email, answer) => {
-    const data = { question, date, email, answer };
+  const addAnswer = (
+    currentID,
+    question,
+    date,
+    email,
+    answer,
+    title,
+    description
+  ) => {
+    const data = { question, date, email, answer, title, description };
     fetch(`${API_ENDPOINT}/api/question/addAnswerToQuestion/` + currentID, {
       method: "put",
       headers: {
@@ -58,10 +71,7 @@ function AnswerQuestion() {
     })
       .then((res) => {
         if (res.status === 200) {
-          console.log("success");
-          //   setPopOn(false);
-          //   setCommonPop(true);
-          //do something
+          setCommonPop(true);
           if (email != "") {
             sendEmail();
           }
@@ -79,6 +89,7 @@ function AnswerQuestion() {
     Question: questions,
     Answer: answer,
     email: "senalweerasekara@gmail.com",
+    // Get these details from each section.
   };
 
   function sendEmail() {
@@ -131,6 +142,16 @@ function AnswerQuestion() {
           </button>
         );
       })}
+
+      {commonPop && (
+        <CommonSuccess
+          setCommonSuccess={setCommonPop}
+          message={"Your Answer has been added successfully."}
+          topic={"Answer Added!"}
+          link1={"deletedQ"}
+          link2={""}
+        />
+      )}
     </div>
   );
 }

@@ -9,7 +9,12 @@ function Question(props) {
   const handleOnClose = () => setPopOn(false);
   const [question, setQuestion] = useState("");
   const [email, setEmail] = useState("");
-  const pid = props.productID;
+  const pid = props.productData.productID._id;
+  const product_id = pid;
+  const description = props.productData.productID.description;
+  // console.log("testing des "+ imageUrl);
+  // const imageUrl = "test";
+  const title = props.productData.productID.name;
 
   const [totalPage, setTotalPage] = useState();
   const pagesButton = new Array(totalPage).fill(null).map((v, i) => i);
@@ -64,8 +69,8 @@ function Question(props) {
 
   const formSubmit = (e) => {
     e.preventDefault();
+    const data = { question, date, email, product_id, title, description };
 
-    const data = { question, date, email, pid };
     fetch(`${API_ENDPOINT}/api/question/addQuestion`, {
       method: "post",
       headers: {
