@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import TwoTabs from "../../pages/review/cust-two-tab";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Header from "../header";
+
 const ProductDetails = () => {
   let params = useParams();
   const userId = "10001";
@@ -161,6 +163,7 @@ const ProductDetails = () => {
 
   return (
     <>
+      <Header />
       <div className="md:flex flex-row  flex-row md:ml-24 md:pt-9">
         <div className="w-0.5/4  flex flex-row md:flex-col ">
           {product.imageUrls &&

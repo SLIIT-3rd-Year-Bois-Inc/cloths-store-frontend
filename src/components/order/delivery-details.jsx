@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API_ENDPOINT } from "../../config";
 import axios from "axios";
+import Header from "../header";
 const DeliveryDetails = (data) => {
   const dataSubmit = (event) => {
     // Do what you want here. send to another page or something.
@@ -66,7 +67,8 @@ const DeliveryDetails = (data) => {
 
   return (
     <div className="">
-      <div className="flex flex-flow ml-96 mt-44">
+      <Header />
+      <div className="flex flex-flow ml-96 mt-32">
         <div className="mr-8">
           <div className="bg-stone-800 text-white pt-4 pb-4">
             <h1 className="ml-20">DELIVERY DETAILS</h1>
