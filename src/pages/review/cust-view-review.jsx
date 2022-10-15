@@ -193,6 +193,17 @@ function CusViewReview(props) {
           </div>
         </div>
 
+        {reviews[0] ? (
+          ""
+        ) : (
+          <div className="font-bold text-3xl m-8 bg-red-200 rounded p-24">
+            <h1>This Product Does not have any reviews</h1>
+            <h1 className="font-normal text-2xl">
+              Be the first to add a review.
+            </h1>
+          </div>
+        )}
+
         <div className="pb-6 text-lg font-bold">
           Showing{" "}
           <div className="text-red-600 font-extrabold inline">
