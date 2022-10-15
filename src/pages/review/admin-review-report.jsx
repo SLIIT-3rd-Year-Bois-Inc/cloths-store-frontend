@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { PieChart } from "react-minimal-pie-chart";
 import BarChart from "react-easy-bar-chart";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function AdminReviewReport(props) {
   const [limit, setLimit] = useState(10);
@@ -155,11 +157,21 @@ function AdminReviewReport(props) {
   }
 
   const [datatika, setData] = useState([]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    axios
+      .get("http://localhost:4200/api/admin/me", { withCredentials: true })
+      .then((res) => {
+        console.log("ran normal", res);
+      })
+      .catch((err) => {
+        navigate("/admin/login");
+      });
+  }, []);
 
   useEffect(() => {
     if (true) {
       fetch(
-        //    getReviews?page=${page}&search=${search}&rating=${rating}&pid=${pid}`,
         `${API_ENDPOINT}/api/review/getAdminReviews?limit=${limit}&hilo=${hilov}`,
         {
           credentials: "include",

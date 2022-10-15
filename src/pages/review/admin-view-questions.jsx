@@ -6,6 +6,8 @@ import { useLocation } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import CommonSuccess from "../../components/review-modals/common-success";
 import CommonAlert from "../../components/review-modals/common-alert";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function AnswerQuestion() {
   const [totalPage, setTotalPage] = useState();
@@ -22,6 +24,18 @@ function AnswerQuestion() {
   const [commonPop3, setCommonPop3] = useState(false);
   const [commonPop4, setCommonPop4] = useState(false);
   const [questions, setQuestions] = useState([]);
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    axios
+      .get("http://localhost:4200/api/admin/me", { withCredentials: true })
+      .then((res) => {
+        console.log("ran normal", res);
+      })
+      .catch((err) => {
+        navigate("/admin/login");
+      });
+  }, []);
 
   useEffect(() => {
     fetch(
