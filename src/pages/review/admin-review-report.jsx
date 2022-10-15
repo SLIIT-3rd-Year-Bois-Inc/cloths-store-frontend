@@ -69,7 +69,7 @@ function AdminReviewReport(props) {
 
     return (
       <div>
-        <div className="flex grid-flow-row mt-6 mb-6 ml-10 mr-10 bg-gray-200 rounded-3xl shadow-lg">
+        <div className="flex grid-flow-row mt-6 mb-6 ml-16 mr-16 bg-gray-200 rounded-3xl shadow-lg">
           <div className="m-12 mr-12 w-3/5 font-semibold border-solid border-b-4 ">
             <h1 className="font-bold text-xl"> {card.card.namess[0].name} </h1>
             {card.card.namess[0].description}
@@ -82,7 +82,7 @@ function AdminReviewReport(props) {
               <PieChart
                 lineWidth={55}
                 animate
-                viewBoxSize={[120, 120]}
+                viewBoxSize={[105, 120]}
                 segmentsShift
                 labelPosition={75}
                 data={[
@@ -117,7 +117,7 @@ function AdminReviewReport(props) {
               />
             </div>
 
-            <div className="w-3/5 text-xl flex flex-grow ">
+            <div className="ml-24 w-3/5 text-xl flex flex-grow ">
               <div>
                 <h1 className="font-bold">Total Reviews : {total}</h1>
                 <h1>
@@ -201,7 +201,7 @@ function AdminReviewReport(props) {
   }
 
   return (
-    <div className="bg-stone-500/30 pt-4 mt-4 pb-4 mb-4 rounded-3xl">
+    <div className="bg-stone-500/30 pt-4 ml-10 mr-10 mt-6 pb-6 mb-6 rounded-3xl">
       <div className="mr-12 ml-12 mt-6">
         <h1 className="font-bold text-4xl">Review Report</h1>
         <h1 className="font-bold text-lg">
