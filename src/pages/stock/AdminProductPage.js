@@ -148,7 +148,6 @@ function AdminProductPage() {
   ]);
 
   function searchProducts(searchValue) {
-    alert(searchValue);
     setLoading(true);
     let tempSearchObj = makeObject();
     axios
@@ -279,27 +278,36 @@ function AdminProductPage() {
             minMaxObj={minMaxObj}
           />
 
-          <div className="flex flex-wrap justify-left xl:w-[1150px]">
-            {currentItems.map((product, index) => (
-              <AdminProduct
-                setDeleteAlertChanged={setDeleteAlertChanged}
-                setProductChanged={setProductChanged}
-                productChanged={productChanged}
-                key={index}
-                product={product}
-                postWidth={postWidth}
-              />
-            ))}
-          </div>
+          {currentItems.length != 0 ? (
+            <div className="flex flex-wrap justify-left xl:w-[1150px]">
+              {currentItems.map((product, index) => (
+                <AdminProduct
+                  setDeleteAlertChanged={setDeleteAlertChanged}
+                  setProductChanged={setProductChanged}
+                  productChanged={productChanged}
+                  key={index}
+                  product={product}
+                  postWidth={postWidth}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col justify-center items-center h-[500px] xl:w-[1150px]">
+              <span className="p-2 text-xl">No items found</span>
+              <span className="p-2 text-s">
+                Try reloading or changing filters
+              </span>
+            </div>
+          )}
         </div>
         <div className="w-full flex flex-row justify-end font-bold mb-20 ">
           <ReactPaginate
             breakLabel="..."
-            nextLabel="next >"
+            nextLabel="Next >"
             onPageChange={handlePageClick}
             pageRangeDisplayed={5}
             pageCount={pageCount}
-            previousLabel="< previous"
+            previousLabel="< Previous"
             renderOnZeroPageCount={null}
             containerClassName="flex flex-row gap-1.5 items-center"
             pageLinkClassName="px-4 py-2 bg-red-600 text-white hover:cursor-pointer font-bold hover:bg-red-500"
