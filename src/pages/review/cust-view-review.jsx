@@ -22,6 +22,20 @@ function CusViewReview(props) {
   }
 
   useEffect(() => {
+    fetch(`${API_ENDPOINT}/api/review/getReviewsRate?pid=${pid}`, {
+      credentials: "include",
+    })
+      .then(async (response) => {
+        await response.json().then(({ total2, rates, max }) => {
+          setTotalReviews(total2);
+          setRates(rates);
+          setMaxStar(max);
+        });
+      })
+      .catch(console.error);
+  }, [maxStar, pid]);
+
+  useEffect(() => {
     if (pid) {
       fetch(
         `${API_ENDPOINT}/api/review/getReviews?page=${page}&search=${search}&rating=${rating}&pid=${pid}`,
@@ -38,20 +52,6 @@ function CusViewReview(props) {
         .catch(console.error);
     }
   }, [page, search, rating, pid]);
-
-  useEffect(() => {
-    fetch(`${API_ENDPOINT}/api/review/getReviewsRate?pid=${pid}`, {
-      credentials: "include",
-    })
-      .then(async (response) => {
-        await response.json().then(({ total2, rates, max }) => {
-          setTotalReviews(total2);
-          setRates(rates);
-          setMaxStar(max);
-        });
-      })
-      .catch(console.error);
-  }, [maxStar]);
 
   return (
     <div>
@@ -197,9 +197,10 @@ function CusViewReview(props) {
           ""
         ) : (
           <div className="font-bold text-3xl m-8 bg-red-200 rounded p-24">
-            <h1>This Product Does not have any reviews</h1>
+            <h1>No reviews</h1>
             <h1 className="font-normal text-2xl">
-              Be the first to add a review.
+              This product doesnt have reviews or your seletced filter doesnt
+              have any results.
             </h1>
           </div>
         )}
