@@ -164,7 +164,7 @@ function Question(props) {
           ""
         ) : (
           <div className="font-bold text-3xl m-8 bg-red-200 rounded p-24">
-            <h1>This Product Doesnt have any Questions</h1>
+            <h1>This Product doesnt have any questions</h1>
             <h1 className="font-normal text-2xl">
               Be the first to ask a question about this product.
             </h1>
