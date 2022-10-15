@@ -5,7 +5,7 @@ import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { useInfoMessage } from "../../../hooks/info-message";
 import { CustomerAPI } from "../../../pages/customer/api";
-import { CustomerLoadingOverlay } from "../../customer-loading-overlay";
+import { CustomerLoadingOverlay } from "../../customer/loading-overlay";
 import { InfoMessage } from "../../info-message";
 import SideBarItem from "../sidebar-item";
 

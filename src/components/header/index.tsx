@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { FiUser, FiShoppingBag, FiMenu } from "react-icons/fi";
 import { Portal } from "react-portal";
 import { Link, LinkProps } from "react-router-dom";
-import UserModal from "../home-user-modal";
-import CustomerSideBar from "../customer-side-bar";
+import UserModal from "../customer/home-user-modal";
+import CustomerSideBar from "../customer/side-bar";
+
 
 interface MenuItemProps extends LinkProps {
   children: string;

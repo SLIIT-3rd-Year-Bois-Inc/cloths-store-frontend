@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import CustomerAddBillingMethod from "../../../components/customer-add-billing-method";
+import CustomerAddBillingMethod from "../../../components/customer/add-billing-method";
 import Card from "../../../components/customer-dashboard/card";
 import { useAuth } from "../../../hooks/auth";
 import { CustomerAPI } from "../../customer/api";

@@ -3,7 +3,7 @@ import Filter from "../../components/stock/Filter";
 import Product from "../../components/stock/Product";
 import ProductViewHeader from "../../components/stock/ProductViewHeader";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import Loader from "../../components/stock/Loader";
 import ProductSearch from "../../components/stock/ProductSearch";
 import ReactPaginate from "react-paginate";
@@ -13,6 +13,8 @@ import useDebounce from "../../hooks/debounce";
 
 function ProductPage() {
   let params = useParams();
+  const location = useLocation();
+
   const [filter, setFilter] = useState(false);
 
   const filterClicked = () => setFilter(!filter);
@@ -97,6 +99,10 @@ function ProductPage() {
 
     return temSearchObj;
   }
+
+  useEffect(() => {
+    setGender(params.gender);
+  }, [location]);
 
   useEffect(() => {
     setLoading(true);

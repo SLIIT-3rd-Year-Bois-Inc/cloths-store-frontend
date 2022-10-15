@@ -48,7 +48,7 @@ export function Profile() {
   return (
     <>
       <h1 className="font-bold text-2xl mb-6">Profile</h1>
-      <div className="w-100 flex-grow max-w-[60em] px-12 shadow-xl pb-6 border-2 border-gray-300 rounded-md">
+      <div className="w-100 flex-grow  px-8 shadow-xl pb-6 border-2 border-gray-300 rounded-md">
         <form
           onSubmit={handleSubmit((data) => {
             data.image = image;
