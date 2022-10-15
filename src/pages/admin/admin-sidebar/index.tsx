@@ -33,6 +33,7 @@ export function AdminSidebar() {
 
       <CollapsibleButton title="Question Management">
         <SubButton title="View Questions" to="/admin/adminAnswer" />
+        <SubButton title="View Review Report" to="/admin/adminReviewReport" />
       </CollapsibleButton>
 
       <div
@@ -41,7 +42,6 @@ export function AdminSidebar() {
       >
         Log Out
       </div>
-
     </div>
   );
 }

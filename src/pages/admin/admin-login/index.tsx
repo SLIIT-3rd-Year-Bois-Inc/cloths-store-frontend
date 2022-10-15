@@ -63,7 +63,7 @@ export default function AdminLogin() {
         <div
           className={`galada-font font-bold text-[42px] text-center mt-[5em]`}
         >
-          Cloths
+          Cloths <span className=" font-normal">Management</span>
         </div>
         <form
           className="w-full flex flex-col items-center"
