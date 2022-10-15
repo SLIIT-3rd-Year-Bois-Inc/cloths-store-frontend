@@ -708,8 +708,11 @@ function EditProduct() {
                 value={"UPDATE"}
                 className="bg-red-600 text-white h-10 w-[200px] cursor-pointer hover:bg-red-700 mr-10 mt-10 mb-20"
               />
-              <button className="bg-black text-white h-10 w-[200px]">
-                CANCLE
+              <button
+                className="bg-black text-white h-10 w-[200px]"
+                onClick={(e) => navigate("/admin/stocks")}
+              >
+                CANCEL
               </button>
             </div>
           </div>

@@ -303,11 +303,11 @@ function AdminProductPage() {
         <div className="w-full flex flex-row justify-end font-bold mb-20 ">
           <ReactPaginate
             breakLabel="..."
-            nextLabel="next >"
+            nextLabel="Next >"
             onPageChange={handlePageClick}
             pageRangeDisplayed={5}
             pageCount={pageCount}
-            previousLabel="< previous"
+            previousLabel="< Previous"
             renderOnZeroPageCount={null}
             containerClassName="flex flex-row gap-1.5 items-center"
             pageLinkClassName="px-4 py-2 bg-red-600 text-white hover:cursor-pointer font-bold hover:bg-red-500"
