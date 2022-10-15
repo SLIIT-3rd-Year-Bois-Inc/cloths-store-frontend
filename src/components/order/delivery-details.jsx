@@ -23,7 +23,7 @@ const DeliveryDetails = (data) => {
   };
 
   const checkOut = async () => {
-    if ((fname, lname, address, phone, email !== "")) {
+    if (fname && lname && address && phone && email !== "") {
       setError("");
       let products = [];
 
