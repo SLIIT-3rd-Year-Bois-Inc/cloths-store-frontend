@@ -40,4 +40,14 @@ const cardSchema = yup.object().shape({
     .required("Expiry year is Required"),
 });
 
-export { signUpSchema, cardSchema };
+const editCustomerSchema = yup.object().shape({
+  f_name: yup.string().max(255).required("First Name is required"),
+  l_name: yup.string().max(255).required("Last Name is required"),
+  email: yup
+    .string()
+    .email("Must be a valid email")
+    .max(255)
+    .required("Email is required"),
+});
+
+export { signUpSchema, cardSchema, editCustomerSchema };

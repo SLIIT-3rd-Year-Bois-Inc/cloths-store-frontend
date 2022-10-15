@@ -11,12 +11,16 @@ export default function AdminCustomerStats() {
     ["admin", "gender_stats"],
     AdminAPI.statsByGender
   );
+
+  const stats_query = useQuery(["total"], AdminAPI.getTotal);
+
+  console.log(stats_query);
   const age_query = useQuery(["admin", "age-stat"], AdminAPI.statsByAge);
 
   return (
     <>
       <div className="text-lg pl-4 pt-4 font-bold">Customer Statistics</div>
-      <div className="flex flex-row flex-wrap">
+      <div className="flex flex-row flex-wrap bg-gray-200 rounded-2xl">
         <div className="pt-1 ml-4 min-w-[30em] max-w-[40em]">
           <div className="my-2">Current customers by gender</div>
           <Pie
@@ -27,6 +31,12 @@ export default function AdminCustomerStats() {
         <div className="pt-1 ml-4 min-w-[30em] max-w-[40em]">
           <div className="my-2">Current customers by gender</div>
           <Pie data={getAgeGraphParams(age_query.data ?? [])} className="p-6" />
+        </div>
+        <div className="w-[20em] flex flex-row p-6">
+          <div className="font-bold text-xl">
+            Current Total Customers -{" "}
+            {stats_query.data.customer_count_total ?? "N/A"}
+          </div>
         </div>
       </div>
     </>

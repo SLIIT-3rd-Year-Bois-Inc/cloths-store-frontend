@@ -1,5 +1,5 @@
 import { QueryKey } from "react-query";
-import { deleteRequest, getJson, postJson } from "../../utils/fetch";
+import { deleteRequest, getJson, patchJson, postJson } from "../../utils/fetch";
 
 interface QueryParams {
   queryKey: any;
@@ -23,4 +23,7 @@ export const AdminAPI = {
   statsByAge: ({ queryKey: [_, __] }: QueryParams) => {
     return getJson(`/api/admin/stats/by-age`, true);
   },
+  editCustomerSchema: (data: any) =>
+    patchJson(`/api/admin/customer/${data.id}`, data, true),
+  getTotal: () => getJson(`/api/admin/stats/general`, true),
 };
