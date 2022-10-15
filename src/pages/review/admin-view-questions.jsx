@@ -139,6 +139,17 @@ function AnswerQuestion() {
         );
       })}
 
+      {questions[0] ? (
+        ""
+      ) : (
+        <div className="font-bold text-3xl m-8 bg-red-200 rounded p-24">
+          <h1>No More Questions</h1>
+          <h1 className="font-normal text-2xl">
+            All questions has been answered.
+          </h1>
+        </div>
+      )}
+
       <h1 className="ml-2">Page selected : {page + 1}</h1>
       {pagesButton.map((pageIndex) => {
         return (
