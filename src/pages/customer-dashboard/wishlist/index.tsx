@@ -1,42 +1,85 @@
 import { Dropdown } from "flowbite-react";
 import React from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { Link } from "react-router-dom";
+import { CustomerAPI } from "../../customer/api";
 
 export default function WishList() {
+  const wish_query = useQuery(
+    ["customer", "wishlist"],
+    CustomerAPI.getWishlist
+  );
+  const data = wish_query.data || [];
+  console.log(data);
   return (
     <>
       <h1 className="font-bold text-2xl mb-4">Wish List</h1>
       <div className="w-full flex-grow">
         <WishFunctionBar />
         <div className="flex w-full">
-          <WishProduct />
+          {data.map((w: any) => {
+            return (
+              <WishProduct
+                name={w.result[0].name}
+                image={w.result[0].imagesUrls[0][1]}
+                id={w.result[0]._id}
+                price={w.result[0].price}
+              />
+            );
+          })}
         </div>
       </div>
     </>
   );
 }
 
-function WishProduct() {
+interface IWishProductsProps {
+  name?: string;
+  image?: string;
+  id?: string;
+  price?: number;
+}
+
+function WishProduct({ name, image, id, price }: IWishProductsProps) {
+  const query_client = useQueryClient();
+
+  const delete_wish = useMutation(CustomerAPI.removeFromWishList, {
+    onSuccess: () => {
+      query_client.invalidateQueries(["customer", "wishlist"]);
+    },
+  });
+
   return (
     <div className="flex flex-col p-8 w-full shadow-lg">
       <div className="flex flex-row">
         <div className="h-[9em] w-[9em] mr-2 flex-shrink-0 inline-block">
           <img
-            src="https://ae01.alicdn.com/kf/Hb048b9e7d1fb4fafb26619b84c2ad217V.jpg_220x220.jpg"
+            src={image}
             className="w-full h-full object-contain"
             alt="Product"
           ></img>
         </div>
         <div className="flex flex-col">
           <div className="flex-grow mb-1 cursor-pointer hover:text-red-500">
-            KZ ZSN Pro In Ear Earphones 1BA+1DD Hybrid Technology Hifi Bass
-            Earbuds Monitor Metal Headphones Sport Noise Cancelling Headset
+            {name}
+          </div>
+          <div className="flex-grow mb-1 cursor-pointer hover:text-red-500">
+            Rs. {price}
           </div>
           <div className="flex-grow"></div>
           <div className="ml-2">
-            <button className="bg-black text-white py-2 px-4 mr-2 rounded">
+            <Link
+              to={`/product/${id}`}
+              className="bg-black text-white py-2 px-4 mr-2 rounded"
+            >
               Buy Now
-            </button>
-            <button className="bg-red-600 text-white py-2 px-4 rounded">
+            </Link>
+            <button
+              onClick={() => {
+                delete_wish.mutate({ id: id });
+              }}
+              className="bg-red-600 text-white py-2 px-4 rounded"
+            >
               Remove
             </button>
           </div>

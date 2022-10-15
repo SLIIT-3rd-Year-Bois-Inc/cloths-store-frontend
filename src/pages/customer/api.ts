@@ -34,4 +34,12 @@ export const CustomerAPI = {
   getPaymentMethods: () => getJson(`/api/customer/payment-method`, true),
   deletePaymentMethod: (data: any) =>
     deleteRequest(`/api/customer/payment-method/${data.id}`),
+  patchPaymentMethod: (data: any) =>
+    patchJson(`/api/customer/payment-method/${data.id}`, data, false),
+  addToWishlist: (data: any) => {
+    postJson(`/api/customer/wishlist`, data, false);
+  },
+  removeFromWishList: (data: any) =>
+    deleteRequest(`/api/customer/wishlist/${data.id}`),
+  getWishlist: () => getJson(`/api/customer/wishlist`, true),
 };
