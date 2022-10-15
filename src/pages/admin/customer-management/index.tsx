@@ -7,6 +7,7 @@ import { AdminAPI } from "../api";
 import { CustomerLoadingOverlay } from "../../../components/customer/loading-overlay";
 import useDebounce from "../../../hooks/debounce";
 import { ToggleSwitch } from "flowbite-react";
+import CustomerEdit from "../../../components/admin/customer-edit";
 
 export function CustomerManagement() {
   const [search_query, setSearchQuery] = useState("");
@@ -86,6 +87,8 @@ interface TableProps {
 }
 
 function TableRow({ customer, idx }: TableProps) {
+  const [showCustomerEdit, setShowCustomerEdit] = useState(false);
+
   return (
     <tr className="text-center border-gray-400 border">
       <td className="py-4">{customer.f_name}</td>
@@ -99,7 +102,7 @@ function TableRow({ customer, idx }: TableProps) {
           >
             <input
               type="checkbox"
-              value=""
+              checked={!customer.disabled}
               id={"toggle" + idx}
               className="sr-only peer"
             />
@@ -108,7 +111,15 @@ function TableRow({ customer, idx }: TableProps) {
           <FiEdit2
             size={22}
             className="p-1 inline-block border border-gray-500 rounded cursor-pointer"
+            onClick={() => setShowCustomerEdit(true)}
           />
+
+          {showCustomerEdit && (
+            <CustomerEdit
+              onClickClose={() => setShowCustomerEdit(false)}
+              customer={customer}
+            />
+          )}
         </div>
       </td>
     </tr>
