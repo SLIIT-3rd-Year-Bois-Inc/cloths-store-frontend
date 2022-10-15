@@ -47,7 +47,7 @@ const OrderComplete = () => {
             onClick={buttonClick}
             className="p-2 pr-10 pl-10 bg-stone-400 rounded hover:bg-red-500 active:bg-red-700 text-white "
           >
-            Back To Shopping
+            Continue Shopping
           </button>
         </div>
       </div>
