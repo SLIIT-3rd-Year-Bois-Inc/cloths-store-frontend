@@ -20,12 +20,13 @@ export default function Billing() {
       <h2 className="font-bold text-xl mb-4">Payment Methods</h2>
       <div className="flex-grow">
         {get_cards.data && get_cards.data.length ? (
-          <>
+          <div className="w-full h-full flex flex-row flex-wrap">
             {get_cards.data.map((card: any) => (
               <Card
                 name_on_card={card.name_on_card}
                 card_number={card.card_number}
                 id={card._id}
+                def={card.default}
               />
             ))}
             <Card
@@ -34,7 +35,7 @@ export default function Billing() {
                 setShowAddCard(true);
               }}
             />
-          </>
+          </div>
         ) : null}
         {!(get_cards.data && get_cards.data.length) ? (
           <NoCard
