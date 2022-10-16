@@ -52,7 +52,7 @@ function CusViewReview(props) {
         .catch(console.error);
     }
   }, [page, search, rating, pid]);
-
+  // d
   return (
     <div>
       <div className="ml-24 mr-24 mb-24 p-16 bg-gray-000 ">
