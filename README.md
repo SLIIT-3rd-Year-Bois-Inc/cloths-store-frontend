@@ -14,7 +14,7 @@
 This is an MERN stack application develouped for an Online Clothing store. This containt the frontend section of the application. 
 
 ## Technologies 
-React JS - Frontend JavaScript Library
+React JS - Frontend JavaScript Library <br>
 Tailwind - CSS library to style components
 React Query - To manage asynchronous state in the app
 YUP - To validation user inputs from forms
