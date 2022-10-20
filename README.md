@@ -3,12 +3,33 @@
 ## Group Details :
 
 **Member Details :**
-|--|--|--|
-| Name | Student ID | Username | <br>
-| Member 01 | IT20619794 | SenalWeerasekara | <br>
-| Member 02 | IT20618568 | I.N Magammulla | <br>
-| Member 03 | IT20603618 | Weerakkody D.K | <br>
-| Member 04 | IT20081034 | P.G.N.Sashmitha | <br>
+<table>
+<tr> 
+  <th>Name</th>
+  <th>Student ID</th> 
+  <th>Username</th> 
+</tr> 
+<tr>
+  <td>Member 01 </td>
+  <td>IT20619794 </td>
+  <td>SenalWeerasekara </td>
+</tr>
+<tr>
+  <td>Member 02 </td>
+  <td>IT20618568 </td>
+  <td>I.N Magammulla </td>
+</tr>
+<tr>
+  <td>Member 03 </td>
+  <td>IT20603618 </td>
+  <td>Weerakkody D.K </td>
+</tr>
+<tr>
+  <td>Member 04 </td>
+  <td>IT20081034 </td>
+  <td>P.G.N.Sashmitha </td>
+</tr>
+</table>
 
 ## Project Description 
 This is an MERN stack application develouped for an Online Clothing store. This containt the frontend section of the application. 
