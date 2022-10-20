@@ -2,7 +2,7 @@
 ## Project name : Cloths Online Shopping Store
 ## Group Details :
 
-**Member Details: **
+**Member Details :**
 |--|--|--|
 | Name | Student ID | Username | 
 | Member 01 | IT20619794 | SenalWeerasekara | 
