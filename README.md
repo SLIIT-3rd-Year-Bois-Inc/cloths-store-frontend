@@ -3,6 +3,7 @@
 ## Group Details :
 
 **Member Details: **
+|--|--|--|
 | Name | Student ID | Username | 
 | Member 01 | IT20619794 | SenalWeerasekara | 
 | Member 02 | IT20618568 | I.N Magammulla | 
