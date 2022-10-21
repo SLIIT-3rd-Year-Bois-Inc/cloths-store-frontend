@@ -21,3 +21,18 @@
 .line-spacing-main {
   letter-spacing: 0.255em;
 }
+
+.text-border-1 {
+  text-shadow: 0 0 3px black;
+}
+
+.line-spacing-small {
+  letter-spacing: 0.1em;
+}
+
+.flowbite-dropdown {
+  position: absolute;
+  inset: 0px auto auto 0px;
+  margin: 0px;
+  transform: translate(282px, 70px);
+}

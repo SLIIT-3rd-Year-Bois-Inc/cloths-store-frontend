@@ -1,83 +1,163 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FiUser, FiShoppingBag, FiMenu } from "react-icons/fi";
+import { Portal } from "react-portal";
+import { Link, LinkProps } from "react-router-dom";
+import UserModal from "../customer/home-user-modal";
+import CustomerSideBar from "../customer/side-bar";
 
-const MenuItem = ({
-  children,
-  light,
-}: {
+
+interface MenuItemProps extends LinkProps {
   children: string;
   light?: boolean;
-}) => {
+}
+
+const MenuItem = ({ children, light, ...rest }: MenuItemProps) => {
   return (
-    <div
+    <Link
+      {...rest}
       className={`px-4 mx-1 py-1 mako-font rounded-2xl cursor-pointer drop-shadow-sm ${
         light ? "text-white" : ""
       }`}
     >
       {children}
-    </div>
+    </Link>
   );
 };
 
-export default function Header() {
-  const [bg, setBg] = useState(false);
+export interface UserModalState {
+  show: boolean;
+  mouse_over_modal: boolean;
+}
+
+export default function Header({ homeStyle }: { homeStyle?: boolean }) {
+  const [bg, setBg] = useState(!homeStyle);
   const ref = useRef<HTMLDivElement>(null);
+  const icon_size = 37;
+
+  const [userModal, setUserModal] = useState<UserModalState>({
+    show: false,
+    mouse_over_modal: false,
+  });
+
+  const [sideBarModal, setSideBarModal] = useState(false);
+
+  const close_user_modal = () => {
+    setUserModal((prev) => {
+      return { ...prev, show: !prev.show };
+    });
+  };
 
   useEffect(() => {
-    window.addEventListener("scroll", (e) => {
-      let elem = ref.current;
-      let b = elem && window.scrollY > elem.getBoundingClientRect().height;
-      setBg(b ? true : false);
-    });
+    if (homeStyle) {
+      const on_scroll = () => {
+        let elem = ref.current;
+        let b = elem && window.scrollY > elem.getBoundingClientRect().height;
+        setBg(b ? true : false);
+      };
+
+      window.addEventListener("scroll", on_scroll);
+
+      return () => {
+        window.removeEventListener("scroll", on_scroll);
+      };
+    }
   }, []);
 
   return (
     <div
       ref={ref}
-      className={`h-[9em] w-full ${
+      className={`w-full ${
         bg ? "bg-[#ffffffb7] backdrop-blur-sm shadow-md" : ""
-      } fixed top-0 z-50 transition-all`}
+      } ${homeStyle ? "fixed" : "sticky"} top-0 z-50 transition-all`}
     >
-      <div className="h-[100px] flex flex-row w-full justify-center items-center px-4">
-        <div className="p-4">
+      <div className="h-[85px] flex flex-row w-full justify-center items-center px-4">
+        <div
+          onClick={() => {
+            setSideBarModal(true);
+          }}
+          className={`p-4 cursor-pointer transition-all rounded-full ${
+            bg ? "hover:bg-[#ffffff9a]" : "hover:bg-[#0000009a]"
+          }`}
+        >
           <FiMenu
-            size={40}
+            size={icon_size}
             className="stroke-1"
             color={`${bg ? "" : "white"}`}
           />
         </div>
-        <div
-          className={`galada-font flex-grow font-bold text-[48px] text-center ${
+        <Link
+          className={`galada-font flex-grow font-bold text-[42px] text-center ${
             bg ? "" : "text-white"
           }`}
+          to="/"
         >
           Cloths
-        </div>
+        </Link>
         <div className="flex flex-row">
-          <div className="p-4">
+          <button
+            className={`p-4 cursor-pointer transition-all rounded-full ${
+              bg ? "hover:bg-[#ffffff9a]" : "hover:bg-[#0000009a]"
+            }`}
+            onClick={() =>
+              setUserModal((prev) => {
+                return { ...prev, show: true };
+              })
+            }
+          >
             <FiUser
-              size={40}
+              size={icon_size}
               className="stroke-1"
               color={`${bg ? "" : "white"}`}
             />
-          </div>
-          <div className="p-4">
+          </button>
+          <div
+            className={`p-4 cursor-pointer transition-all rounded-full ${
+              bg ? "hover:bg-[#ffffff9a]" : "hover:bg-[#0000009a]"
+            }`}
+          >
             <FiShoppingBag
-              size={40}
+              size={icon_size}
               className="stroke-1"
               color={`${bg ? "" : "white"}`}
             />
           </div>
         </div>
       </div>
-      <div className="flex w-full justify-center items-center">
-        <MenuItem light={!bg}>Women</MenuItem>
-        <MenuItem light={!bg}>Men</MenuItem>
-        <MenuItem light={!bg}>Kids</MenuItem>
-        <MenuItem light={!bg}>New</MenuItem>
-        <MenuItem light={!bg}>Sale</MenuItem>
-        <MenuItem light={!bg}>Browse</MenuItem>
+
+      <div className="flex w-full pb-2 justify-center items-center">
+        <MenuItem light={!bg} to="/stock/W">
+          Women
+        </MenuItem>
+        <MenuItem light={!bg} to="/stock/M">
+          Men
+        </MenuItem>
+        <MenuItem light={!bg} to="/stock/K">
+          Kids
+        </MenuItem>
+        <MenuItem light={!bg} to="">
+          New
+        </MenuItem>
+        <MenuItem light={!bg} to="">
+          Sale
+        </MenuItem>
+        <MenuItem light={!bg} to="">
+          Browse
+        </MenuItem>
       </div>
+      {userModal.show && (
+        <Portal>
+          <UserModal onClose={close_user_modal} />
+        </Portal>
+      )}
+      {sideBarModal && (
+        <Portal>
+          <CustomerSideBar
+            onClickClose={() => {
+              setSideBarModal(false);
+            }}
+          />
+        </Portal>
+      )}
     </div>
   );
 }
