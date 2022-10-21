@@ -40,3 +40,13 @@ Tailwind - CSS library to style components <br>
 React Query - To manage asynchronous state in the app <br>
 YUP - To validation user inputs from forms <br>
 Firebase Storage - To store image assets <br>
+
+To run this project <br>
+  1. Clone the project
+  ```bash
+  git clone https://github.com/SLIIT-3rd-Year-Bois-Inc/cloths-store-frontend
+  ```
+  2. To start development
+  ```bash
+  npm start
+  ```
